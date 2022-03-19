@@ -1,0 +1,118 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="19">
+            <item index="0" class="java.lang.String" itemvalue="new_single" />
+            <item index="1" class="java.lang.String" itemvalue="border" />
+            <item index="2" class="java.lang.String" itemvalue="max_lenth" />
+            <item index="3" class="java.lang.String" itemvalue="," />
+            <item index="4" class="java.lang.String" itemvalue="text-align:center" />
+            <item index="5" class="java.lang.String" itemvalue="{{article.id}}" />
+            <item index="6" class="java.lang.String" itemvalue="article.objects.get(id" />
+            <item index="7" class="java.lang.String" itemvalue="article.objects.post(id" />
+            <item index="8" class="java.lang.String" itemvalue="href" />
+            <item index="9" class="java.lang.String" itemvalue="method" />
+            <item index="10" class="java.lang.String" itemvalue="enctype" />
+            <item index="11" class="java.lang.String" itemvalue="action" />
+            <item index="12" class="java.lang.String" itemvalue="article.tags" />
+            <item index="13" class="java.lang.String" itemvalue="categories" />
+            <item index="14" class="java.lang.String" itemvalue="post_list" />
+            <item index="15" class="java.lang.String" itemvalue="blog:" />
+            <item index="16" class="java.lang.String" itemvalue="#dc143c" />
+            <item index="17" class="java.lang.String" itemvalue="this.innerhtml" />
+            <item index="18" class="java.lang.String" itemvalue="onclick(fun_prof)" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="13">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+            <item index="6" class="java.lang.String" itemvalue="form" />
+            <item index="7" class="java.lang.String" itemvalue="h" />
+            <item index="8" class="java.lang.String" itemvalue="bold" />
+            <item index="9" class="java.lang.String" itemvalue="div" />
+            <item index="10" class="java.lang.String" itemvalue="scrit" />
+            <item index="11" class="java.lang.String" itemvalue="li" />
+            <item index="12" class="java.lang.String" itemvalue="option" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="PyArgumentListInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E303" />
+          <option value="E131" />
+          <option value="E722" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N806" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyTypeCheckerInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="Decimal" />
+          <option value="blog.models.SalesOrder.objects" />
+          <option value="web.src.additional_settings.logging_settings" />
+          <option value="web.src.additional_settings.allauth_settings" />
+          <option value="web.src.additional_settings.summernote_settings" />
+          <option value="CeleryService" />
+          <option value="rest_framework.request.*" />
+          <option value="auth_app.forms.template" />
+          <option value="auth_app.forms.subject" />
+          <option value="auth_app.forms.template_name" />
+          <option value="auth_app.forms.password_recovery" />
+          <option value="auth_app.forms.auth_app" />
+          <option value="movies.movies.views" />
+          <option value="moon.movies.models.Movie.objects" />
+          <option value="moon.movies.models.Movie.reviews_set" />
+          <option value="moon.movies.models.Category.objects" />
+          <option value="moon.movies.models.Genre.objects" />
+          <option value="moon.movies.models.RatingStar.objects" />
+          <option value="dict.__mod__" />
+          <option value="django_movie.movies.models.Movie.objects" />
+          <option value="django_movie.movies.models.Rating.objects" />
+          <option value="super.create" />
+          <option value="blog.web.blog.serializers.*" />
+          <option value="drf_yasg.inspectors.field.get_prep_value" />
+          <option value="blog.web.auth_app.utils.x_forwarded_for" />
+          <option value="blog.web.src.settings.CHARACTER" />
+          <option value="blog.web.blog.ViewSet" />
+          <option value="django_movie.movies.models.Actor.objects" />
+          <option value="actions.models.Follower.objects" />
+          <option value="blog.templatetags.blog.created" />
+          <option value="actions.views.AddFollowerView" />
+          <option value="str.sunion" />
+          <option value="type.without_ui" />
+          <option value="type.with_ui" />
+          <option value="blog.templatetags.blog.order_by" />
+          <option value="rest_framework.serializers.FollowerStatus" />
+          <option value="blog.models.Article.DoesNotExist" />
+          <option value="actions.serializers.FollowersListSerializer.objects" />
+          <option value="actions.serializers.UserSerializer.objects" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
