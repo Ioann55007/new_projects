@@ -11,8 +11,8 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
                         <ul class="dropdown__catalog">
                             <li><a href="base_index.html">Home Page</a></li>
-                            <li><a href="single-topic.html">Single Topic Page</a></li>
-                            <li><a href="simple-signup.html">Sign up Page</a></li>
+                            <li><a href="{% url 'forum:single-topic' %}">Single Topic Page</a></li>
+                            <li><a href="{% url 'registration_App:simple-signup' %}">Sign up Page</a></li>
                             <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
                         </ul>
                     </nav>

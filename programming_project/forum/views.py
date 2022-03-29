@@ -1,8 +1,5 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView
-
-
 
 
 class MainPageView(View):
@@ -11,3 +8,9 @@ class MainPageView(View):
     def get(self, request):
         return render(request, self.template_name)
 
+
+class SingleTopicPageView(View):
+    template_name = 'single-topic.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

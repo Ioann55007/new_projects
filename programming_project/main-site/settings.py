@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'forum.apps.AboutusConfig',
+    'forum.apps.ForumConfig',
     'create_topicApp.apps.CreateTopicappConfig',
+    'registration_App.apps.RegistrationAppConfig',
+
 ]
 
 MIDDLEWARE = [

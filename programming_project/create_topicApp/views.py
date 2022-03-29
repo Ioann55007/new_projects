@@ -6,6 +6,6 @@ class CreateTopicView(View):
     template_name = 'create_top.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        return render(request, 'create_top.html')
 
 

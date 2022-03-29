@@ -978,7 +978,7 @@ select {
 }
 @media only screen and (min-width: 1040px) {
   .posts__item.posts__item--bg-gradient {
-    background-image: url('../images/topic-bg-gradient.jpg');
+    background-image: url('../topic-bg-gradient.jpg');
     background-size: cover;
   }
 }
