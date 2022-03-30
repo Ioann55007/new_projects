@@ -20,7 +20,8 @@ class Topic(models.Model):
     category = models.ManyToManyField(Category, related_name='topic_set', through='ThroughModel')
     author = models.CharField(max_length=9)
     created = models.DateField(auto_now=False)
-    views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
+    # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
+    content = models.TextField()
 
     def __str__(self):
         return self.name
@@ -43,8 +44,8 @@ class Replies(models.Model):
         return self. author_name
 
 
-class Views(models.Model):
-    topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)
+# class Views(models.Model):
+#     topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)
 
 
 class Created(models.Model):

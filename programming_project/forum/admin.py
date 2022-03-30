@@ -10,10 +10,16 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ("name",)
 
 
+# @admin.register(Views)
+# class ViewsAdmin(admin.ModelAdmin):
+#     fields = ('topic',)
+
+
+
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
     """Темы"""
-    list_display = ('views',)
+    # list_display = ('views',)
 
     def display_category(self):
         """
@@ -40,5 +46,5 @@ class RepliesAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    """Просмотры"""
+    """Пользователи"""
     list_display = ('name', 'image')
