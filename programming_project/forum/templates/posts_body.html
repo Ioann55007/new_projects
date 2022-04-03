@@ -1,9 +1,46 @@
 <div class="posts__body">
-
     <div class="posts__item">
+        {% block container %}
+        <div class="posts__section-left">
 
+            <div class="posts__topic">
+                {% for topic in topics %}
+                <div class="posts__content">
+                    <a href="#"><h3>{{topic.name}}</h3></a>
+                {% endfor %}
+
+
+                </div>
+            </div>
+            {% for topic in topics %}
+            <div class="posts__category" style="color:grey"><a href="" class="category"><i class="bg-4436f8"></i></a>{{ topic.category }}</div>
+            {% endfor %}
+        </div>
+        <div class="posts__section-right">
+            <div class="posts__users">
+                <div>
+                    <a href="#"><img src="media/no_image.jpg" width="50" height="70" alt="avatar"></a>
+                </div>
+
+<!--                <div>-->
+<!--                    <a href="#" class="avatar"><img src="static/fonts/icons/avatars/T.svg" alt="avatar"></a>-->
+<!--                </div>-->
+            </div>
+            {% for topic in topics %}
+            <div class="posts__replies"></div>
+            <div class="posts__views"></div>
+            <div class="posts__activity">{{topic.created}}</div>
+            {% endfor%}
+        {% endblock container %}
+    </div>
 
     </div>
+
+
+
+
+
+
     <div class="posts__item bg-f2f4f6">
         <div class="posts__section-left">
             <div class="posts__topic">
@@ -59,4 +96,3 @@
         </div>
     </div>
 
-</div>

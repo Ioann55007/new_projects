@@ -8,14 +8,13 @@
                         <img src="{% static 'fonts/icons/main/Logo_Forum.svg' %}" alt="logo">
                     </h1>
                     <div class="header__logo-btn" data-dropdown-btn="logo">
-                        Unity<i class="icon-Arrow_Below"></i>
+                        Search<i class="icon-Arrow_Below"></i>
                     </div>
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
                         <ul class="dropdown__catalog">
-                            <li><a href="index.html">Home Page</a></li>
-                            <li><a href="single-topic.html">Single Topic Page</a></li>
-                            <li><a href="simple-signup.html">Sign up Page</a></li>
-                            <li><a href="create-topic.html">Create Topic Page</a></li>
+                            <li><a href="{% url 'forum:main' %}">Home Page</a></li>
+                            <li><a href="{% url 'registration_App:simple-signup' %}">Sign up Page</a></li>
+                            <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
                         </ul>
                     </nav>
                 </div>

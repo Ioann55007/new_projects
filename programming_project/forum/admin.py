@@ -6,7 +6,7 @@ from .models import Category, Topic, Replies,  User
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """Категории"""
-    list_display = ("name", "id")
+    list_display = ("name",)
     list_display_links = ("name",)
 
 
@@ -20,22 +20,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class TopicAdmin(admin.ModelAdmin):
     """Темы"""
     # list_display = ('views',)
+    list_display = ("category", 'name')
 
-    def display_category(self):
-        """
-        Creates a string for the Genre. This is required to display genre in Admin.
-        """
-        return ', '.join([category.name for category in self.category.all()[:3]])
-
-    display_category.short_description = 'Category'
-
-    def display_author(self):
-        """
-        Creates a string for the Genre. This is required to display genre in Admin.
-        """
-        return ', '.join([author.name for author in self.author.all()])
-
-    display_category.short_description = 'Author'
 
 
 @admin.register(Replies)
