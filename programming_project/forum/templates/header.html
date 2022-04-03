@@ -6,11 +6,11 @@
                         <img src="static/fonts/icons/main/Logo_Forum.svg" alt="logo">
                     </h1>
                     <div class="header__logo-btn" data-dropdown-btn="logo">
-                        Unity<i class="icon-Arrow_Below"></i>
+                        Search<i class="icon-Arrow_Below"></i>
                     </div>
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
                         <ul class="dropdown__catalog">
-                            <li><a href="base_index.html">Home Page</a></li>
+                            <li><a href="{% url 'forum:main' %}">Home Page</a></li>
                             <li><a href="{% url 'forum:single-topic' %}">Single Topic Page</a></li>
                             <li><a href="{% url 'registration_App:simple-signup' %}">Sign up Page</a></li>
                             <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
@@ -18,10 +18,10 @@
                     </nav>
                 </div>
                 <div class="header__search">
-                    <form action="#">
+                    <form action="{% url 'forum:search_results' %}" method="get">
                         <label>
                             <i class="icon-Search js-header-search-btn-open"></i>
-                            <input type="search" placeholder="Search all forums" class="form-control">
+                            <input type="search" placeholder="Search all forums" class="form-control" name="q">
                         </label>
                     </form>
                     <div class="header__search-close js-header-search-btn-close"><i class="icon-Cancel"></i></div>

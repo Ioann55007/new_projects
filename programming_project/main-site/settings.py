@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'forum.apps.ForumConfig',
     'create_topicApp.apps.CreateTopicappConfig',
     'registration_App.apps.RegistrationAppConfig',
+    'taggit',
 
 ]
 
