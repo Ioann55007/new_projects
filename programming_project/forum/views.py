@@ -1,20 +1,9 @@
-from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views import View
-from django.views.generic import ListView
-from taggit.models import Tag
-
-from .models import Topic
 
 
-def Main(request):
-    topics = Topic.objects.all().order_by('name')
-    return render(request, 'index.html', {'topics': topics})
-
-
-class Search(ListView):
-    model = Topic
-    template_name = 'search_results.html'
+class MainPageView(View):
+    template_name = 'index.html'
 
     def get_queryset(self):
         query = self.request.GET.get('q')

@@ -1,25 +1,18 @@
 from django.contrib import admin
-from taggit.admin import TagAdmin
 
-from .models import Category, Topic, Replies, User
+from .models import Category, Topic, Replies,  User
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """Категории"""
-    list_display = ("name",)
+    list_display = ("name", "id")
     list_display_links = ("name",)
 
 
 # @admin.register(Views)
 # class ViewsAdmin(admin.ModelAdmin):
 #     fields = ('topic',)
-
-
-# @admin.register(TagAdmin)
-# class TopicTagAdmin(admin.ModelAdmin):
-#     list_display = ('name',)
-#     fields = ('name',)
 
 
 
