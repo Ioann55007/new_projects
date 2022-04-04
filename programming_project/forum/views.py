@@ -8,7 +8,7 @@ from taggit.models import Tag
 
 def Main(request):
     topics = Topic.objects.all().order_by('name')
-    return render(request, 'index.html', {{'topics': topics}})
+    return render(request, 'index.html', {'topics': topics})
 
 
 class Search(ListView):
