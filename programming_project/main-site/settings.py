@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'create_topicApp.apps.CreateTopicappConfig',
     'registration_App.apps.RegistrationAppConfig',
     'taggit',
+    'django.contrib.humanize',
 
 ]
 

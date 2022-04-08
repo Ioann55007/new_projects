@@ -1,5 +1,5 @@
 from django.db.models import Q
-from .models import Topic
+from .models import Topic, Category
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView
@@ -20,13 +20,14 @@ class Search(ListView):
         object_list = Topic.objects.filter(
             Q(name__icontains=query) | Q(content__icontains=query)
         )
+
         return object_list
 
 
     def topic_list(request, tag_slug=None):
         object_list = Topic.published.all()
         topics = Topic.objects.all().order_by('name')
-
+        categories = Category.objects.all()
         tag = None
 
         if tag_slug:
@@ -36,7 +37,18 @@ class Search(ListView):
                       'search_results.html',
                       {
                        'topic': topics,
+                       'category': categories,
                        'tag': tag})
+
+
+def topic_view(request, category_id):
+
+    cat = Topic.objects.all()
+    context = {
+        'cat': cat.filter(category=category_id),
+        'category': category_id
+    }
+    return render(request, 'search_results.html', context)
 
 
 

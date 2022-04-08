@@ -4,9 +4,10 @@ from taggit.managers import TaggableManager
 
 class Category(models.Model):
     """Категории"""
-    name = models.CharField(max_length=17)
+    name = models.CharField(max_length=170)
     author = models.CharField(max_length=9)
     created = models.DateField(auto_now=False)
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
