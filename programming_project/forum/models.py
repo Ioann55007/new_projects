@@ -9,6 +9,8 @@ class Category(models.Model):
     created = models.DateField(auto_now=False)
     objects = models.Manager()
 
+
+
     def __str__(self):
         return self.name
 
@@ -29,6 +31,10 @@ class Topic(models.Model):
     content = models.TextField()
     tags = TaggableManager()
 
+
+
+    def tag_list(self) -> str:
+        return u", ".join(o.name for o in self.tags.all())
 
 
     def __str__(self):

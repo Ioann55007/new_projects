@@ -20,7 +20,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class TopicAdmin(admin.ModelAdmin):
     """Темы"""
     # list_display = ('views',)
-    list_display = ("category", 'name', 'tags')
+    list_display = ("category", 'name', 'tag_list')
     fields = ('category', 'name',  'author',  'content', 'created', 'tags')
 
 
