@@ -1,6 +1,6 @@
 from django.core import serializers
 
-from programming_project.forum.models import Category, Topic, Replies, User, Created
+from .models import Category, Topic, Replies, User, Created
 
 
 class CategorySerializer(serializers.ModelSerializer):

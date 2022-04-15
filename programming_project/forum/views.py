@@ -58,3 +58,14 @@ class SingleTopicPageView(View):
     def get(self, request):
         return render(request, self.template_name)
 
+
+def topic_detail(request):
+        topics = Topic.objects.all().order_by('name')
+        categories = Category.objects.all()
+
+        return render(request,
+                      'topic_detail.html',
+                      {
+                       'topics': topics,
+                       'category': categories
+                       })
