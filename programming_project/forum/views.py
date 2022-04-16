@@ -61,11 +61,13 @@ class SingleTopicPageView(View):
 
 def topic_detail(request):
         topics = Topic.objects.all().order_by('name')
+        topic_author = Topic.objects.all()
         categories = Category.objects.all()
 
         return render(request,
                       'topic_detail.html',
                       {
                        'topics': topics,
-                       'category': categories
+                       'category': categories,
+                       'topic_author': topic_author,
                        })
