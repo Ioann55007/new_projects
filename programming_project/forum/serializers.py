@@ -1,7 +1,17 @@
-from django.core import serializers
+from rest_framework import serializers
 
 from .models import Category, Topic, Replies, User, Created
 
+
+class TopicUnSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(source='get_absolute_url')
+
+    class Meta:
+        model = Topic
+        fields = (
+            'id', 'name', 'url', 'author', 'category',
+            'created','content', 'tags'
+        )
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

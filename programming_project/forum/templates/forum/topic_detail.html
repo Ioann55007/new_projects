@@ -106,6 +106,7 @@
                             </ul>
                         </div>
                         <div>
+
                             <h3>Categories</h3>
                             {% get_categories as categories %}
                             <ul class="dropdown__catalog row">
@@ -218,7 +219,7 @@
             </div>
             <div class="topics">
                 <div class="topics__heading">
-                   {% for topic in topics %}
+                   {% for topic in topic_detail %}
                     <h2 class="topics__heading-title">{{topic.name}}</h2>
                     {% endfor %}
                     <div class="topics__heading-info">

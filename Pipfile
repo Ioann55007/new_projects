@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 self = "*"
 category = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

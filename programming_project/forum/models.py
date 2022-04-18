@@ -1,5 +1,8 @@
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 from taggit.managers import TaggableManager
+from rest_framework.reverse import reverse_lazy
 
 
 class Category(models.Model):
@@ -30,15 +33,18 @@ class Topic(models.Model):
     # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
     content = models.TextField()
     tags = TaggableManager()
-
-
-
-    def tag_list(self) -> str:
-        return u", ".join(o.name for o in self.tags.all())
+    url = models.SlugField(max_length=130, unique=True)
 
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("forum:topic_detail", kwargs={"slug": self.url})
+
+    def tag_list(self) -> str:
+        return u", ".join(o.name for o in self.tags.all())
+
 
     class Meta:
         verbose_name = 'Topic'
