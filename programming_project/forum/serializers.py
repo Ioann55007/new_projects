@@ -10,8 +10,9 @@ class TopicUnSerializer(serializers.ModelSerializer):
         model = Topic
         fields = (
             'id', 'name', 'url', 'author', 'category',
-            'created','content', 'tags'
+            'created', 'content', 'tags'
         )
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,7 +23,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ('name',  'author', 'created', 'content', 'tags')
+        fields = ('name',  'url', 'author', 'created', 'content', 'tags')
 
 
 class RepliesSerializer(serializers.ModelSerializer):

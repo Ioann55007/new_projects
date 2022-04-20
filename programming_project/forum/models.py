@@ -35,12 +35,12 @@ class Topic(models.Model):
     tags = TaggableManager()
     url = models.SlugField(max_length=130, unique=True)
 
-
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("forum:topic_detail", kwargs={"slug": self.url})
+        # return reverse("forum:topic_detail", kwargs={"slug": self.url})
+        return reverse_lazy('forum:topic_detail', kwargs={'slug': self.url})
 
     def tag_list(self) -> str:
         return u", ".join(o.name for o in self.tags.all())

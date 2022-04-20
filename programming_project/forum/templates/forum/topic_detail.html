@@ -219,26 +219,21 @@
             </div>
             <div class="topics">
                 <div class="topics__heading">
-                   {% for topic in topic_detail %}
+
                     <h2 class="topics__heading-title">{{topic.name}}</h2>
-                    {% endfor %}
+
                     <div class="topics__heading-info">
 
-                        {% for topic in topics %}
                         <a href="#" class="category"><i class="bg-3ebafa"></i>{{topic.category}}</a>
-                        {% endfor %}
                         <div class="tags">
-                             {% for topic in topics %}
-
-                                            {% for tag in topic.tags.all %}
 
 
-                            <a href="{% url 'forum:topic_detail'  %}" class="bg-4f80b0">{{tag.name}}</a>
-                            <a href="{% url 'forum:search_results'  %}" class="bg-424ee8">{{ tag.name }}</a>
+
+                            {% for tag in topic.tags.all %}
+
+                            <a href="{% url 'forum:topic_detail' topic.url %}" class="bg-4f80b0">{{tag.name}}</a>
                             {% if not forloop.last %}: {% endif %}
-                                            {% endfor %}
                             {% endfor %}
-
 
                         </div>
                     </div>
@@ -253,18 +248,15 @@
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">
-                                        {% for topic in topic_author %}<a href="#">{{topic.author}}</a>{% endfor %}
+                                        <a href="#">{{topic.author}}</a>
                                     </div>
-                                    {% for topic in topics %}
+
                                     <div class="topic__date"><i class="icon-Watch_Later"></i>{{topic.created}}</div>
-                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="topic__content">
                                 <div class="topic__text">
-                                    {% for topic in topics %}
                                         {{ topic.content }}
-                                    {% endfor %}
                                 </div>
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
@@ -481,17 +473,13 @@
                                 <a href="#" class="calendar__btn calendar__btn--c-01"><i class="icon-Calender"></i></a>
                             </div>
                             <div class="calendar__center">
-                                {% for topic in topics %}
                                 <div class="calendar__first">{{topic.created}}</div>
-                                {% endfor %}
                                 <div class="calendar__range">
                                     <div class="calendar__current">
-                                       {% for topic in topics %}
                                         <p>{{ topic.created |date:"m-Y"  }}</p>
                                         <span>{{topic.created|date:"M-d"}}</span>
 
 
-                                        {% endfor %}
                                     </div>
                                 </div>
                                 <div class="calendar__last">6h ago</div>

@@ -160,7 +160,7 @@
 
                                 {% for category in categories %}
 
-                                <li class="col-xs-6"><a href="{% url 'forum:topic_view' category.id %}">{{ category.name }}</a></li>
+                                <li class="col-xs-6"><a href="{% url 'forum:topic_view' category.id %}">{{ tag.name }}</a></li>
                                 {% endfor %}
 <!--                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-348aa7"></i>Social</a></li>-->
 <!--                                <li class="col-xs-6"><a href="#" class="category"><i class="bg-4436f8"></i>Video</a></li>-->
