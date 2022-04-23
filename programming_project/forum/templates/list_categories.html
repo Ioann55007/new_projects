@@ -4,15 +4,22 @@
                 <div class="nav__categories js-dropdown">
                     <div class="nav__select">
                         <div class="btn-select" data-dropdown-btn="categories">All Categories</div>
+                        {% for topic in object_list %}
+
                         <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
+
                             {% get_categories as categories %}
                             <ul class="dropdown__catalog row">
                                 {% for category in categories %}
-                                <li class="col-xs-6"><a href="{% url 'forum:topic_view' category.id %}" class="category">{{ category.name }}</a></li>
+
+                                <li class="col-xs-6"><a href="{% url 'forum:category_detail' category.slug category.id %}" class="category">{{ category.name }}</a></li>
                                 {% endfor %}
+
 
                             </ul>
                         </nav>
+                        {% endfor %}
+
                     </div>
 
                 </div>

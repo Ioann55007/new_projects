@@ -1,5 +1,8 @@
-from django.db.models import Q, QuerySet
+from django.shortcuts import render
 
+# Create your views here.
+from django.db.models import Q, QuerySet
+from django.urls import reverse
 
 from .models import Topic, Category
 from django.shortcuts import render, get_object_or_404
@@ -67,15 +70,54 @@ class TopicListView(ListView):
     template_name = 'index.html'
 
 
+    # def get_queryset(self):
+    #     # попытаться получить категорию
+    #     # category = Category.objects.get(Category, slug__iexact=self.kwargs.get('slug'))
+    #     # вывести новости из категории
+    #     # category = Topic.objects.get(Category)
+    #     category = Topic.objects.filter(Category__id=self.kwargs['slug'])
+    #     queryset = category.topic.all()
+    #     return queryset
+
+
+class ByCategory(ListView):
+    model = Topic
+    context_object_name = 'category'
+
+    def get_queryset(self):
+        return Topic.objects.filter(url=self.kwargs['id']).selected_related('category')
+
+    def get_success_url(self):
+        return reverse('forum:topic_detail', kwargs={"slug": self.object.slug})
+
+
 class TopicDetailView(DetailView):
     model = Topic
     queryset = Topic.objects.all()
-    slug_field = "url"
+    slug_field = "id"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         return context
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    queryset = Category.objects.all()
+    slug_field = "slug"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+
+    def topicInCategory(request, id):
+        category = Category.objects.filter().get(id=id)
+        topics = category.topic_set.all()
+        return render(request, 'forum:category_detail.html', {'topics': topics, 'category': category})
+
 
 
 
@@ -116,7 +158,6 @@ class TopicDetailView(DetailView):
     #     response = super().retrieve(request, **kwargs)
     #     response.template_name = self.get_template_name()
     #     return response
-
 
 
 

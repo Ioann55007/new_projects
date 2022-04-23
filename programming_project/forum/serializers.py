@@ -17,7 +17,7 @@ class TopicUnSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name', 'author', 'created')
+        fields = ('name', 'author', 'created', 'url')
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -42,18 +42,3 @@ class CreatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Created
         fields = ('topic',)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

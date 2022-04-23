@@ -1,12 +1,15 @@
 from django.contrib import admin
 
+# Register your models here.
+from django.contrib import admin
+
 from .models import Category, Topic, Replies,  User
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """Категории"""
-    list_display = ("name", "id")
+    list_display = ("name", "id", 'slug')
     list_display_links = ("name",)
 
 
@@ -20,8 +23,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class TopicAdmin(admin.ModelAdmin):
     """Темы"""
     # list_display = ('views',)
-    list_display = ("category", 'name', 'tag_list', 'url')
-    fields = ('category', 'name',  'author',  'content', 'created', 'tags', 'url')
+    list_display = ("name", 'category', 'tag_list', 'slug')
+    fields = ('category', 'name',  'author',  'content', 'created', 'tags', 'slug')
 
 
 
