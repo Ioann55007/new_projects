@@ -116,6 +116,7 @@ class CategoryDetailView(DetailView):
     def topicInCategory(request, id):
         category = Category.objects.filter().get(id=id)
         topics = category.topic_set.all()
+
         return render(request, 'forum:category_detail.html', {'topics': topics, 'category': category})
 
 
