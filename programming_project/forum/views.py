@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.db.models import Q, QuerySet
+from django.template import context
 from django.urls import reverse
 
 from .models import Topic, Category
@@ -104,7 +105,7 @@ class TopicDetailView(DetailView):
 
 class CategoryDetailView(DetailView):
     model = Category
-    queryset = Category.objects.all()
+    # queryset = Category.objects.all()
     slug_field = "slug"
 
     def get_context_data(self, **kwargs):
@@ -116,8 +117,7 @@ class CategoryDetailView(DetailView):
     def topicInCategory(request, id):
         category = Category.objects.filter().get(id=id)
         topics = category.topic_set.all()
-
-        return render(request, 'forum:category_detail.html', {'topics': topics, 'category': category})
+        return render(request, 'forum:category_detail.html', {'category': category,  'topics': topics})
 
 
 

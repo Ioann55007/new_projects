@@ -13,10 +13,9 @@ class Category(models.Model):
     name = models.CharField(max_length=170)
     author = models.CharField(max_length=9)
     created = models.DateField(auto_now=False)
-    content_object = models.ForeignKey('Topic', on_delete=models.CASCADE, related_name='topic_set')
-
     objects = models.Manager()
     slug = models.SlugField(max_length=130, unique=True)
+
 
     def get_absolute_url(self):
         return reverse('category', kwargs={"slug": self.slug})
