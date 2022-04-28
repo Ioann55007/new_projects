@@ -13,20 +13,24 @@ Including another URLconf
     1. Import the includes() function: from django.urls import includes, path
     2. Add a URL to urlpatterns:  path('blog/', includes('blog.urls'))
 """
+from .yasg import urlpatterns as doc_urls
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('api/', include('rest_framework.urls')),
     path('', include('create_topicApp.urls', namespace='create_topicApp')),
     path('', include('forum.urls', namespace='forum')),
     path('', include('registration_App.urls', namespace='registration_App')),
+    path('api/v1/', include('forum.urls', namespace='forum')),
 
 ]
+
+urlpatterns += doc_urls
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

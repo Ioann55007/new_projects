@@ -42,3 +42,23 @@ class CreatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Created
         fields = ('topic',)
+
+
+class TopicListSerializers(serializers.ModelSerializer):
+    category = CategorySerializer()
+    profit = serializers.SerializerMethodField(method_name='get_profit')
+
+    def get_profit(self, obj):
+        return obj.fess_in_world - obj.budget
+
+    class Meta:
+        model = Topic
+        fields = ('id', 'name', 'category', 'profit')
+
+
+class TopicDetailSerializer(serializers.ModelSerializer):
+    """Полный фильм"""
+    category = serializers.SlugRelatedField(slug_field="name", read_only=True)
+
+    class Meta:
+        model = Topic

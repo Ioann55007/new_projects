@@ -1,22 +1,26 @@
-from django.shortcuts import render
-
-# Create your views here.
-from django.db.models import Q, QuerySet
-from django.template import context
+from .filters import TopicFilter
+from django.db.models import Q
 from django.urls import reverse
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import AllowAny
+from rest_framework.viewsets import ModelViewSet
 
+from . import serializers
 from .models import Topic, Category
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView
 from taggit.models import Tag
-from rest_framework.viewsets import ModelViewSet
-from . import serializers
 
-#
-# def Main(request):
-#     topics = Topic.objects.all().order_by('name')
-#     return render(request, 'index.html', {'topics': topics})
+from .serializers import TopicListSerializers, TopicDetailSerializer
+from .services import BlogService
+
+
+class ViewSet(ModelViewSet):
+    http_method_names = ('get', 'post', 'put', 'delete')
+    lookup_field = 'slug'
+    permission_classes = (AllowAny,)
+
 
 class Search(ListView):
     model = Topic
@@ -71,16 +75,6 @@ class TopicListView(ListView):
     template_name = 'index.html'
 
 
-    # def get_queryset(self):
-    #     # попытаться получить категорию
-    #     # category = Category.objects.get(Category, slug__iexact=self.kwargs.get('slug'))
-    #     # вывести новости из категории
-    #     # category = Topic.objects.get(Category)
-    #     category = Topic.objects.filter(Category__id=self.kwargs['slug'])
-    #     queryset = category.topic.all()
-    #     return queryset
-
-
 class ByCategory(ListView):
     model = Topic
     context_object_name = 'category'
@@ -122,43 +116,37 @@ class CategoryDetailView(DetailView):
 
 
 
+class TopicViewSet(ViewSet):
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TopicFilter
 
-
-# class ViewSet(ModelViewSet):
-#     http_method_names = ('get', 'post', 'put', 'delete')
-#     lookup_field = 'name'
-
-
-# class TopicViewSet(ViewSet):
-
-    # def get_queryset(self):
-    #     return Topic.objects.all()
-    #
-    # def topic_detail(request):
-    #     topics = Topic.objects.all().order_by('name')
-    #     topic_author = Topic.objects.all()
-    #     categories = Category.objects.all()
-
-        # return render(request,
-        #               'topic_detail.html',
-        #               {
-        #                   'topics': topics,
-        #                   'category': categories,
-        #                   'topic_author': topic_author,
-        #               })
-
-    # def get_template_name(self):
-    #     if self.action == 'retrieve':
-    #         return 'topic_detail.html'
-    #
     # def get_serializer_class(self):
     #     if self.action == 'list':
-    #         return serializers.TopicUnSerializer
-    #
-    # def retrieve(self, request, **kwargs):
-    #     response = super().retrieve(request, **kwargs)
-    #     response.template_name = self.get_template_name()
-    #     return response
+    #         return TopicListSerializers
+    #     elif self.action == "retrieve":
+    #         return TopicDetailSerializer
 
+    def get_template_name(self):
+        if self.action == 'list':
+            return 'index.html'
+        elif self.action == 'retrieve':
+            return 'forum/topic_detail.html'
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializers.TopicSerializer
+        elif self.action == 'create':
+            return serializers.CreatedSerializer
 
+    def get_queryset(self):
+        return BlogService.get_active_articles()
+
+    def list(self, request, **kwargs):
+        response = super().list(request, **kwargs)
+        response.template_name = self.get_template_name()
+        return response
+
+    def retrieve(self, request, **kwargs):
+        response = super().retrieve(request, **kwargs)
+        response.template_name = self.get_template_name()
+        return response
