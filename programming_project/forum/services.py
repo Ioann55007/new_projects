@@ -1,22 +1,18 @@
-from django.conf import settings
-from django.db.models import Count, QuerySet, Prefetch
+from django.db.models import QuerySet
 
 from .models import Category, Topic
 
 
 class BlogService:
-
     @staticmethod
     def category_queryset() -> QuerySet[Category]:
         return Category.objects.all()
 
     @staticmethod
-    def get_active_articles() -> QuerySet[Topic]:
+    def get_active_topics() -> QuerySet[Topic]:
         return (Topic.objects
-                .select_related('category', 'author')
-                )
-
+                .select_related('category'))
 
     @staticmethod
-    def is_article_slug_exist(title: str) -> bool:
-        return Topic.objects.filter(slug=Topic.get_slug(title)).exists()
+    def is_topic_slug_exist(name: str) -> bool:
+        return Topic.objects.filter(slug=Topic.get_slug(name)).exists()

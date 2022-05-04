@@ -22,11 +22,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/', include('rest_framework.urls')),
+    path('api/', include('rest_framework.urls')),
     path('', include('create_topicApp.urls', namespace='create_topicApp')),
     path('', include('forum.urls', namespace='forum')),
     path('', include('registration_App.urls', namespace='registration_App')),
-    path('api/v1/', include('forum.urls', namespace='forum')),
 
 ]
 

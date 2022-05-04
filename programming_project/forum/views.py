@@ -74,6 +74,11 @@ class TopicListView(ListView):
     queryset = Topic.objects.all()
     template_name = 'index.html'
 
+    # def modal_topic(request):
+    #     topic = Topic.objects.order_by('-id')[0:5]
+    #     return render(request, 'index.html', {'topic': topic})
+
+
 
 class ByCategory(ListView):
     model = Topic
@@ -114,17 +119,8 @@ class CategoryDetailView(DetailView):
         return render(request, 'forum:category_detail.html', {'category': category,  'topics': topics})
 
 
-
-
 class TopicViewSet(ViewSet):
-    filter_backends = (DjangoFilterBackend,)
     filterset_class = TopicFilter
-
-    # def get_serializer_class(self):
-    #     if self.action == 'list':
-    #         return TopicListSerializers
-    #     elif self.action == "retrieve":
-    #         return TopicDetailSerializer
 
     def get_template_name(self):
         if self.action == 'list':
@@ -139,7 +135,7 @@ class TopicViewSet(ViewSet):
             return serializers.CreatedSerializer
 
     def get_queryset(self):
-        return BlogService.get_active_articles()
+        return BlogService.get_active_topics()
 
     def list(self, request, **kwargs):
         response = super().list(request, **kwargs)
@@ -147,6 +143,21 @@ class TopicViewSet(ViewSet):
         return response
 
     def retrieve(self, request, **kwargs):
-        response = super().retrieve(request, **kwargs)
+        response = super().list(request, **kwargs)
         response.template_name = self.get_template_name()
         return response
+
+
+# def modal_topic(*args, **kwargs):
+#     template_name = 'modal_new_topics.html'
+#     return template_name
+
+
+# def modal_topic(request):
+#     return render(request, "modal_new_topics.html")
+
+
+
+def modal_topic(request):
+    topic = Topic.objects.order_by('-id')[0:5]
+    return render(request, 'modal_new_topics.html', {'topic': topic})

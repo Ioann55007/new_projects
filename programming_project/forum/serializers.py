@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from taggit.serializers import TaggitSerializer, TagListSerializerField
 
 from .models import Category, Topic, Replies, User, Created
+from .services import BlogService
 
 
 class TopicUnSerializer(serializers.ModelSerializer):
@@ -15,15 +17,24 @@ class TopicUnSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    # class Meta:
+    #     model = Category
+    #     fields = ('name', 'author', 'created', 'url', 'topic')
+
+    slug = serializers.SlugField(read_only=True, allow_unicode=True)
+
     class Meta:
         model = Category
-        fields = ('name', 'author', 'created', 'url', 'topic')
+        fields = ('id', 'name', 'slug', 'author', 'topic')
 
 
 class TopicSerializer(serializers.ModelSerializer):
+    url = serializers.CharField(source='get_absolute_url')
+    category = CategorySerializer
+
     class Meta:
         model = Topic
-        fields = ('name',  'url', 'author', 'created', 'content', 'tags', 'category')
+        fields = ('name', 'url', 'category','content', 'author', 'created')
 
 
 class RepliesSerializer(serializers.ModelSerializer):
@@ -62,3 +73,21 @@ class TopicDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
+
+
+class CreateTopicSerializer(TaggitSerializer, serializers.ModelSerializer):
+    objects = None
+    tags = TagListSerializerField()
+
+    class Meta:
+        model = Topic
+        fields = ('name', 'category', 'image', 'content', 'tags')
+
+    def create(self, validated_data):
+        validated_data['author'] = self.context.get('request').user
+        return super().create(validated_data)
+
+    def validate_title(self, name: str):
+        if BlogService.is_article_slug_exist(name):
+            raise serializers.ValidationError("This title already exists")
+        return name

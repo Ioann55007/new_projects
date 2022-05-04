@@ -47,7 +47,6 @@ class Topic(models.Model):
     # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
     content = models.TextField()
     tags = TaggableManager()
-    # url = models.SlugField(max_length=130, unique=True)
     slug = models.SlugField(max_length=130, unique=True)
 
     def __str__(self):
