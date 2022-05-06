@@ -4,6 +4,7 @@ from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
+from django.http import HttpResponseRedirect
 
 from . import serializers
 from .models import Topic, Category
@@ -74,11 +75,6 @@ class TopicListView(ListView):
     queryset = Topic.objects.all()
     template_name = 'index.html'
 
-    # def modal_topic(request):
-    #     topic = Topic.objects.order_by('-id')[0:5]
-    #     return render(request, 'index.html', {'topic': topic})
-
-
 
 class ByCategory(ListView):
     model = Topic
@@ -148,16 +144,14 @@ class TopicViewSet(ViewSet):
         return response
 
 
-# def modal_topic(*args, **kwargs):
-#     template_name = 'modal_new_topics.html'
-#     return template_name
-
-
-# def modal_topic(request):
-#     return render(request, "modal_new_topics.html")
-
-
 
 def modal_topic(request):
     topic = Topic.objects.order_by('-id')[0:5]
     return render(request, 'modal_new_topics.html', {'topic': topic})
+
+
+# def modal_topic(request):
+#     topic = Topic.objects.order_by('-id')[0:5]
+#     return HttpResponseRedirect('http://1/new_topics/', {'topic': topic})
+
+

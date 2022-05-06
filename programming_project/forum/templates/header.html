@@ -65,12 +65,24 @@
                             <ul class="dropdown__catalog row">
                                 <li class="col-xs-6"><a href="{% url 'forum:modal_topic' %}"
                                 >New</a></li>
-                               <form id="myModalForm" method="get" action="{% url 'forum:modal_topic'  %}">
-                                <button type="button" data-toggle="modal" data-target="#myModal">Launch modal</button>
-                               </form>
+                              <li class="col-xs-6">
                                 <button type="button" id="myForm"  onclick="document.location='1/new_topics/'">
-                                    Cli</button>
+                                    New</button></li>
 
+
+                                <div><dialog id="window">
+                                    <h3>List new topics!</h3>
+
+                                    {% for item in topic %}
+                                        {{ item.name }}
+
+                                            {% if not forloop.last %}: {% endif %}
+                                    {% endfor %}
+
+                                    <button id="exit">Выйти</button>
+                                </dialog>
+                                </div>
+                                <button id="show">Показать диалоговое окно</button>
                                 <li class="col-xs-6"><a href="#">Unread</a></li>
                                 <li class="col-xs-6"><a href="#">Users</a></li>
                                 <li class="col-xs-6"><a href="#">Tags</a></li>
@@ -91,6 +103,7 @@
                                 <li class="col-xs-6"><a href="#">Forum Rules</a></li>
                                 <li class="col-xs-6"><a href="#">Blog</a></li>
                                 <li class="col-xs-6"><a href="#">About Us</a></li>
+
                             </ul>
                         </div>
                     </nav>
@@ -123,14 +136,12 @@
                 <a href="{% url 'create_topicApp:create_top' %}"><img src="static/fonts/icons/main/New_Topic.svg" alt="New Topic"></a>
             </div>
         </div>
+
     <script src="static/vendor/jquery/jquery.min.js"></script>
 
     <script type="text/javascript" src="static/js/modal_new.js"></script>
 
+
     </header>
-
-
-
-
 
 
