@@ -73,11 +73,6 @@
                                 <div><dialog id="window">
                                     <h3>List new topics!</h3>
 
-                                    {% for item in topic %}
-                                        {{ item.name }}
-
-                                            {% if not forloop.last %}: {% endif %}
-                                    {% endfor %}
 
                                     <button id="exit">Выйти</button>
                                 </dialog>
@@ -108,6 +103,7 @@
                         </div>
                     </nav>
                 </div>
+
                 <div class="header__notification">
                     <div class="header__notification-btn" data-dropdown-btn="notification">
                         <i class="icon-Notification"></i>

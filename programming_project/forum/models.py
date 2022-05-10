@@ -80,6 +80,7 @@ class Replies(models.Model):
 
 # class Views(models.Model):
 #     topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)
+#     views = models.ManyToManyField("Ip", related_name="post_views", blank=True)
 
 
 class Created(models.Model):

@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 
 from . import serializers
 from .models import Topic, Category
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
 from taggit.models import Tag
@@ -74,6 +74,7 @@ class TopicListView(ListView):
     model = Topic
     queryset = Topic.objects.all()
     template_name = 'index.html'
+
 
 
 class ByCategory(ListView):
@@ -147,11 +148,5 @@ class TopicViewSet(ViewSet):
 
 def modal_topic(request):
     topic = Topic.objects.order_by('-id')[0:5]
-    return render(request, 'modal_new_topics.html', {'topic': topic})
-
-
-# def modal_topic(request):
-#     topic = Topic.objects.order_by('-id')[0:5]
-#     return HttpResponseRedirect('http://1/new_topics/', {'topic': topic})
-
+    return render(request,  'modal_new_topics.html', {'topic': topic})
 
