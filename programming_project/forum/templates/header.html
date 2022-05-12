@@ -66,10 +66,6 @@
                                 <li class="col-xs-6"><a href="{% url 'forum:modal_topic' %}"
                                 >New</a></li>
                               <li class="col-xs-6">
-                                <button type="button" id="myForm"  onclick="document.location='1/new_topics/'">
-                                    New</button></li>
-
-
                                 <div><dialog id="window">
                                     <h3>List new topics!</h3>
 
@@ -78,9 +74,32 @@
                                 </dialog>
                                 </div>
                                 <button id="show">Показать диалоговое окно</button>
+
                                 <li class="col-xs-6"><a href="#">Unread</a></li>
                                 <li class="col-xs-6"><a href="#">Users</a></li>
-                                <li class="col-xs-6"><a href="#">Tags</a></li>
+                                <button class="col-xs-6" id="sh">Tags</button>
+
+                                 <div><dialog id="wind" style="background-color: red">
+                                    <h3>Tags</h3>
+
+
+                                         {% get_tags as tags %}
+                                         {% for tag in tags %}
+                                            {{tag.name}}
+                                           {% if not forloop.last %}: {% endif %}
+
+                                         {% endfor %}
+
+
+                                    <button id="ex">Выйти</button>
+                                </dialog>
+                                </div>
+
+
+
+
+
+
                             </ul>
                         </div>
                         <div>
@@ -132,12 +151,42 @@
                 <a href="{% url 'create_topicApp:create_top' %}"><img src="static/fonts/icons/main/New_Topic.svg" alt="New Topic"></a>
             </div>
         </div>
+<script>
+(function() {
+            var dialog = document.getElementById('window');
+
+            document.getElementById('show').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('exit').onclick = function() {
+                dialog.close();
+            };
+
+        })();
+
+
+
+
+
+  (function() {
+            var dialog = document.getElementById('wind');
+
+            document.getElementById('sh').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('ex').onclick = function() {
+                dialog.close();
+            };
+
+        })();
+
+</script>
+
+
+
+
+ </header>
 
     <script src="static/vendor/jquery/jquery.min.js"></script>
 
-    <script type="text/javascript" src="static/js/modal_new.js"></script>
-
-
-    </header>
-
-
+    <script  src="{% static 'js/modal_new.js' %}"></script>

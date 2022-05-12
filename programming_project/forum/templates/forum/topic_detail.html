@@ -589,10 +589,71 @@
                 </div>
             </div>
         </div>
+    <div><dialog id="window">
+        <h3>List new topics!</h3>
+            {% get_tags as tags %}
+             {% for tag in tags %}
+                {{tag.name}}
+               {% if not forloop.last %}: {% endif %}
+
+            {% endfor %}
+
+        <button id="exit">Выйти</button>
+    </dialog>
+    </div>
+    <button id="show">Tags</button>
+
+<!-- Modal -->
+<dialog id="wind">
+        <h3>List new topics!</h3>
+            {% get_tags as tags %}
+             {% for tag in tags %}
+                {{tag.name}}
+               {% if not forloop.last %}: {% endif %}
+
+            {% endfor %}
+
+        <button id="ex">Выйти</button>
+    </dialog>
+    <button id="sh">Tags</button>
+
+<script>
+    (function() {
+            var dialog = document.getElementById('window');
+
+            document.getElementById('show').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('exit').onclick = function() {
+                dialog.close();
+            };
+
+        })();
+
+
+    (function() {
+            var dialog = document.getElementById('wind');
+
+            document.getElementById('sh').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('ex').onclick = function() {
+                dialog.close();
+            };
+
+        })();
+
+
+
+
+</script>
+
     </footer>
+
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
-    <script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+
+<script src="{% static 'js/app.js' %}"></script>
 
 </body>
 </html>

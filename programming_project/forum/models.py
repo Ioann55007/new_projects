@@ -16,25 +16,20 @@ class Category(models.Model):
     objects = models.Manager()
     slug = models.SlugField(max_length=130, unique=True)
 
-
     def get_absolute_url(self):
         return reverse('category', kwargs={"slug": self.slug})
 
-
     def __str__(self):
         return self.name
-
 
     def save(self, *args, **kwargs):
         value = self.name
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
-
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
-
 
 
 class Topic(models.Model):
@@ -45,6 +40,7 @@ class Topic(models.Model):
     author = models.CharField(max_length=9)
     created = models.DateField(auto_now=False)
     # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
+    views = models.ManyToManyField("Ip", related_name="topic_views", blank=True)
     content = models.TextField()
     tags = TaggableManager()
     slug = models.SlugField(max_length=130, unique=True)
@@ -59,11 +55,9 @@ class Topic(models.Model):
     def tag_list(self) -> str:
         return u", ".join(o.name for o in self.tags.all())
 
-
     class Meta:
         verbose_name = 'Topic'
         verbose_name_plural = 'Topics'
-
 
 
 class Replies(models.Model):
@@ -75,11 +69,11 @@ class Replies(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_set', blank=True, null=True)
 
     def __str__(self):
-        return self. author_name
+        return self.author_name
 
 
 # class Views(models.Model):
-#     topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)
+#     # topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)
 #     views = models.ManyToManyField("Ip", related_name="post_views", blank=True)
 
 
@@ -90,3 +84,9 @@ class Created(models.Model):
 class User(models.Model):
     name = models.CharField(max_length=12)
     image = models.ImageField(upload_to='media/', default='no_image.jpg')
+
+
+class Ip(models.Model):
+    ip = models.CharField(max_length=100)
+    updated = models.DateTimeField(auto_now=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ip_user')
