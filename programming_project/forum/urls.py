@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
-from .views import Search, topic_view, modal_topic
+from .views import Search, topic_view, modal_topic, ForumRulesView
 
 app_name = 'forum'
 
@@ -18,5 +18,6 @@ urlpatterns = format_suffix_patterns([
     path("list/1/", views.TopicViewSet.as_view({'get': 'list'})),
     path("<int:pk>/", views.TopicViewSet.as_view({'get': 'retrieve'})),
     path('1/new_topics/', modal_topic, name='modal_topic'),
+    path('3/forum_rules/', views.ForumRulesView.as_view(), name='forum_rules'),
 
 ])

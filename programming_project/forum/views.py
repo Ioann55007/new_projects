@@ -5,6 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 
 from . import serializers
 from .models import Topic, Category
@@ -73,7 +74,9 @@ class SingleTopicPageView(View):
 class TopicListView(ListView):
     model = Topic
     queryset = Topic.objects.all()
+
     template_name = 'index.html'
+
 
 
 
@@ -161,3 +164,9 @@ def modal_topic(request):
     topic = Topic.objects.order_by('-id')[0:5]
     return render(request,  'modal_new_topics.html', {'topic': topic})
 
+
+class ForumRulesView(View):
+    template_name = 'forum_rules.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

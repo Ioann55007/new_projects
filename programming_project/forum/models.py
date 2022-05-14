@@ -8,6 +8,12 @@ from taggit.managers import TaggableManager
 from rest_framework.reverse import reverse_lazy
 
 
+class User(models.Model):
+    name = models.CharField(max_length=12)
+    image = models.ImageField(upload_to='media/', default='no_image.jpg')
+
+
+
 class Category(models.Model):
     """Категории"""
     name = models.CharField(max_length=170)
@@ -38,6 +44,7 @@ class Topic(models.Model):
         Category, verbose_name="Category", on_delete=models.SET_NULL, null=True, related_name='topic'
     )
     author = models.CharField(max_length=9)
+
     created = models.DateField(auto_now=False)
     # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
     views = models.ManyToManyField("Ip", related_name="topic_views", blank=True)
@@ -79,11 +86,6 @@ class Replies(models.Model):
 
 class Created(models.Model):
     topic = models.ForeignKey(Topic, related_name='topic_created_set', on_delete=models.SET_NULL, null=True)
-
-
-class User(models.Model):
-    name = models.CharField(max_length=12)
-    image = models.ImageField(upload_to='media/', default='no_image.jpg')
 
 
 class Ip(models.Model):
