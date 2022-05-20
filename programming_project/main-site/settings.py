@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+from os import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,6 +23,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jb#l7g-6d!-(*5o@nxq!mz=y%85q=a#dkvzt&no$@f%1-pny(j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(environ.get("EMAIL_PORT", 465))
+EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'forumprogrammer.site@gmail.com')
+EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '19951383ok')
+DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'forumprogrammer.site@gmail.com')
+EMAIL_TIMEOUT = int(environ.get('EMAIL_TIMEOUT', 15))
+EMAIL_USE_SSL = int(environ.get('EMAIL_USE_SSL', 1))
+EMAIL_USE_TLS = int(environ.get('EMAIL_USE_TLS', 0))
+
+ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
+FRONTEND_SITE = 'http://localhost:8000'
+
+SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'forum_programmer@gmail.ru')
+SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'django_forum15')
+
 DEBUG = True
 
 ALLOWED_HOSTS = []

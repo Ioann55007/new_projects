@@ -165,8 +165,35 @@ def modal_topic(request):
     return render(request,  'modal_new_topics.html', {'topic': topic})
 
 
+def modal_latest_topic(request):
+    tops = Topic.objects.order_by('-id')[0:1]
+    return render(request,  'modal_latest_topic.html', {'tops': tops})
+
+
 class ForumRulesView(View):
     template_name = 'forum_rules.html'
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+class AboutUsView(View):
+    template_name = 'about_us.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class ContactUsView(View):
+    template_name = 'contact_us.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class SendEmailView(View):
+    template_name = 'email/send_email.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
