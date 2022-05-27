@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from taggit.serializers import TaggitSerializer, TagListSerializerField
 
-from .models import Category, Topic, Replies, User, Created
+from .models import Category, Topic, Replies, User, Created, Feedback
 from .services import BlogService
 
 
@@ -91,3 +91,20 @@ class CreateTopicSerializer(TaggitSerializer, serializers.ModelSerializer):
         if BlogService.is_article_slug_exist(name):
             raise serializers.ValidationError("This title already exists")
         return name
+
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False)
+    name = serializers.CharField(min_length=2, required=False)
+
+    class Meta:
+        model = Feedback
+        fields = ('name', 'email', 'content', 'file')
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            validated_data['name'] = user.full_name()
+            validated_data['email'] = user.email
+        return super().create(validated_data)

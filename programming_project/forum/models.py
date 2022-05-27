@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
 from rest_framework.reverse import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 
 class User(models.Model):
@@ -92,3 +93,13 @@ class Ip(models.Model):
     ip = models.CharField(max_length=100)
     updated = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ip_user')
+
+
+class Feedback(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    content = models.TextField()
+    file = models.FileField(upload_to='feedback_files/', null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Feedback')

@@ -1,11 +1,16 @@
-
+from django.db import router
 from django.urls import path
+from django.conf import settings
+
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, ContactUsView
+from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email
 
 app_name = 'forum'
+
+router = DefaultRouter()
 
 
 urlpatterns = format_suffix_patterns([
@@ -21,7 +26,5 @@ urlpatterns = format_suffix_patterns([
     path('2/latest_topic/', modal_latest_topic, name='modal_latest_topic'),
     path('3/forum_rules/', views.ForumRulesView.as_view(), name='forum_rules'),
     path('4/about_us/', views.AboutUsView.as_view(), name='about_us'),
-    path('5/contact_us/', views.ContactUsView.as_view(), name='contact_us'),
-    path('6/email_send/', views.SendEmailView.as_view(), name='contact_us'),
-
+    path('5/email_send/', send_email, name='send_email'),
 ])

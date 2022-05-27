@@ -1,20 +1,18 @@
+
 from .filters import TopicFilter
 from django.db.models import Q
 from django.urls import reverse
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
-from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
-
 from . import serializers
 from .models import Topic, Category
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView
 from taggit.models import Tag
-
-from .serializers import TopicListSerializers, TopicDetailSerializer
+from django.core.mail import send_mail
+from .forms import ContactForm
+from .serializers import TopicListSerializers, TopicDetailSerializer, FeedbackSerializer
 from .services import BlogService
 
 
@@ -36,7 +34,6 @@ class Search(ListView):
 
         return object_list
 
-
     def topic_list(request, tag_slug=None):
         object_list = Topic.published.all()
         topics = Topic.objects.all().order_by('name')
@@ -49,13 +46,12 @@ class Search(ListView):
         return render(request, object_list,
                       'search_results.html',
                       {
-                       'topic': topics,
-                       'category': categories,
-                       'tag': tag})
+                          'topic': topics,
+                          'category': categories,
+                          'tag': tag})
 
 
 def topic_view(request, category_id):
-
     cat = Topic.objects.all()
     context = {
         'cat': cat.filter(category=category_id),
@@ -78,8 +74,6 @@ class TopicListView(ListView):
     template_name = 'index.html'
 
 
-
-
 class ByCategory(ListView):
     model = Topic
     context_object_name = 'category'
@@ -96,8 +90,6 @@ class TopicDetailView(DetailView):
     queryset = Topic.objects.all()
     slug_field = "id"
 
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -112,10 +104,8 @@ class TopicDetailView(DetailView):
         return ip
 
 
-
 class CategoryDetailView(DetailView):
     model = Category
-    # queryset = Category.objects.all()
     slug_field = "slug"
 
     def get_context_data(self, **kwargs):
@@ -123,11 +113,10 @@ class CategoryDetailView(DetailView):
 
         return context
 
-
     def topicInCategory(request, id):
         category = Category.objects.filter().get(id=id)
         topics = category.topic_set.all()
-        return render(request, 'forum:category_detail.html', {'category': category,  'topics': topics})
+        return render(request, 'forum:category_detail.html', {'category': category, 'topics': topics})
 
 
 class TopicViewSet(ViewSet):
@@ -159,15 +148,14 @@ class TopicViewSet(ViewSet):
         return response
 
 
-
 def modal_topic(request):
     topic = Topic.objects.order_by('-id')[0:5]
-    return render(request,  'modal_new_topics.html', {'topic': topic})
+    return render(request, 'modal_new_topics.html', {'topic': topic})
 
 
 def modal_latest_topic(request):
     tops = Topic.objects.order_by('-id')[0:1]
-    return render(request,  'modal_latest_topic.html', {'tops': tops})
+    return render(request, 'modal_latest_topic.html', {'tops': tops})
 
 
 class ForumRulesView(View):
@@ -184,16 +172,17 @@ class AboutUsView(View):
         return render(request, self.template_name)
 
 
-class ContactUsView(View):
-    template_name = 'contact_us.html'
+def send_email(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            mail = send_mail(form.cleaned_data['email'], form.cleaned_data['content'],
+                             'forumprogrammer.site@gmail.com', ['ioann.basic@gmail.com'], fail_silently=False)
 
-    def get(self, request):
-        return render(request, self.template_name)
+            if mail:
+                return render(request, 'email/send_email.html')
 
-
-class SendEmailView(View):
-    template_name = 'email/send_email.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
+    else:
+        form = ContactForm()
+    return render(request, 'email/contact_us.html', {'form': form})
 
