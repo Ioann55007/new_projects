@@ -186,3 +186,9 @@ def send_email(request):
         form = ContactForm()
     return render(request, 'email/contact_us.html', {'form': form})
 
+
+class TeamView(View):
+    template_name = 'team/the_team.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

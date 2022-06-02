@@ -6,7 +6,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email
+from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView
 
 app_name = 'forum'
 
@@ -27,4 +27,5 @@ urlpatterns = format_suffix_patterns([
     path('3/forum_rules/', views.ForumRulesView.as_view(), name='forum_rules'),
     path('4/about_us/', views.AboutUsView.as_view(), name='about_us'),
     path('5/email_send/', send_email, name='send_email'),
+    path('6/team', TeamView.as_view(), name='the_team')
 ])
