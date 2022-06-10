@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from django.contrib import admin
 
-from .models import Category, Topic, Replies,  User
+from .models import Category, Topic, Replies, User, TopicLikes
 
 
 @admin.register(Category)
@@ -25,7 +25,7 @@ class TopicAdmin(admin.ModelAdmin):
     # list_display = ('views',)
     list_display = ("name", 'category', 'tag_list', 'slug')
     fields = ('category', 'name',  'author',  'content', 'created', 'tags', 'slug')
-
+    search_fields = ('name', 'category')
 
 
 @admin.register(Replies)
@@ -38,3 +38,13 @@ class RepliesAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     """Пользователи"""
     list_display = ('name', 'image')
+    search_fields = ('name',)
+
+
+@admin.register(TopicLikes)
+class TopicLikesAdmin(admin.ModelAdmin):
+    """Лайки"""
+    autocomplete_fields = ['liked_by', 'topic_post']
+    list_display = ('topic_post', 'liked_by', 'like', 'created')
+
+

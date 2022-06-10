@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
 from rest_framework.reverse import reverse_lazy
@@ -12,7 +14,6 @@ from django.utils.translation import gettext_lazy as _
 class User(models.Model):
     name = models.CharField(max_length=12)
     image = models.ImageField(upload_to='media/', default='no_image.jpg')
-
 
 
 class Category(models.Model):
@@ -103,3 +104,28 @@ class Feedback(models.Model):
 
     class Meta:
         verbose_name = _('Feedback')
+
+
+# class UserTopicRelation(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+#     like = models.BooleanField(default=False)
+#     in_topics = models.BooleanField(default=False)
+#
+#     def __str__(self):
+#         return f'{self.user}:{self.topic}'
+
+
+class TopicLikes(models.Model):
+    topic_post = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='Публикация в теме')
+    liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='Поставил лайк')
+    like = models.BooleanField('Like', default=False)
+    created = models.DateTimeField('Дата и время', default=timezone.now)
+
+    def __str__(self):
+        return f'{self.liked_by}:{self.topic_post} {self.like}'
+
+    class Meta:
+        verbose_name = 'Topic Like'
+        verbose_name_plural = 'Topic Likes'
+

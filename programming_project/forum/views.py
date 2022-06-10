@@ -1,19 +1,31 @@
+import re
+from urllib.parse import urlsplit, urlunsplit
 
-from .filters import TopicFilter
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db.models import Q
-from django.urls import reverse
-from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ModelViewSet
-from . import serializers
-from .models import Topic, Category
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme, quote_etag
+from django.utils.translation import (
+    LANGUAGE_SESSION_KEY, check_for_language
+)
 from django.views import View
 from django.views.generic import ListView, DetailView
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from taggit.models import Tag
-from django.core.mail import send_mail
+
+from . import serializers
+from .filters import TopicFilter
 from .forms import ContactForm
-from .serializers import TopicListSerializers, TopicDetailSerializer, FeedbackSerializer
+from .models import Topic, Category, TopicLikes
+
 from .services import BlogService
+from main_site import settings
 
 
 class ViewSet(ModelViewSet):
@@ -192,3 +204,67 @@ class TeamView(View):
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+def lang(request, lang_code):
+    next = request.POST.get('next', request.GET.get('next'))
+    if (next or not request.headers.get('x-requested-with')) and not url_has_allowed_host_and_scheme(url=next,
+                                                                                                     allowed_hosts=request.get_host()):
+        next = request.META.get('HTTP_REFERER')
+        if next:
+            next = quote_etag(next)  # HTTP_REFERER may be encoded.
+        if not url_has_allowed_host_and_scheme(url=next, allowed_hosts=request.get_host()):
+            next = '/'
+    response = HttpResponseRedirect(next) if next else HttpResponse(status=204)
+
+    if lang_code and check_for_language(lang_code):
+        if next:
+            for code_tuple in settings.LANGUAGES:
+                settings_lang_code = "/" + code_tuple[0]
+                parsed = urlsplit(next)
+                if parsed.path.startswith(settings_lang_code):
+                    path = re.sub('^' + settings_lang_code, '', parsed.path)
+                    next = urlunsplit((parsed.scheme, parsed.netloc, path, parsed.query, parsed.fragment))
+            response = HttpResponseRedirect(next)
+        if hasattr(request, 'session'):
+            request.session[LANGUAGE_SESSION_KEY] = lang_code
+        else:
+            response.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME, lang_code,
+                max_age=settings.LANGUAGE_COOKIE_AGE,
+                path=settings.LANGUAGE_COOKIE_PATH,
+                domain=settings.LANGUAGE_COOKIE_DOMAIN,
+            )
+    return response
+
+
+class AddLikeView(View):
+    def post(self, request, *args, **kwargs):
+        topic_post_id = int(request.POST.get('topic_post_id'))
+        user_id = int(request.POST.get('user_id'))
+        url_from = request.POST.get('url_from')
+
+        user_inst = User.objects.get(id=user_id)
+        topic_post_inst = Topic.objects.get(id=topic_post_id)
+
+        try:
+            topic_like_inst = TopicLikes.objects.get(topic_post=topic_post_inst, liked_by=user_inst)
+        except Exception as e:
+            topic_like = TopicLikes(topic_post=topic_post_inst, \
+                                    liked_by=user_inst, \
+                                    like=True
+                                    )
+            topic_like.save()
+
+        return redirect(url_from)
+
+
+class RemoveLikeView(View):
+    def post(self, request, *args, **kwargs):
+        topic_likes_id = int(request.POST.get('topic_likes_id'))
+        url_from       = request.POST.get('url_from')
+
+        topic_like = TopicLikes.objects.get(id=topic_likes_id)
+        topic_like.delete()
+
+        return redirect(url_from)

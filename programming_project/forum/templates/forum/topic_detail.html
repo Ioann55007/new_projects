@@ -264,9 +264,10 @@
                                             <span></span>
                                         </div>
                                         <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                            <span></span>
+                                            <i class="icon-Favorite_Topic"></i>
+                                            <span>{% include 'includes/add_like_post.html' with topic_post_id=object.id %}</span>
                                         </div>
+
                                     </div>
                                     <div class="topic__footer-share">
                                         <div data-visible="desktop">

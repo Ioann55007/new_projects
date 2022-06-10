@@ -1,4 +1,4 @@
-"""main-site URL Configuration
+"""main_site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -13,6 +13,9 @@ Including another URLconf
     1. Import the includes() function: from django.urls import includes, path
     2. Add a URL to urlpatterns:  path('blog/', includes('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
+from django.views.i18n import JavaScriptCatalog
+
 from .yasg import urlpatterns as doc_urls
 from django.contrib import admin
 from django.urls import path, include
