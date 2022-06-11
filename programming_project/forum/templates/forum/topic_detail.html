@@ -23,6 +23,7 @@
     <!-- Vendor -->
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+
     <!-- Custom -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
@@ -256,16 +257,27 @@
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
                                         <div>
+                                            <div>
                                             <a href="#"><i class="icon-Upvote"></i></a>
-                                            <span></span>
+                                            <span>201</span>
                                         </div>
                                         <div>
                                             <a href="#"><i class="icon-Downvote"></i></a>
+                                            <span>08</span>
+                                        </div>
+                                        <div>
+                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
+                                            <span>39</span>
+                                            {% include 'includes/add_like_post.html' %}
+
+                                        </div>
+
+                                        </div>
+                                        <div>
                                             <span></span>
                                         </div>
                                         <div>
-                                            <i class="icon-Favorite_Topic"></i>
-                                            <span>{% include 'includes/add_like_post.html' with topic_post_id=object.id %}</span>
+
                                         </div>
 
                                     </div>
@@ -360,7 +372,6 @@
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
                                         <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
                                             <span></span>
                                         </div>
                                         <div>
@@ -368,8 +379,7 @@
                                             <span></span>
                                         </div>
                                         <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                            <span></span>
+
                                         </div>
                                     </div>
                                     <div class="topic__footer-share">
@@ -405,7 +415,6 @@
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
                                         <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
                                         </div>
                                         <div>
                                             <a href="#"><i class="icon-Downvote"></i></a>

@@ -3,12 +3,16 @@ from django.db import models
 
 # Create your models here.
 from django.db import models
+from django.db.models import Sum
+
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
 from rest_framework.reverse import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 
 class User(models.Model):
@@ -53,6 +57,10 @@ class Topic(models.Model):
     content = models.TextField()
     tags = TaggableManager()
     slug = models.SlugField(max_length=130, unique=True)
+    likes = models.ManyToManyField(User, related_name='topic_posts')
+
+    def total_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.name
@@ -106,26 +114,22 @@ class Feedback(models.Model):
         verbose_name = _('Feedback')
 
 
-# class UserTopicRelation(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-#     like = models.BooleanField(default=False)
-#     in_topics = models.BooleanField(default=False)
+# class TopicLikes(models.Model):
+#     topic_post = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='Публикация в теме')
+#     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='Поставил лайк')
+#     like = models.BooleanField('Like', default=False)
+#     created = models.DateTimeField('Дата и время', default=timezone.now)
 #
 #     def __str__(self):
-#         return f'{self.user}:{self.topic}'
+#         return f'{self.liked_by}:{self.topic_post} {self.like}'
+#
+#     class Meta:
+#         verbose_name = 'Topic Like'
+#         verbose_name_plural = 'Topic Likes'
 
+# class TopLikes(models.Model):
+#     likes = models.ForeignKey(User, blank=True, on_delete=models.SET_NULL, null=True, related_name='likes', verbose_name='Лайк')
+#     dislikes = models.ForeignKey(User, blank=True, on_delete=models.SET_NULL, null=True, related_name='dislikes', verbose_name='дизлайк')
+#     created = models.DateTimeField('Дата и время', default=timezone.now)
 
-class TopicLikes(models.Model):
-    topic_post = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='Публикация в теме')
-    liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='Поставил лайк')
-    like = models.BooleanField('Like', default=False)
-    created = models.DateTimeField('Дата и время', default=timezone.now)
-
-    def __str__(self):
-        return f'{self.liked_by}:{self.topic_post} {self.like}'
-
-    class Meta:
-        verbose_name = 'Topic Like'
-        verbose_name_plural = 'Topic Likes'
 

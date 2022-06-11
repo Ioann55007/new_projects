@@ -1,23 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.db import router
 from django.urls import path, include
 from django.conf import settings
 
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework.routers import DefaultRouter, SimpleRouter
 
 from . import views
-from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView, \
-    AddLikeView, RemoveLikeView
+from .models import Topic
+from django.contrib.auth.decorators import login_required
+
+from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView, LikeView
 
 app_name = 'forum'
-
-# router = DefaultRouter()
-
-
-
-
-
-
 
 urlpatterns = format_suffix_patterns([
     path('', views.TopicListView.as_view(), name='main'),
@@ -37,11 +31,10 @@ urlpatterns = format_suffix_patterns([
     path('lang/<lang_code>/', views.lang, name='lang'),
 ])
 
-
 urlpatterns += [
-    path("likes/", include([
-        path('add/', AddLikeView.as_view(), name='add'),
-        path('remove/', RemoveLikeView.as_view(), name='remove'),
-    ])),
+    # path('like/<int:pk>', LikeView, name='like_post'),
+    path('like/<int:slug>/', views.LikeView, name='like_topic'),
 
 ]
+
+

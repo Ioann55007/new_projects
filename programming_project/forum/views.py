@@ -2,6 +2,7 @@ import re
 from urllib.parse import urlsplit, urlunsplit
 
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import Q
@@ -14,18 +15,31 @@ from django.utils.translation import (
 )
 from django.views import View
 from django.views.generic import ListView, DetailView
+from rest_framework import viewsets
 from rest_framework.mixins import UpdateModelMixin
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from taggit.models import Tag
 
 from . import serializers
 from .filters import TopicFilter
 from .forms import ContactForm
-from .models import Topic, Category, TopicLikes
+from .models import Topic, Category
 
 from .services import BlogService
 from main_site import settings
+
+import json
+
+from django.http import HttpResponse
+from django.views import View
+from django.contrib.contenttypes.models import ContentType
+
+
+def LikeView(request, slug):
+    topic = get_object_or_404(Topic, id=request.POST.get('topic_id'))
+    topic.likes.add(request.user)
+    return HttpResponseRedirect(reverse('topic_detail', args=[str(slug)]))
 
 
 class ViewSet(ModelViewSet):
@@ -102,9 +116,11 @@ class TopicDetailView(DetailView):
     queryset = Topic.objects.all()
     slug_field = "id"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        stuff = get_object_or_404(Topic, id=self.kwargs['slug'])
+        total_likes = stuff.total_likes()
+        context["total_likes"] = total_likes
         return context
 
     def get_client_ip(request):
@@ -236,35 +252,3 @@ def lang(request, lang_code):
                 domain=settings.LANGUAGE_COOKIE_DOMAIN,
             )
     return response
-
-
-class AddLikeView(View):
-    def post(self, request, *args, **kwargs):
-        topic_post_id = int(request.POST.get('topic_post_id'))
-        user_id = int(request.POST.get('user_id'))
-        url_from = request.POST.get('url_from')
-
-        user_inst = User.objects.get(id=user_id)
-        topic_post_inst = Topic.objects.get(id=topic_post_id)
-
-        try:
-            topic_like_inst = TopicLikes.objects.get(topic_post=topic_post_inst, liked_by=user_inst)
-        except Exception as e:
-            topic_like = TopicLikes(topic_post=topic_post_inst, \
-                                    liked_by=user_inst, \
-                                    like=True
-                                    )
-            topic_like.save()
-
-        return redirect(url_from)
-
-
-class RemoveLikeView(View):
-    def post(self, request, *args, **kwargs):
-        topic_likes_id = int(request.POST.get('topic_likes_id'))
-        url_from       = request.POST.get('url_from')
-
-        topic_like = TopicLikes.objects.get(id=topic_likes_id)
-        topic_like.delete()
-
-        return redirect(url_from)
