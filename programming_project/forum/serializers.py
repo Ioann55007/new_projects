@@ -34,7 +34,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ('name', 'url', 'category','content', 'author', 'created')
+        fields = ('name', 'url', 'category', 'content', 'author', 'created', 'likes')
 
 
 class RepliesSerializer(serializers.ModelSerializer):

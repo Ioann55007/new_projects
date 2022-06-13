@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.functional import LazyObject
 from django.utils.http import url_has_allowed_host_and_scheme, quote_etag
 from django.utils.translation import (
     LANGUAGE_SESSION_KEY, check_for_language
@@ -36,10 +37,7 @@ from django.views import View
 from django.contrib.contenttypes.models import ContentType
 
 
-def LikeView(request, slug):
-    topic = get_object_or_404(Topic, id=request.POST.get('topic_id'))
-    topic.likes.add(request.user)
-    return HttpResponseRedirect(reverse('topic_detail', args=[str(slug)]))
+
 
 
 class ViewSet(ModelViewSet):
@@ -117,10 +115,12 @@ class TopicDetailView(DetailView):
     slug_field = "id"
 
     def get_context_data(self, *args, **kwargs):
+        liked = False
+        if self.object.likes.filter(id=self.request.user.id).exists():
+            liked = True
         context = super().get_context_data(**kwargs)
-        stuff = get_object_or_404(Topic, id=self.kwargs['slug'])
-        total_likes = stuff.total_likes()
-        context["total_likes"] = total_likes
+        context['topic'] = context.get('object')
+        context['liked'] = liked
         return context
 
     def get_client_ip(request):
@@ -252,3 +252,14 @@ def lang(request, lang_code):
                 domain=settings.LANGUAGE_COOKIE_DOMAIN,
             )
     return response
+
+
+def like_topic(request, id):
+    if request.method == 'POST':
+        topic = Topic.objects.get(id=id)
+        if topic.likes.filter(id=request.user.id).exists():
+            topic.likes.remove(request.user.id)
+        else:
+            topic.likes.add(request.user.id)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+

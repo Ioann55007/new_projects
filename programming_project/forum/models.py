@@ -19,6 +19,9 @@ class User(models.Model):
     name = models.CharField(max_length=12)
     image = models.ImageField(upload_to='media/', default='no_image.jpg')
 
+    def __str__(self):
+        return self.name
+
 
 class Category(models.Model):
     """Категории"""
@@ -45,25 +48,36 @@ class Category(models.Model):
 
 
 class Topic(models.Model):
+    # name = models.CharField(max_length=200)
+    # category = models.ForeignKey(
+    #     Category, verbose_name="Category", on_delete=models.SET_NULL, null=True, related_name='topic'
+    # )
+    #
+    # created = models.DateField(auto_now=False)
+    # # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
+    # views = models.ManyToManyField("Ip", related_name="topic_views", blank=True)
+    # content = models.TextField()
+    # tags = TaggableManager()
+    # slug = models.SlugField(max_length=130, unique=True)
+    # likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
+    # author = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     category = models.ForeignKey(
         Category, verbose_name="Category", on_delete=models.SET_NULL, null=True, related_name='topic'
     )
-    author = models.CharField(max_length=9)
-
-    created = models.DateField(auto_now=False)
-    # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
-    views = models.ManyToManyField("Ip", related_name="topic_views", blank=True)
     content = models.TextField()
+    # likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
+    likes = models.ManyToManyField(User, related_name='topic_likes')
+    created = models.DateField(auto_now=False)
     tags = TaggableManager()
     slug = models.SlugField(max_length=130, unique=True)
-    likes = models.ManyToManyField(User, related_name='topic_posts')
-
-    def total_likes(self):
-        return self.likes.count()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
+    def total_likes(self):
+        return self.likes.count()
 
     def get_absolute_url(self):
         # return reverse("forum:topic_detail", kwargs={"slug": self.url})
@@ -75,6 +89,23 @@ class Topic(models.Model):
     class Meta:
         verbose_name = 'Topic'
         verbose_name_plural = 'Topics'
+
+
+# LIKE_CHOICES = (
+#     ('Like', 'Like'),
+#     ('Unlike', 'Unlike'),
+# )
+#
+#
+# class Like(models.Model):
+#     user = models.ForeignKey(User, related_name='like_user', on_delete=models.CASCADE)
+#     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+#     value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
+#
+#
+#
+#     def __str__(self):
+#         return f'{self.topic}:{self.user} {self.value}'
 
 
 class Replies(models.Model):
@@ -113,7 +144,6 @@ class Feedback(models.Model):
     class Meta:
         verbose_name = _('Feedback')
 
-
 # class TopicLikes(models.Model):
 #     topic_post = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='Публикация в теме')
 #     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='Поставил лайк')
@@ -131,5 +161,3 @@ class Feedback(models.Model):
 #     likes = models.ForeignKey(User, blank=True, on_delete=models.SET_NULL, null=True, related_name='likes', verbose_name='Лайк')
 #     dislikes = models.ForeignKey(User, blank=True, on_delete=models.SET_NULL, null=True, related_name='dislikes', verbose_name='дизлайк')
 #     created = models.DateTimeField('Дата и время', default=timezone.now)
-
-

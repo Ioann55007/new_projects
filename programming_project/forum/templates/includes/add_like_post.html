@@ -1,8 +1,14 @@
 
-<form action="{% url 'forum:like_topic' topic.pk %}"
-  method="POST">{% csrf_token %}
+    <form action="{% url 'forum:like_topic' object.id %}" method="post">
+        {% csrf_token %}
+        {% if liked %}
 
-    <button type="submit" name="topic_id" value="{{ topic.id }}" class="btn btn-primary btn-sm">
-        Like
-    </button> - {{ total_likes }} Likes
-</form>
+        <button  type="submit" class="icon-Favorite_Topic" style="background-color: Transparent;  border:none; color:red">Unlike</button>
+
+        {% else %}
+
+        <button  type="submit" class="icon-Favorite_Topic" style="background-color: Transparent;  border:none; color:black">Like</button>
+
+       {% endif %}
+        {{ object.total_likes }}
+    </form>
