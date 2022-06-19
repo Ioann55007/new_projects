@@ -1,0 +1,16 @@
+{% extends 'simple-signup.html'%}
+{% load static i18n %}
+
+{% block container %}
+<div id="ifErrors"></div>
+<div id="verifyConfirm" data-href="{% url 'auth_app:api_sign_up_verify' %}"></div>
+<div id="singIn" data-href="{% url 'auth_app:login' %}"></div>
+{% endblock container %}
+
+
+
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+
+<script src="{% static 'js/verifyConfirm.js' %}"></script>
+

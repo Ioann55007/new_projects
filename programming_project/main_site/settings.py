@@ -35,9 +35,11 @@ EMAIL_USE_TLS = int(environ.get('EMAIL_USE_TLS', 0))
 
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 FRONTEND_SITE = 'http://localhost:8000'
+ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
 
 SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'forum_programmer@gmail.ru')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'django_forum15')
+
 
 DEBUG = True
 
@@ -59,10 +61,11 @@ INSTALLED_APPS = [
     'taggit',
     'django.contrib.humanize',
     'drf_yasg',
-
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -170,4 +173,78 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+THIRD_PARTY_APPS = [
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'rest_framework_simplejwt.token_blacklist',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_framework',
+    'corsheaders',
+    'django_summernote',
+
+]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'microservice_request.permissions.HasApiKeyOrIsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ),
+}
+
+if ENABLE_RENDERING:
+    """ For build CMS using DRF """
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    )
+
+
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
+        'SCOPE': ['email', 'public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'name',
+            'name_format',
+            'picture',
+            'short_name'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': 'path.to.callable',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v7.0',
+        'APP': {
+            'client_id': environ.get('FACEBOOK_CLIENT_ID'),
+            'secret': environ.get('FACEBOOK_SECRET_KEY'),
+
+        }
+    }
+}
+
+
+
+
+INSTALLED_APPS += THIRD_PARTY_APPS
 
