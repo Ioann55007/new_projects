@@ -25,22 +25,25 @@ function singUp(e) {
 
 function error_process(data) {
   $(".help-block").remove()
-  let groups = ['#email', '#password',  '#first-name', '#last-name']
+  let groups = ['#firstNameGroup', '#lastNameGroup', '#usernameGroup', '#emailGroup',  '#passwordGroup']
   for (let group of groups) {
     $(group).removeClass(error_class_name);
   }
-  if (data.responseJSON.email) {
-    help_block("#email", data.responseJSON.email)
-  }
-  if (data.responseJSON.password1) {
-    help_block("#password", data.responseJSON.password1)
+  if (data.responseJSON.first_name) {
+    help_block("#fistNameGroup", data.responseJSON.first_name)
   }
 
-  if (data.responseJSON.first_name) {
-    help_block("#first-name", data.responseJSON.first_name)
-  }
   if (data.responseJSON.last_name) {
-    help_block("#last-name", data.responseJSON.last_name)
+    help_block("#lastNameGroup", data.responseJSON.last_name)
+  }
+  if (data.responseJSON.username) {
+    help_block("#usernameGroup", data.responseJSON.username)
+  }
+ if (data.responseJSON.email) {
+    help_block("#email", data.responseJSON.email)
+  }
+  if (data.responseJSON.password) {
+    help_block("#password", data.responseJSON.password)
   }
 }
 

@@ -67,7 +67,7 @@ class TemplateAPIView(APIView):
         path('some-path/', TemplateAPIView.as_view(template_name='template.html'))
     """
     permission_classes = (AllowAny,)
-    template_name = ''
+    template_name = 'verification_sent.html'
 
     @method_decorator(name='create', decorator=swagger_auto_schema(auto_schema=None))
     def get(self, request, *args, **kwargs):

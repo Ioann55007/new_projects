@@ -1,16 +1,15 @@
+
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import setup_user_email
 from allauth.utils import email_address_exists
 from dj_rest_auth import serializers as auth_serializers
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-
 from .services import CeleryService
 from .forms import PassResetForm
 from .services import AuthAppService
+
 
 User = get_user_model()
 
@@ -27,8 +26,8 @@ class UserSignUpSerializer(serializers.Serializer):
     first_name = serializers.CharField(min_length=2, max_length=100, required=True)
     last_name = serializers.CharField(min_length=2, max_length=100, required=True)
     email = serializers.EmailField(required=True)
-    password1 = serializers.CharField(write_only=True, min_length=8)
-    password2 = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(write_only=True, min_length=8)
+    username = serializers.CharField(write_only=True, min_length=8)
 
     def validate_password(self, password):
         return get_adapter().clean_password(password)
@@ -45,7 +44,6 @@ class UserSignUpSerializer(serializers.Serializer):
     def save(self, **kwargs):
         request = self.context.get('request')
         self.validated_data['password'] = self.validated_data.pop('password')
-
         self.validated_data.pop('captcha', None)
         user = User.objects.create_user(**self.validated_data, is_active=False)
         setup_user_email(request=request, user=user, addresses=[])
@@ -92,7 +90,7 @@ class PasswordResetSerializer(auth_serializers.PasswordResetSerializer):
 
 
 class PasswordResetConfirmSerializer(auth_serializers.PasswordResetConfirmSerializer):
-    new_password1 = serializers.CharField(max_length=128, min_length=8)
+    new_password = serializers.CharField(max_length=128, min_length=8)
 
 
 class VerifyEmailSerializer(serializers.Serializer):
