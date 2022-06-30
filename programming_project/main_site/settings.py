@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 from os import environ
 
@@ -22,28 +23,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-jb#l7g-6d!-(*5o@nxq!mz=y%85q=a#dkvzt&no$@f%1-pny(j'
 
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(environ.get("EMAIL_PORT", 465))
-EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'forumprogrammer.site@gmail.com')
-EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '19951383ok')
-DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'forumprogrammer.site@gmail.com')
-EMAIL_TIMEOUT = int(environ.get('EMAIL_TIMEOUT', 15))
-EMAIL_USE_SSL = int(environ.get('EMAIL_USE_SSL', 1))
-EMAIL_USE_TLS = int(environ.get('EMAIL_USE_TLS', 0))
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'ioann.basic@gmail.com'
+EMAIL_HOST_PASSWORD = 'ubbpyplvesuxbkjk'
+DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'ioann.basic@gmail.com')
+EMAIL_USE_TLS = True
+
+
 
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 FRONTEND_SITE = 'http://localhost:8000'
 ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
 
-SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'forum_programmer@gmail.ru')
-SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', 'django_forum15')
+SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'admin@gmail.com')
+SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', '1524ok')
 
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
-DEBUG = True
-
-ALLOWED_HOSTS = []
+# noinspection PyRedeclaration
+ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 
 
 # Application definition
@@ -77,21 +80,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'main_site.urls'
 
-# TEMPLATES = [
-#     {
-#         'BACKEND': 'django.templates.backends.django.DjangoTemplates',
-#         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-#         'APP_DIRS': True,
-#         'OPTIONS': {
-#             'context_processors': [
-#                 'django.templates.context_processors.debug',
-#                 'django.templates.context_processors.request',
-#                 'django.contrib.auth.context_processors.auth',
-#                 'django.contrib.messages.context_processors.messages',
-#             ],
-#         },
-#     },
-# ]
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -211,9 +201,6 @@ if ENABLE_RENDERING:
     )
 
 
-
-
-
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
         'METHOD': 'oauth2',
@@ -244,7 +231,138 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 
-
-
 INSTALLED_APPS += THIRD_PARTY_APPS
+
+
+CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND')
+
+CELERY_TIMEZONE = environ.get('TZ', 'UTC')
+
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BROKER_HEARTBEAT_CHECKRATE = 10
+CELERY_EVENT_QUEUE_EXPIRES = 10
+CELERY_EVENT_QUEUE_TTL = 10
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'max_retries': 4,
+    'interval_start': 0,
+    'interval_step': 0.5,
+    'interval_max': 3,
+}
+
+CELERY_TASK_ROUTES = {
+    '*': {'queue': 'celery'},
+}
+
+
+
+JWT_AUTH_REFRESH_COOKIE = 'refresh'
+JWT_AUTH_COOKIE = 'jwt-auth'
+REST_USE_JWT = True
+REST_SESSION_LOGIN = False
+CORS_ALLOW_CREDENTIALS = True
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': environ.get('SECRET_KEY'),
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=2),
+}
+
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        },
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'description': 'Value example: Bearer ******************',
+            'in': 'header'
+        },
+        'Api-Key': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'description': 'Value example: <API_KEY_HEADER> <API_KEY>',
+            'in': 'header'
+        },
+        'Language': {
+            'type': 'apiKey',
+            'name': 'Accept-Language',
+            'in': 'header',
+            'description': 'Your language code. Example: ua,ru,en',
+            'default': 'en'
+        },
+    },
+    'USE_SESSION_AUTH': True,
+    'JSON_EDITOR': False,
+    'LOGOUT_URL': 'rest_framework:logout',
+}
+
+
+
+SUMMERNOTE_THEME = 'bs4'
+
+
+SUMMERNOTE_CONFIG = {
+    'iframe': True,
+    'empty': ('<p><br/></p>', '<p><br></p>'),
+    'summernote': {
+        'airMode': False,
+        'width': '100%',
+        'height': '480',
+        'lang': None,
+        'toolbar': [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview']],
+        ],
+        'codemirror': {
+            'mode': 'htmlmixed',
+            'lineNumbers': 'true',
+
+        },
+        'attachment_absolute_uri': True,
+        'attachment_require_authentication': True,
+
+    }
+}
+
+
+
+
+
 

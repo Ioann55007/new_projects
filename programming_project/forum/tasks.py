@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 from os import environ
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader
@@ -10,7 +10,7 @@ from .celery import app
 
 @app.task()
 def send_information_email(
-    subject: str, html_email_template_name: str, context: dict, to_email: Union[list[str], str],
+    subject: str, html_email_template_name: str, context: dict, to_email: Union[List[str], str],
     letter_language: str = 'en', file_url: str = None, **kwargs
 ):
     activate(letter_language)
@@ -21,8 +21,8 @@ def send_information_email(
     if file_url:
         file_url = environ.get('APP_HOME', environ.get('HOME')) + file_url
         email_message.attach_file(file_url, kwargs.get('mimetype'))
-    send_email(email_message)
-
+    # send_email(email_message)
+    send_email(subject, email_message, to_email, fail_silently=True)
 
 
 @smtp_shell

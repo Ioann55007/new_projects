@@ -1,35 +1,26 @@
-from django.conf import settings
-from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
-from rest_framework.reverse import reverse_lazy
-from .services import CeleryService
-from .services import UserService
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+from .models import Contact
 
 
-class PassResetForm(PasswordResetForm):
+class UserRegisterForm(UserCreationForm):
+    username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(label='Имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(label='Фамилия', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
-    def get_reset_url(self, uid, token):
-        path = "registration_App:pass_reset_confirm"
-        url = reverse_lazy(path, kwargs={'uidb64': uid, 'token': token})
-        return settings.FRONTEND_SITE + str(url)
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-    def save(self, **kwargs):
-        """
-        Generate a one-use only link for resetting password and send it to the user.
-        """
-        email = self.cleaned_data["email"]
-        user = UserService.get_user(email=email)
-        if not user:
-            raise ValidationError({'email': _('User does not exist with this email')})
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        url = self.get_reset_url(uid=uid, token=token)
-        content = {
-            'user': user.get_full_name(),
-            'reset_url': url,
-        }
-        CeleryService.send_password_reset(to_email=email, content=content)
+
+# class ContactForm(forms.ModelForm):
+#     """Форма подписки по email"""
+#     class Meta:
+#         model = Contact
+#         fields = '__all__'

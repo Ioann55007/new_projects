@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from .services import CeleryService
-from .forms import PassResetForm
+
 from .services import AuthAppService
 
 
@@ -28,6 +28,7 @@ class UserSignUpSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, min_length=8)
     username = serializers.CharField(write_only=True, min_length=8)
+
 
     def validate_password(self, password):
         return get_adapter().clean_password(password)
@@ -85,8 +86,7 @@ class LoginSerializer(auth_serializers.LoginSerializer):
         return attrs
 
 
-class PasswordResetSerializer(auth_serializers.PasswordResetSerializer):
-    password_reset_form_class = PassResetForm
+
 
 
 class PasswordResetConfirmSerializer(auth_serializers.PasswordResetConfirmSerializer):

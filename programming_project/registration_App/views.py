@@ -1,3 +1,7 @@
+from django.contrib import messages
+from django.views.generic import CreateView
+from .tasks import send_inf_email
+from .forms import UserRegisterForm
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -11,20 +15,41 @@ from dj_rest_auth import views as auth_views
 from dj_rest_auth.registration.views import (
     VerifyEmailView as _VerifyEmailView,
 )
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny
 
 from . import serializers
-from .services import full_logout
+from .models import Contact
+from .services import full_logout, send
 
 logger = logging.getLogger(__name__)
 
 
-class SimpleSignupView(View):
+def register(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Вы успешно зарегистрировались!')
+
+        else:
+            messages.error(request, 'Ошибка при регистрации !')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'simple-signup.html', {"form": form})
+
+
+class ContactView(CreateView):
+    model = Contact
+    form_class = UserRegisterForm
+    success_url = '/'
     template_name = 'simple-signup.html'
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def form_valid(self, form):
+        form.save()
+        # send(form.instance.email)
+        send_inf_email.delay(form.instance.email)
+        return super().form_valid(form)
 
 
 
@@ -37,8 +62,7 @@ class SignUpView(CreateAPIView):
     serializer_class = serializers.UserSignUpSerializer
 
 
-class PasswordResetView(auth_views.PasswordResetView):
-    serializer_class = serializers.PasswordResetSerializer
+
 
 
 class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
@@ -71,17 +95,4 @@ class TemplateAPIView(APIView):
 
     @method_decorator(name='create', decorator=swagger_auto_schema(auto_schema=None))
     def get(self, request, *args, **kwargs):
-        return Response()
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return Response

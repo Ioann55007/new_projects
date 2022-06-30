@@ -1,5 +1,5 @@
 import re
-
+from django.core.mail import send_mail
 from allauth.account.models import EmailAddress
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -12,7 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from typing import Tuple
 
 from .decorators import except_shell
-from .tasks import send_information_email
+# from .tasks import send_information_email
 from .utils import captcha_request, get_client_ip, get_activate_key
 
 User = get_user_model()
@@ -133,3 +133,13 @@ class UserService:
         return Prefetch(
             'emailaddress_set', queryset=EmailAddress.objects.filter(primary=True), to_attr='email_address'
         )
+
+
+def send(user_email):
+    send_mail(
+        'Вы успешном зарегистрировались',
+        'Переходите по ссылке',
+        'ioann.basic@gmail.com',
+        [user_email],
+        fail_silently=False,
+    )

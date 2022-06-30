@@ -61,67 +61,25 @@
                     <h3>Create a New Unity Account</h3>
                     <p>By singin up you can start posting, replaying to topics, earn badges, favorite, vote topics and many more.</p>
                 </div>
-                <div class="signup__form">
-                  <form id="signUpForm" action="{% url 'registration_App:api_sign_up' %}" role="form" method="post" class="form" data-href="{% url 'registration_App:verify_email_sent' %}">
-                        {% csrf_token %}
-                    <div class="row" data-visible="desktop">
-                        <div class="col-md-6">
-                            <div class="signup__section" id="firstNameGroup">
-                                <input type="text" name="first_name" value="" class="form-control input-lg"  placeholder="First Name"
-                                       required />
 
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="signup__section" id="lastNameGroup">
-                                <input type="text" name="last_name" value="" class="form-control input-lg"   placeholder="Last Name"
-                                       required />
+                <form action="{% url 'registration_App:send_email' %}" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
 
+                    {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                            <div class="alert alert-danger" role="alert">{{ message }}</div>
+                        {% else %}
+                        <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="signup__section" id="usernameGroup">
-                        <input type="text" name="username" value="" class="form-control input-lg"  placeholder="User Name"
-                               required />
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
 
-                    </div>
-                    <div class="signup__section" id="emailGroup">
-                        <input type="text" name="email" value="" class="form-control input-lg"  placeholder="Email"
-                               required />
-                    </div>
-                    <div class="signup__section" id="passwordGroup">
-                        <div class="message-input">
-                            <input type="password" name="password"  value="" class="form-control input-lg"
-                                   placeholder="Password" required />
-                            <span class="message-input__strong">strong</span>
-                        </div>
-                    </div>
-                    <div class="signup__checkbox">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="signup__box">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox" checked="checked">
-                                        <i></i>
-                                    </label>
-                                    <span>I agree to the Terms & Conditions.</span>
-                                </label>
-                            </div>
-                            <div class="col-md-6" data-visible="desktop">
-                                <label class="signup__box">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox">
-                                        <i></i>
-                                    </label>
-                                    <span>Subscribe to newsletter</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="signup__btn-create btn btn--type-02" type="submit">Create New Account</button>
-                  </form>
-                </div>
+                </form>
+
             </div>
         </div>
     </main>
@@ -152,7 +110,7 @@
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
     <script src="{% static 'js/app.js/' %}"></script>
-    <script src="{% static 'js/signup.js/' %}"></script>
+
 
 </body>
 </html>

@@ -1,3 +1,4 @@
+import logging
 from smtplib import SMTPRecipientsRefused
 
 from requests import RequestException
