@@ -4,8 +4,6 @@ $(function () {
 
 const error_class_name = "has-error"
 
-
-
 function singUp(e) {
   let form = $(this);
   e.preventDefault();
@@ -23,24 +21,53 @@ function singUp(e) {
   })
 }
 
+
+
+const error_class_name = "has-error"
+
+
+
 function error_process(data) {
   $(".help-block").remove()
-  let groups = ['#email', '#password',  '#first-name', '#last-name']
+  let groups = ['#firstNameGroup', '#lastNameGroup', '#usernameGroup', '#emailGroup',  '#passwordGroup']
   for (let group of groups) {
-    $(group).removeClass(error_class_name);
+    $(group).removeClass(error_class_name)
+  };
+  var element = document.getElementById('first_name');
+  var html = element.outerHTML;
+  var data = { html: html };
+  var json = JSON.stringify(data);
+  if (data.responseJSON.element) {
+    help_block("#fistNameGroup", data.responseJSON.element)
   }
-  if (data.responseJSON.email) {
-    help_block("#email", data.responseJSON.email)
+    var melement = document.getElementById('last_name');
+    var html = melement.outerHTML;
+    var data = { html: html };
+    var json = JSON.stringify(data);
+  if (data.responseJSON.melement) {
+    help_block("#lastNameGroup", data.responseJSON.melement)
   }
-  if (data.responseJSON.password1) {
-    help_block("#password", data.responseJSON.password1)
-  }
+  var nelement = document.getElementById('username');
+  var html = nelement.outerHTML;
+  var data = { html: html };
+  var json = JSON.stringify(data);
 
-  if (data.responseJSON.first_name) {
-    help_block("#first-name", data.responseJSON.first_name)
+  if (data.responseJSON.nelement) {
+    help_block("#usernameGroup", data.responseJSON.nelement)
   }
-  if (data.responseJSON.last_name) {
-    help_block("#last-name", data.responseJSON.last_name)
+  var zelement = document.getElementById('email');
+  var html = zelement.outerHTML;
+  var data = { html: html };
+  var json = JSON.stringify(data);
+ if (data.responseJSON.zelement) {
+    help_block("#email", data.responseJSON.zelement)
+  }
+  var lelement = document.getElementById('password');
+  var html = lelement.outerHTML;
+  var data = { html: html };
+  var json = JSON.stringify(data);
+  if (data.responseJSON.lelement) {
+    help_block("#password", data.responseJSON.lelement)
   }
 }
 
