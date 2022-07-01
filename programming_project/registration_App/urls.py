@@ -1,10 +1,13 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
-from .views import TemplateAPIView, register, ContactView
+# from .views import TemplateAPIView, register, ContactView
 
 from . import views
+from .views import  signup
+from .views import activate
+
 app_name = 'registration_App'
 
 router = DefaultRouter()
@@ -16,7 +19,12 @@ urlpatterns = [
 ]
 
 
+
+
+
 urlpatterns += [
-    path('simple-signup/1', register, name='register'),
-    path('send_email', ContactView.as_view(), name='send_email'),
+
+    path('signup_email', signup, name='signup'),
+    path('activate//<uidb64>/<token>/',
+            activate, name='activate')
 ]

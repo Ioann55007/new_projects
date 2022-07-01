@@ -12,7 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from typing import Tuple
 
 from .decorators import except_shell
-# from .tasks import send_information_email
+from .tasks import send_information_email
 from .utils import captcha_request, get_client_ip, get_activate_key
 
 User = get_user_model()

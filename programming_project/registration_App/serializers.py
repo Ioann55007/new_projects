@@ -6,6 +6,8 @@ from dj_rest_auth import serializers as auth_serializers
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+
+
 from .services import CeleryService
 
 from .services import AuthAppService
@@ -84,14 +86,3 @@ class LoginSerializer(auth_serializers.LoginSerializer):
             raise serializers.ValidationError(msg)
         attrs['user'] = user
         return attrs
-
-
-
-
-
-class PasswordResetConfirmSerializer(auth_serializers.PasswordResetConfirmSerializer):
-    new_password = serializers.CharField(max_length=128, min_length=8)
-
-
-class VerifyEmailSerializer(serializers.Serializer):
-    key = serializers.CharField()

@@ -365,4 +365,3 @@ SUMMERNOTE_CONFIG = {
 
 
 
-

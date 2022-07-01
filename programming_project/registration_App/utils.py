@@ -1,4 +1,9 @@
+from email.message import EmailMessage
 from allauth.account.models import EmailAddress, EmailConfirmationHMAC
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from requests import get
 
 from .adapter import AccountAdapter
@@ -24,3 +29,12 @@ def get_client_ip(request):
 @request_shell
 def captcha_request(url, params):
     return get(url, params=params, verify=True)
+
+
+
+
+
+
+
+
+
