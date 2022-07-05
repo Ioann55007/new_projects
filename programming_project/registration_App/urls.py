@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 # from .views import TemplateAPIView, register, ContactView
 
 from . import views
-from .views import  signup
+from .views import signup, user_login, user_logout
 from .views import activate
 
 app_name = 'registration_App'
@@ -20,11 +20,12 @@ urlpatterns = [
 
 
 
-
-
 urlpatterns += [
 
     path('signup_email', signup, name='signup'),
     path('activate//<uidb64>/<token>/',
-            activate, name='activate')
+            activate, name='activate'),
+    path('login/1', user_login, name='login'),
+    path('logout/1', user_logout, name='logout'),
+
 ]
