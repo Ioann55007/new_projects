@@ -16,28 +16,29 @@
 			    		<p class="text-muted mb-0" style="font-size: 12px">Username:</p>
 			    		<p>{{ user.username }}</p>
 			    		<p class="text-muted mb-0" style="font-size: 12px">Name:</p>
-				  		<p>{{ user.first_name }} {{ user.last_name }}</p>
+				  		<p>{{ user.first_name }}</p>
+						<p class="text-muted mb-0" style="font-size: 12px">Last Name:</p>
+						<p>{{ user.last_name }}</p>
+
 				  		<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 				  		<p>{{ user.email }} </p>
 
-						<div class="text-right" id="show">
-							<button class="btn btn-outline-primary btn-sm" data-toggle="modal"  data-target="#profileModal">Edit Profile</button>
+						<div class="text-right">
+							<button id="show" class="btn btn-outline-primary btn-sm">Edit Profile</button>
 						</div>
 			        </div>
 		    	</div>
 		  	</div>
 		    <div class="col-sm-12 col-md-12 col-lg-9 pb-4">
-		    	...
 		    </div>
 		</div>
 	</div>
 	<dialog id="profile_modal">
-	<div class="modal fade" tabindex="-1" id="profileModal" role="dialog">
 	  	<div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      	<div class="modal-header">
 			        <h5 class="modal-title">Edit Profile</h5>
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			        <button type="button" id="Clos" class="close" data-dismiss="modal" aria-label="Close">
 			          <span aria-hidden="true">&times;</span>
 			        </button>
 		        </div>
@@ -53,7 +54,7 @@
 		        </div>
 		    </div>
 	  	</div>
-	</div>
+
 	</dialog>
 
 <script>
@@ -64,6 +65,9 @@
                 dialog.show();
             };
             document.getElementById('close').onclick = function() {
+                dialog.close();
+            };
+            document.getElementById('Clos').onclick = function() {
                 dialog.close();
             };
 

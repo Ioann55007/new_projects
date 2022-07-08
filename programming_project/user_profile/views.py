@@ -16,7 +16,7 @@ def userpage(request):
     #               context={"user": request.user, "user_form": user_form, "profile_form": profile_form})
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
             messages.success(request, ('Your profile was successfully updated!'))
@@ -25,7 +25,7 @@ def userpage(request):
             messages.success(request, ('Your wishlist was successfully updated!'))
         else:
             messages.error(request, ('Unable to complete request'))
-        return redirect("main:userpage")
+        return redirect("user_profile:userpage")
     user_form = UserForm(instance=request.user)
     profile_form = ProfileForm(instance=request.user)
     return render(request=request, template_name="user.html", context={"user": request.user,
