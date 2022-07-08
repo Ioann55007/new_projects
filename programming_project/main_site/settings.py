@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'drf_yasg',
     'rest_framework.authtoken',
+    'user_profile.apps.UserProfileConfig',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -362,6 +364,7 @@ SUMMERNOTE_CONFIG = {
 }
 
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 

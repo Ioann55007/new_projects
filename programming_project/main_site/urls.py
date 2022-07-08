@@ -28,6 +28,7 @@ urlpatterns = [
     path('', include('create_topicApp.urls', namespace='create_topicApp')),
     path('', include('forum.urls', namespace='forum')),
     path('', include('registration_App.urls', namespace='registration_App')),
+    path('', include('user_profile.urls', namespace='user_profile')),
 
 ]
 
