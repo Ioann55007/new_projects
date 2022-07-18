@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'drf_yasg',
     'rest_framework.authtoken',
-    'user_profile.apps.UserProfileConfig',
+    'profile_user.apps.ProfileUserConfig',
     'crispy_forms',
 ]
 
@@ -366,5 +366,6 @@ SUMMERNOTE_CONFIG = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+AUTH_PROFILE_MODULE = 'profile_user.UserProfile'
 
 

@@ -11,9 +11,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import LazyObject
 from django.utils.http import url_has_allowed_host_and_scheme, quote_etag
-from django.utils.translation import (
-    LANGUAGE_SESSION_KEY, check_for_language
-)
+# from django.utils.translation import (
+#     LANGUAGE_SESSION_KEY, check_for_language
+# )
 from django.views import View
 from django.views.generic import ListView, DetailView
 from rest_framework import viewsets

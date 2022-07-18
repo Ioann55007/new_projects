@@ -1,0 +1,89 @@
+
+	{% block content %}
+
+	{% load crispy_forms_tags %}
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<!--User-->
+	<br><br>
+	<div class="container mx-auto">
+	    <div class="row">
+	    	<div class="col-sm-12 col-md-12 col-lg-3 pb-4">
+				<img src="{{ request.user.profile.url }}" class="avatar">
+				    <form method="POST" action="{% url 'profile_user:avatar' %}" enctype="multipart/form-data">
+
+                		{% csrf_token %}
+						{{form.as_p}}
+
+
+					    <input class="btn btn-primary" type="submit">
+           			 </form>
+		    	<div class="card p-4">
+			    	<h4 class="card-title font-weight-bold text-center">Hello, {{ user.username|title }}</h4>
+			      	<hr>
+			    	<div class="card-text">
+			    		<p class="text-muted mb-0" style="font-size: 12px">Username:</p>
+			    		<p>{{ user.username }}</p>
+			    		<p class="text-muted mb-0" style="font-size: 12px">Name:</p>
+				  		<p>{{ user.first_name }}</p>
+						<p class="text-muted mb-0" style="font-size: 12px">Last Name:</p>
+						<p>{{ user.last_name }}</p>
+
+				  		<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
+				  		<p>{{ user.email }} </p>
+
+						<div class="text-right">
+							<button id="show" class="btn btn-outline-primary btn-sm">Edit Profile</button>
+						</div>
+			        </div>
+		    	</div>
+		  	</div>
+		    <div class="col-sm-12 col-md-12 col-lg-9 pb-4">
+		    </div>
+		</div>
+	</div>
+	<dialog id="profile_modal">
+	  	<div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      	<div class="modal-header">
+			        <h5 class="modal-title">Edit Profile</h5>
+			        <button type="button" id="Clos" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+		        </div>
+		        <div class="modal-body">
+			        <form method="post">
+			          	{% csrf_token %}
+			          	{{ user_form|crispy }}
+		         </div>
+		      	<div class="modal-footer">
+		        		<button type="submit" class="btn btn-primary">Save changes</button>
+		        	 </form>
+		        	<button type="button" id="close" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		        </div>
+		    </div>
+	  	</div>
+
+	</dialog>
+
+<script>
+	(function() {
+            var dialog = document.getElementById('profile_modal');
+
+            document.getElementById('show').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('close').onclick = function() {
+                dialog.close();
+            };
+            document.getElementById('Clos').onclick = function() {
+                dialog.close();
+            };
+
+
+        })();
+
+
+</script>
+
+	{% endblock %}
