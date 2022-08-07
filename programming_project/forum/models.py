@@ -15,6 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 
+
+
 class User(models.Model):
     name = models.CharField(max_length=12)
     image = models.ImageField(upload_to='media/', default='no_image.jpg')
@@ -47,31 +49,34 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
 
+
+
+
 class Topic(models.Model):
-    # name = models.CharField(max_length=200)
-    # category = models.ForeignKey(
-    #     Category, verbose_name="Category", on_delete=models.SET_NULL, null=True, related_name='topic'
-    # )
-    #
-    # created = models.DateField(auto_now=False)
-    # # views = models.ForeignKey('Views', related_name='views_set', on_delete=models.CASCADE)
-    # views = models.ManyToManyField("Ip", related_name="topic_views", blank=True)
-    # content = models.TextField()
-    # tags = TaggableManager()
-    # slug = models.SlugField(max_length=130, unique=True)
-    # likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
-    # author = models.ForeignKey(User, on_delete=models.CASCADE)
+    class NewManager(models.Manager):
+        def get_queryset(self):
+            return super().get_queryset().filter(status='published')
+
+    options = (
+        ('published', 'Published'),
+    )
+
     name = models.CharField(max_length=200)
     category = models.ForeignKey(
         Category, verbose_name="Category", on_delete=models.SET_NULL, null=True, related_name='topic'
     )
     content = models.TextField()
-    # likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
-    likes = models.ManyToManyField(User, related_name='topic_likes')
+    likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
+    # likes = models.ManyToManyField(User, related_name='topic_likes')
     created = models.DateField(auto_now=False)
     tags = TaggableManager()
     slug = models.SlugField(max_length=130, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    favourites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
+    newmanager = NewManager()  # custom manager
+    excerpt = models.TextField(null=True)
+    objects = models.Manager()
+    status = models.CharField(max_length=10, choices=options, default='draft')
 
     def __str__(self):
         return self.name
@@ -91,21 +96,9 @@ class Topic(models.Model):
         verbose_name_plural = 'Topics'
 
 
-# LIKE_CHOICES = (
-#     ('Like', 'Like'),
-#     ('Unlike', 'Unlike'),
-# )
-#
-#
-# class Like(models.Model):
-#     user = models.ForeignKey(User, related_name='like_user', on_delete=models.CASCADE)
-#     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-#     value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
-#
-#
-#
-#     def __str__(self):
-#         return f'{self.topic}:{self.user} {self.value}'
+
+
+
 
 
 class Replies(models.Model):
@@ -144,20 +137,11 @@ class Feedback(models.Model):
     class Meta:
         verbose_name = _('Feedback')
 
-# class TopicLikes(models.Model):
-#     topic_post = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, verbose_name='Публикация в теме')
-#     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='Поставил лайк')
-#     like = models.BooleanField('Like', default=False)
-#     created = models.DateTimeField('Дата и время', default=timezone.now)
-#
-#     def __str__(self):
-#         return f'{self.liked_by}:{self.topic_post} {self.like}'
-#
-#     class Meta:
-#         verbose_name = 'Topic Like'
-#         verbose_name_plural = 'Topic Likes'
 
-# class TopLikes(models.Model):
-#     likes = models.ForeignKey(User, blank=True, on_delete=models.SET_NULL, null=True, related_name='likes', verbose_name='Лайк')
-#     dislikes = models.ForeignKey(User, blank=True, on_delete=models.SET_NULL, null=True, related_name='dislikes', verbose_name='дизлайк')
-#     created = models.DateTimeField('Дата и время', default=timezone.now)
+
+
+
+
+
+
+

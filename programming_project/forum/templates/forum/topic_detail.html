@@ -1,6 +1,7 @@
 <!doctype html>
 {% load tagnag %}
 {% load static  %}
+{% load social_share %}
 
 <html lang="en-US">
 <head>
@@ -10,6 +11,7 @@
     <meta name="keywords" content="HTML5 Template">
     <meta name="description" content="Responsive HTML5 Template">
     <meta name="author" content="author.com">
+
     <title>Responsive HTML5 Template</title>
 
     <!-- STYLESHEET -->
@@ -163,6 +165,8 @@
     </header>
 {% load static  %}
 
+
+
     <main>
         <div class="container">
             <div class="nav">
@@ -279,9 +283,13 @@
                                     </div>
                                     <div class="topic__footer-share">
                                         <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#"><i class="icon-Bookmark"></i></a>
+                                            <a id="sow"><i class="icon-Share_Topic"></i></a>
+                                            {% if request.user.is_authenticated %}
+
+                                            <a href="{% url 'forum:favourite_add' topic.id %}"><i class="icon-Bookmark"></i></a>
+                                            <a href="{% url 'forum:favourite_list' %}" class="">Remove
+                                            Favourties</a>
+                                            {% endif %}
                                         </div>
                                         <div data-visible="mobile">
                                             <a href="#"><i class="icon-More_Options"></i></a>
@@ -380,7 +388,6 @@
                                     <div class="topic__footer-share">
                                         <div data-visible="desktop">
                                             <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
                                             <a href="#"><i class="icon-Bookmark"></i></a>
                                         </div>
                                         <div data-visible="mobile">
@@ -426,7 +433,6 @@
                                     <div class="topic__footer-share">
                                         <div data-visible="desktop">
                                             <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
                                             <a href="#" class="active"><i class="icon-Already_Bookmarked"></i></a>
                                         </div>
                                         <div data-visible="mobile">
@@ -494,7 +500,6 @@
                 <div class="topics__control">
                     <a href="#" class="btn"><i class="icon-Bookmark"></i>Bookmark</a>
                     <a href="#" class="btn"><i class="icon-Share_Topic"></i>Share</a>
-                    <a href="#" class="btn"><i class="icon-Flag_Topic"></i>Flag</a>
                     <a href="#" class="btn"><i class="icon-Add_User"></i>Invite</a>
                     <a href="#" class="btn"><i class="icon-Track"></i>Track</a>
                     <a href="#" class="btn btn--type-02" data-visible="desktop"><i class="icon-Reply_Fill"></i>Reply</a>
@@ -621,6 +626,18 @@
     </dialog>
     <button id="sh">Tags</button>
 
+   <dialog id="ourlog">
+           {% send_email object.title "New Song: {{object.title}}. Check it out!" object_or_url "Share via email" %}
+           <i class="fa fa-envelope"></i>
+
+           {% post_to_whatsapp object_or_url "Share via WhatsApp" %}<i class="fa fa-whatsapp"></i>
+
+           {% post_to_telegram  object_or_url 'Telegram' %}<i class="fa fa-telegram"></i><br>
+
+
+       <button id="clis">Закрыть</button>
+   </dialog>
+
 <script>
     (function() {
             var dialog = document.getElementById('window');
@@ -647,6 +664,17 @@
 
         })();
 
+ (function() {
+            var dialog = document.getElementById('ourlog');
+
+            document.getElementById('sow').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('clis').onclick = function() {
+                dialog.close();
+            };
+
+        })();
 
 
 

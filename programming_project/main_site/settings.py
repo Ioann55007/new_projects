@@ -47,6 +47,7 @@ DEBUG = int(os.environ.get("DEBUG", default=1))
 
 # noinspection PyRedeclaration
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
+ALLOWED_HOSTS += ['3ef3-94-41-3-182.eu.ngrok.io']
 
 
 # Application definition
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'profile_user.apps.ProfileUserConfig',
     'crispy_forms',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -184,6 +186,8 @@ THIRD_PARTY_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'microservice_request.permissions.HasApiKeyOrIsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
+
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
@@ -191,7 +195,9 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend'
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
 }
 

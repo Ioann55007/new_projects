@@ -24,7 +24,7 @@ class TopicAdmin(admin.ModelAdmin):
     """Темы"""
     # list_display = ('views',)
     list_display = ("name", 'category', 'tag_list', 'slug')
-    fields = ('category', 'name',  'author',  'content', 'created', 'tags', 'slug', 'likes')
+    fields = ('category', 'name',  'author',  'content', 'created', 'tags', 'slug', 'likes', 'status')
     search_fields = ('name', 'category', 'likes')
 
 

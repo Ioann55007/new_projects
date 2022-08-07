@@ -6,10 +6,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<!--User-->
 	<br><br>
+
 	<div class="container mx-auto">
 	    <div class="row">
 	    	<div class="col-sm-12 col-md-12 col-lg-3 pb-4">
-				<img src="{{ request.user.profile.url }}" class="avatar">
+
+				<img src="{{ request.user.profile.avatar.url}}/" height="130" width="200" class="avatar">
 				    <form method="POST" action="{% url 'profile_user:avatar' %}" enctype="multipart/form-data">
 
                 		{% csrf_token %}

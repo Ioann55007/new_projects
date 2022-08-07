@@ -13,8 +13,17 @@ class UserForm(forms.ModelForm):
 
 
 
+# class ProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = Profile
+#         fields = ('user', 'avatar')
+#
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('user', 'avatar')
+        fields = '__all__'
+
+
+
 

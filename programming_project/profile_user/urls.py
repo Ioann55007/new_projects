@@ -7,5 +7,4 @@ app_name = 'profile_user'
 urlpatterns = [
     path('profile_upload', avatar_img, name='avatar'),
     path("user/4", views.userpage, name="userpage"),
-
 ]

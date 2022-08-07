@@ -1,21 +1,20 @@
+import self as self
 from django.contrib.auth import get_user_model
-
+from django.views import View
 
 from .forms import UserForm, ProfileForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+from .models import Profile
 
 User = get_user_model()
-
-
 
 
 @login_required
 def profile(request):
     return render(request, 'user.html')
-
 
 
 def userpage(request):
@@ -34,20 +33,20 @@ def userpage(request):
     user_form = UserForm(instance=request.user)
     profile_form = ProfileForm(instance=request.user)
     return render(request=request, template_name="user.html", context={"user": request.user,
-                                                                            "user_form": user_form,
+                                                                       "user_form": user_form,
 
-                                                                            "profile_form": profile_form})
+                                                                       "profile_form": profile_form})
+
+
+
 
 
 def avatar_img(request):
-    profile = request.user
-    form = ProfileForm(instance=request.user)
-
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-
-    context = {'form': form, 'profile': profile}
-
+    context = {'form': form}
     return render(request, 'user.html', context)

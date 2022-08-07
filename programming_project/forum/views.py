@@ -2,6 +2,8 @@ import re
 from urllib.parse import urlsplit, urlunsplit
 
 from django.conf import settings
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -263,3 +265,17 @@ def like_topic(request, id):
             topic.likes.add(request.user.id)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+def favorite_add(request, id):
+    topic_favorite = get_object_or_404(Topic, id=id)
+    if topic_favorite.favourites.filter(id=request.user.id).exists():
+        topic_favorite.favourites.remove(request.user)
+    else:
+        topic_favorite.favourites.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+
+def favouritie_list(request):
+    new = Topic.newmanager.filter(favourites=request.user.id)
+    return render(request, 'favourites/favourite.html', {'new': new})
