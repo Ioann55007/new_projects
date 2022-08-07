@@ -374,4 +374,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_PROFILE_MODULE = 'profile_user.UserProfile'
 
+AUTH_USER_MODEL = 'forum.User'
 

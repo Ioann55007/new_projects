@@ -2,8 +2,13 @@ from django.contrib import admin
 
 # Register your models here.
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import Category, Topic, Replies, User
+from .models import Category, Topic, Replies
+from django.contrib import admin
+from .models import User
+from . import models
 
 
 @admin.register(Category)
@@ -34,11 +39,21 @@ class RepliesAdmin(admin.ModelAdmin):
     list_display = ('author_name', 'created')
 
 
-@admin.register(User)
-class UserAdmin(admin.ModelAdmin):
-    """Пользователи"""
-    list_display = ('name', 'image')
-    search_fields = ('name',)
+class UserAdmin(BaseUserAdmin):
+    ordering = ['id']
+    list_display = ['username', 'email']
+
+# @admin.register(User)
+# class UserAdmin(admin.ModelAdmin):
+#     """Пользователи"""
+#     list_display = ('last_login', 'password')
+#     # search_fields = ('name',)
+
+# admin.site.register(User, UserAdmin)
+
+
+admin.site.register(models.User, UserAdmin)
+
 
 
 

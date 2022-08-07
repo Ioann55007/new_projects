@@ -1,28 +1,44 @@
 from django.conf import settings
-from django.db import models
+from django.contrib.auth.base_user import AbstractBaseUser
 
 # Create your models here.
 from django.db import models
-from django.db.models import Sum
-
 from django.urls import reverse
-from django.utils import timezone
 from django.utils.text import slugify
 from taggit.managers import TaggableManager
 from rest_framework.reverse import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.auth.models import PermissionsMixin
 
 
 
+# class User(AbstractUser):
+#     pass
 
-class User(models.Model):
-    name = models.CharField(max_length=12)
-    image = models.ImageField(upload_to='media/', default='no_image.jpg')
 
-    def __str__(self):
-        return self.name
+
+class User(AbstractBaseUser, PermissionsMixin):
+    identifier = models.CharField(max_length=40, unique=True)
+    # date_of_birth = models.DateField()
+    # height = models.FloatField()
+    username = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+
+    REQUIRED_FIELDS = ['date_of_birth', 'height']
+    USERNAME_FIELD = 'identifier'
+
+
+# class User(models.Model):
+#     name = models.CharField(max_length=12)
+#     image = models.ImageField(upload_to='media/', default='no_image.jpg')
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Category(models.Model):
@@ -67,11 +83,10 @@ class Topic(models.Model):
     )
     content = models.TextField()
     likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
-    # likes = models.ManyToManyField(User, related_name='topic_likes')
     created = models.DateField(auto_now=False)
     tags = TaggableManager()
     slug = models.SlugField(max_length=130, unique=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     favourites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
     newmanager = NewManager()  # custom manager
     excerpt = models.TextField(null=True)
@@ -126,6 +141,7 @@ class Ip(models.Model):
     ip = models.CharField(max_length=100)
     updated = models.DateTimeField(auto_now=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ip_user')
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='User')
 
 
 class Feedback(models.Model):
@@ -136,12 +152,4 @@ class Feedback(models.Model):
 
     class Meta:
         verbose_name = _('Feedback')
-
-
-
-
-
-
-
-
 
