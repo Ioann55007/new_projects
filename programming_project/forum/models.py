@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
 
@@ -8,8 +9,7 @@ from django.utils.text import slugify
 from taggit.managers import TaggableManager
 from rest_framework.reverse import reverse_lazy
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import PermissionsMixin
-
+from django.contrib.auth.models import PermissionsMixin, UserManager
 
 
 # class User(AbstractUser):
@@ -18,19 +18,25 @@ from django.contrib.auth.models import PermissionsMixin
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    identifier = models.CharField(max_length=40, unique=True)
+    # identifier = models.CharField(max_length=40, unique=True)
     # date_of_birth = models.DateField()
     # height = models.FloatField()
+
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
-    password = models.CharField(max_length=255)
-
+    password1 = models.CharField(max_length=255)
+    password2 = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    objects = UserManager()
+    avatar = models.ImageField(settings.AUTH_USER_MODEL, default='media/no_image.jpg', blank=True)
+
+    USERNAME_FIELD = 'username'
+
+    REQUIRED_FIELDS = ['email', 'password', 'avatar']
 
 
-    REQUIRED_FIELDS = ['date_of_birth', 'height']
-    USERNAME_FIELD = 'identifier'
+
 
 
 # class User(models.Model):
@@ -46,7 +52,7 @@ class Category(models.Model):
     name = models.CharField(max_length=170)
     author = models.CharField(max_length=9)
     created = models.DateField(auto_now=False)
-    objects = models.Manager()
+    objects = UserManager()
     slug = models.SlugField(max_length=130, unique=True)
 
     def get_absolute_url(self):
@@ -60,10 +66,10 @@ class Category(models.Model):
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
 
+
     class Meta:
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
-
 
 
 

@@ -11,7 +11,7 @@
 	    <div class="row">
 	    	<div class="col-sm-12 col-md-12 col-lg-3 pb-4">
 
-				<img src="{{ request.user.profile.avatar.url}}/" height="130" width="200" class="avatar">
+				<img src="{{ request.user.avatar.url}}/" height="130" width="200" class="avatar">
 				    <form method="POST" action="{% url 'profile_user:avatar' %}" enctype="multipart/form-data">
 
                 		{% csrf_token %}

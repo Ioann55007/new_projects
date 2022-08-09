@@ -1,8 +1,12 @@
+import os.path
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
 
+import sys
+sys.path.append(os.path.abspath('..'))
+
+from forum.models import User
 
 class SignupForm(UserCreationForm):
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'form-control'}))
