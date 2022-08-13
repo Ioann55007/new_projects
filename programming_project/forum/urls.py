@@ -30,11 +30,10 @@ urlpatterns = format_suffix_patterns([
     path('lang/<lang_code>/', views.lang, name='lang'),
     path('like_topic/<int:id>/', like_topic, name='like_topic'),
     path('<int:id>/', views.favorite_add, name='favourite_add'),
-    path("profile/favourities/", views.favouritie_list, name="favourite_list"),
+    # path("profile/favourities/", views.favouritie_list, name="favourite_list"),
+    path('favourites/<int:topic_id>/', views.favouritie_list, name='favourite_list'),
 
 ])
 
-# urlpatterns += [
-#     path('<slug:slug>/like/', like_topic, name='like-topic'),
-# ]
+
 

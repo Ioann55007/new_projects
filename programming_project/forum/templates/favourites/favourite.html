@@ -4,21 +4,25 @@
     <section class="jumbotron text-center bg-white">
         <div class="container">
             <h1>User saved favourite posts</h1>
-            <p class="lead text-muted">Here you can remove or view the favourites posts you have added</p>
+            <p class="lead text-muted">Here you can remove or view the favourites topics you have added</p>
         </div>
     </section>
     <div>
+
         <div class="row">
+            {% if new %}
+            <h2 style="font-size:18px;font-weight:bold">{{ne|truncatechars:50}}</h2>
 
             <div class="col-md-4">
-                <a class="text-dark" href="{{post.get_absolute_url}}">
+                <a class="text-dark" href="{{topic.get_absolute_url}}">
                     <div class="card mb-4 box-shadow">
                         <div class="card-body">
-                            <h2 style="font-size:18px;font-weight:bold">{topic.name|truncatechars:50}}</h2>
-                            <p class="card-text">{{topic.excerpt|truncatechars:50}}</p>
+                            Topic name:
+                            <h2 style="font-size:16px">{{new.name}}</h2>
+                            Topic content:
+                            <h2 style="font-size:16px">{{new.content}}</h2>
                             <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">9 mins</small>
-                                <div id="favourite-section"><a href="{% url 'forum:favourite_add' topic.id %}"
+                                <div id="favourite-section"><a href="{% url 'forum:favourite_add' new.id %}"
                                         class="btn btn-outline-primary">Remove</a></div>
                             </div>
 
@@ -26,7 +30,10 @@
                     </div>
                 </a>
             </div>
+            {% endif %}
+
         </div>
+
     </div>
-</div>
 {% endblock %}
+</div>

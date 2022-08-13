@@ -12,15 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import PermissionsMixin, UserManager
 
 
-# class User(AbstractUser):
-#     pass
-
-
-
 class User(AbstractBaseUser, PermissionsMixin):
-    # identifier = models.CharField(max_length=40, unique=True)
-    # date_of_birth = models.DateField()
-    # height = models.FloatField()
 
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(max_length=255, unique=True)
@@ -36,15 +28,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email', 'password', 'avatar']
 
 
-
-
-
-# class User(models.Model):
-#     name = models.CharField(max_length=12)
-#     image = models.ImageField(upload_to='media/', default='no_image.jpg')
-#
-#     def __str__(self):
-#         return self.name
 
 
 class Category(models.Model):
@@ -74,14 +57,8 @@ class Category(models.Model):
 
 
 
-class Topic(models.Model):
-    class NewManager(models.Manager):
-        def get_queryset(self):
-            return super().get_queryset().filter(status='published')
 
-    options = (
-        ('published', 'Published'),
-    )
+class Topic(models.Model):
 
     name = models.CharField(max_length=200)
     category = models.ForeignKey(
@@ -94,10 +71,8 @@ class Topic(models.Model):
     slug = models.SlugField(max_length=130, unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     favourites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
-    newmanager = NewManager()  # custom manager
     excerpt = models.TextField(null=True)
     objects = models.Manager()
-    status = models.CharField(max_length=10, choices=options, default='draft')
 
     def __str__(self):
         return self.name

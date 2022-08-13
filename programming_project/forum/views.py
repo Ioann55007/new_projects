@@ -266,16 +266,20 @@ def like_topic(request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-def favorite_add(request, id):
+def favorite_add(request, id, self):
     topiz = get_object_or_404(Topic, id=id)
-    if topiz.favourites.filter(id=request.user.id).exists():
-        topiz.favourites.remove(request.user)
+    if topiz.favourites.filter(id=self.request.topic.id).exists():
+        topiz.favourites.remove(self.request.topic)
     else:
-        topiz.favourites.add(request.user)
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        topiz.favourites.add(self.request.topic)
+    return HttpResponseRedirect(self.request.META['HTTP_REFERER'])
 
 
 
-def favouritie_list(request):
-    new = Topic.newmanager.filter(favourites=request.user)
-    return render(request, 'favourites/favourite.html', {'new': new})
+def favouritie_list(request, topic_id):
+
+        # new = Topic.newmanager
+    # new = Topic.objects.get(topic=request.topic_id)
+    new = Topic.objects.get(id=topic_id)
+    context = {'new': new}
+    return render(request,  'favourites/favourite.html', context)
