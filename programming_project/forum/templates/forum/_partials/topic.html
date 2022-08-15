@@ -1,0 +1,27 @@
+{% if topic %}
+<div class="panel panel default">
+
+           <div class="panel-heading">{{ topic }}</div>
+
+            <div class="panel-body">
+
+                {{ topic.content|linebreaks }}
+                {{ topic.name }}
+            <section>
+                <h3>Tags</h3>
+                <ul class="list-inline">
+                    <li>tagged with:</li>
+                    {% for tag in topic.tags.all %}
+                    <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+
+            </section>
+            </div>
+    {% if not delete_view %}
+            <div class="panel-footer clearfix"><a class="pull-left" href="{% url 'forum:update' pk=topic.pk %}">Edit</a>
+                <a href="{% url 'forum:delete' topic.pk %}" class="text-danger pull-right">Delete</a></div>
+</div>
+    {% endif %}
+
+{% endif %}

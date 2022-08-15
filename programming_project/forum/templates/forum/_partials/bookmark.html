@@ -1,0 +1,28 @@
+{% if bookmarks %}
+<div class="panel panel default">
+
+           <div class="panel-heading">{{ bookmarks }}</div>
+
+            <div class="panel-body">
+
+                {{ bookmarks.description|linebreaks }}
+                {{ bookmark_topic_bookmark.topic.name }}
+                <p><a href="{{ bookmarks.url }}" target="_blank">{{ bookmarks.url }}</a></p>
+            <section>
+                <h3>Tags</h3>
+                <ul class="list-inline">
+                    <li>tagged with:</li>
+                    {% for tag in bookmarks.tags.all %}
+                    <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+
+            </section>
+            </div>
+    {% if not delete_view %}
+            <div class="panel-footer clearfix"><a class="pull-left" href="{% url 'forum:update' pk=bookmarks.pk %}">Edit</a>
+                <a href="{% url 'forum:delete' bookmarks.pk %}" class="text-danger pull-right">Delete</a></div>
+</div>
+    {% endif %}
+
+{% endif %}

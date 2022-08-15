@@ -29,11 +29,17 @@ urlpatterns = format_suffix_patterns([
     path('6/team', TeamView.as_view(), name='the_team'),
     path('lang/<lang_code>/', views.lang, name='lang'),
     path('like_topic/<int:id>/', like_topic, name='like_topic'),
-    path('<int:id>/', views.favorite_add, name='favourite_add'),
-    # path("profile/favourities/", views.favouritie_list, name="favourite_list"),
-    path('favourites/<int:topic_id>/', views.favouritie_list, name='favourite_list'),
+    # path('<int:id>/', views.favorite_add, name='favourite_add'),
+    # path("11/favourites/", views.favouritie_list, name="favourite_list"),
+    # path("11/bookmarks/", views.List.as_view(), name="list"),
+    # path("14/bookmarks/", views.ListBookmark.as_view(), name="list_bookmark"),
+    # path("15/create/", views.Create.as_view(), name="create"),
+    # path("update/<int:pk>/", views.Update.as_view(), name="update"),
+    # path("topic_bookmark/<int:pk>/", views.TopicBookmark.as_view(), name="topic_bookmark"),
+    # path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
+    path("11/bookmarks/", views.List.as_view(), name='list_topic_bookmark'),
+    path("15/create/", views.Create.as_view(), name='create'),
+    path("update/<int:pk>/", views.Update.as_view(), name="update"),
+    path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
 
 ])
-
-
-

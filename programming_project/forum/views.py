@@ -3,20 +3,21 @@ from urllib.parse import urlsplit, urlunsplit
 
 from django.conf import settings
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+
+# from .models import User
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.functional import LazyObject
 from django.utils.http import url_has_allowed_host_and_scheme, quote_etag
 # from django.utils.translation import (
 #     LANGUAGE_SESSION_KEY, check_for_language
 # )
-from django.views import View
+from django.views import View, generic
 from django.views.generic import ListView, DetailView
 from rest_framework import viewsets
 from rest_framework.mixins import UpdateModelMixin
@@ -27,7 +28,7 @@ from taggit.models import Tag
 from . import serializers
 from .filters import TopicFilter
 from .forms import ContactForm
-from .models import Topic, Category
+from .models import Topic, Category, Bookmark
 
 from .services import BlogService
 from main_site import settings
@@ -37,7 +38,7 @@ import json
 from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
-
+from . import models
 
 
 
@@ -266,20 +267,117 @@ def like_topic(request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-def favorite_add(request, id, self):
-    topiz = get_object_or_404(Topic, id=id)
-    if topiz.favourites.filter(id=self.request.topic.id).exists():
-        topiz.favourites.remove(self.request.topic)
-    else:
-        topiz.favourites.add(self.request.topic)
-    return HttpResponseRedirect(self.request.META['HTTP_REFERER'])
+# def favorite_add(request, id, self):
+#     topiz = get_object_or_404(Topic, id=id)
+#     if topiz.favourites.filter(id=self.request.topic.id).exists():
+#         topiz.favourites.remove(self.request.topic)
+#     else:
+#         topiz.favourites.add(self.request.topic)
+#     return HttpResponseRedirect(self.request.META['HTTP_REFERER'])
 
 
 
-def favouritie_list(request, topic_id):
+# def favouritie_list(request):
+#     # user = User.objects.get(username=request.user)
+#     # new = Topic.newmanager.filter(user)
+#     new = Topic.newmanager.filter(favourites=request.user)
+#     # context = {'new': new, 'user': user}
+#     # context = {'new': new}
+#     # return render(request,  'favourites/favourite.html', context)
+#     return render(request,
+#                   'favourites/favourite.html',
+#                   {'new': new})
 
-        # new = Topic.newmanager
-    # new = Topic.objects.get(topic=request.topic_id)
-    new = Topic.objects.get(id=topic_id)
-    context = {'new': new}
-    return render(request,  'favourites/favourite.html', context)
+
+# class List(LoginRequiredMixin, generic.ListView):
+#     model = models.Bookmark
+#
+#     def get_queryset(self):
+#
+#         return self.request.user.bookmarks.all()
+#
+#
+#
+# class Create(LoginRequiredMixin, generic.CreateView):
+#     fields = ['url', 'title', 'description', 'tags']
+#     model = models.Bookmark
+#     success_url = reverse_lazy('forum:list')
+#
+#
+#     def form_valid(self, form):
+#         bookmark = form.save(commit=False)
+#         bookmark.user = self.request.user
+#         bookmark.save()
+#         form.save_m2m()
+#         return super().form_valid(form)
+#
+#
+# class Update(LoginRequiredMixin, generic.UpdateView):
+#     fields = ['url', 'title', 'description', 'tags', 'topic']
+#     model = models.Bookmark
+#
+#     success_url = reverse_lazy('forum:list')
+#
+#     def get_queryset(self):
+#         return self.request.user.bookmarks.all()
+#
+#
+# class Delete(LoginRequiredMixin, generic.DeleteView):
+#     model = models.Bookmark
+#     success_url = reverse_lazy('forum:list')
+#
+#     def get_queryset(self):
+#         return self.request.user.bookmarks.all()
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['delete_view'] = True
+#         return context
+
+
+
+class List(LoginRequiredMixin, generic.ListView):
+    model = models.Topic
+
+    def get_queryset(self):
+
+        return self.request.user.topic.all()
+
+
+
+class Create(LoginRequiredMixin, generic.CreateView):
+    fields = ['author', 'name', 'content', 'tags']
+    model = models.Topic
+    success_url = reverse_lazy('forum:list_topic_bookmark')
+
+
+    def form_valid(self, form):
+        topic = form.save(commit=False)
+        topic.author = self.request.user
+        topic.save()
+        form.save_m2m()
+        return super().form_valid(form)
+
+
+class Update(LoginRequiredMixin, generic.UpdateView):
+    fields = ['author', 'name', 'content', 'tags']
+    model = models.Bookmark
+
+    success_url = reverse_lazy('forum:list_topic_bookmark')
+
+    def get_queryset(self):
+        return self.request.user.topic.all()
+
+
+class Delete(LoginRequiredMixin, generic.DeleteView):
+    model = models.Bookmark
+    success_url = reverse_lazy('forum:list_topic_bookmark')
+
+    def get_queryset(self):
+        return self.request.user.topic.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['delete_view'] = True
+        return context
+

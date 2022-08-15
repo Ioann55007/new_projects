@@ -33,10 +33,11 @@ class TopicAdmin(admin.ModelAdmin):
     search_fields = ('name', 'category', 'likes')
 
 
+
 @admin.register(Replies)
 class RepliesAdmin(admin.ModelAdmin):
     """Ответы"""
-    list_display = ('author_name', 'created')
+    list_display = ('author', 'created', 'parent', 'topic')
 
 
 class UserAdmin(BaseUserAdmin):
@@ -54,7 +55,9 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(models.User, UserAdmin)
 
-
+@admin.register(models.Bookmark)
+class BookmarkAdmin(admin.ModelAdmin):
+    list_display = ['title', 'url', 'user']
 
 
 

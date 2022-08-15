@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'profile_user.apps.ProfileUserConfig',
     'crispy_forms',
     'django_social_share',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [

@@ -10,19 +10,20 @@
     <div>
 
         <div class="row">
-            {% if new %}
-            <h2 style="font-size:18px;font-weight:bold">{{ne|truncatechars:50}}</h2>
+
+
+            <h2 style="font-size:18px;font-weight:bold">{{new|truncatechars:50}}</h2>
 
             <div class="col-md-4">
                 <a class="text-dark" href="{{topic.get_absolute_url}}">
                     <div class="card mb-4 box-shadow">
                         <div class="card-body">
                             Topic name:
-                            <h2 style="font-size:16px">{{new.name}}</h2>
+                            <h2 style="font-size:16px">{{new}}</h2>
                             Topic content:
                             <h2 style="font-size:16px">{{new.content}}</h2>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div id="favourite-section"><a href="{% url 'forum:favourite_add' new.id %}"
+                                <div id="favourite-section"><a href="{% url 'forum:favourite_add' user.id %}"
                                         class="btn btn-outline-primary">Remove</a></div>
                             </div>
 
@@ -30,10 +31,8 @@
                     </div>
                 </a>
             </div>
-            {% endif %}
 
         </div>
-
     </div>
 {% endblock %}
 </div>

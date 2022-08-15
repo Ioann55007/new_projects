@@ -1,0 +1,20 @@
+{% extends '_layouts/base.html' %}
+
+
+{% block title %} Delete topic_bookmark{{ block.super }} {% endblock %}
+{% block content %}
+    {% include 'forum/_partials/topic.html' %}
+    <form method="post">
+        {% csrf_token %}
+        <h3>Topic name:</h3>
+        {{ topic.name }}
+        <h3>Topic content</h3>
+        {{ topic.content }}
+
+        <p style="margin-top: 270px;">Are you sure you want to delete bookmark?</p>
+
+        <button class="btn btn-danger" type="submit">Yes</button>
+        <a href="{% url 'forum:list_topic_bookmark' %}" class="btn">No</a>
+    </form>
+
+{% endblock %}
