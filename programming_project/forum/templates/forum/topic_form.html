@@ -1,4 +1,5 @@
 {% extends '_layouts/base.html' %}
+{% load static %}
 {% load bootstrap3 %}
 {% block title %} Create a topic_bookmark | {{ block.super }} {% endblock %}
 
@@ -9,8 +10,10 @@
     {% buttons %}
         <button class="btn btn-success">Save</button>
     {% endbuttons %}
-
 </form>
+
+
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 
 {% endblock %}
 

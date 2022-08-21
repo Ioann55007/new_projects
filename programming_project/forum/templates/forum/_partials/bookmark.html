@@ -20,6 +20,7 @@
             </section>
             </div>
     {% if not delete_view %}
+
             <div class="panel-footer clearfix"><a class="pull-left" href="{% url 'forum:update' pk=bookmarks.pk %}">Edit</a>
                 <a href="{% url 'forum:delete' bookmarks.pk %}" class="text-danger pull-right">Delete</a></div>
 </div>

@@ -23,7 +23,7 @@
         <div class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
                 <li>{{ user.username }}</li>
-                <li><a href="{% url 'forum:list_topic_bookmark' %}">My Bookmarks</a></li>
+                <li><a href="{% url 'forum:list_topic_bookmark'  %}">My Bookmarks</a></li>
                 <li><a href="{% url 'forum:create' %}">Add Bookmark</a></li>
             {% endif %}
         </div>

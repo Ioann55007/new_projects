@@ -1,3 +1,6 @@
+import uuid
+import datetime
+
 import requests
 from django.apps import apps
 from django.conf import settings
@@ -19,11 +22,14 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=30, null=True, blank=True)
+    last_name = models.CharField(max_length=30, null=True, blank=True)
     email = models.EmailField(max_length=255, unique=True)
-    password1 = models.CharField(max_length=255)
-    password2 = models.CharField(max_length=255)
+    # password1 = models.CharField(max_length=255)
+    # password2 = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(u'date joined', default=timezone.now)
     objects = UserManager()
     avatar = models.ImageField(settings.AUTH_USER_MODEL, default='media/no_image.jpg', blank=True)
 
@@ -66,11 +72,11 @@ class Topic(models.Model):
     )
     content = models.TextField()
     likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
-    created = models.DateField(auto_now=False)
+    created = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
-    slug = models.SlugField(max_length=130, unique=True)
+    slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    favourites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topic_bookmark')
     excerpt = models.TextField(null=True)
     objects = models.Manager()
 
@@ -92,11 +98,6 @@ class Topic(models.Model):
         verbose_name = 'Topic'
         verbose_name_plural = 'Topics'
 
-
-
-class Dopmarks(models.Model):
-    topic = models.ManyToManyField(Topic, related_name='topic_bookmark', default=None, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookmark_topic')
 
 
 class Bookmark(models.Model):

@@ -1,4 +1,5 @@
 from email.message import EmailMessage
+from django.contrib.auth.decorators import login_required
 
 from coreapi.compat import force_text
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,21 +19,23 @@ logger = logging.getLogger(__name__)
 
 
 
-
-
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            # save form in the memory not in database
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+
+            # save form in the memory not in database
+
+
             # to get the domain of the current site
             current_site = get_current_site(request)
             mail_subject = 'Activation link has been sent to your email id'
             message = render_to_string('acc_active_email.html', {
-                'user': user,
+
+                'form': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),

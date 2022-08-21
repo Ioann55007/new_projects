@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath('..'))
 
 from forum.models import User
 
+
 class SignupForm(UserCreationForm):
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(label='Имя', widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -19,7 +20,7 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
 
 class UserLoginForm(AuthenticationForm):

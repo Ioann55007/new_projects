@@ -29,8 +29,7 @@ class TopicAdmin(admin.ModelAdmin):
     """Темы"""
     # list_display = ('views',)
     list_display = ("name", 'category', 'tag_list', 'slug')
-    fields = ('category', 'name',  'author',  'content', 'created', 'tags', 'slug', 'likes', 'status')
-    search_fields = ('name', 'category', 'likes')
+    search_fields = ('name', 'category', 'likes', 'created')
 
 
 
@@ -42,18 +41,12 @@ class RepliesAdmin(admin.ModelAdmin):
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['id']
-    list_display = ['username', 'email']
-
-# @admin.register(User)
-# class UserAdmin(admin.ModelAdmin):
-#     """Пользователи"""
-#     list_display = ('last_login', 'password')
-#     # search_fields = ('name',)
-
-# admin.site.register(User, UserAdmin)
+    list_display = ['username', 'email'
+                    ]
 
 
 admin.site.register(models.User, UserAdmin)
+
 
 @admin.register(models.Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):

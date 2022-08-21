@@ -288,7 +288,7 @@ def like_topic(request, id):
 #                   'favourites/favourite.html',
 #                   {'new': new})
 
-
+#
 # class List(LoginRequiredMixin, generic.ListView):
 #     model = models.Bookmark
 #
@@ -341,40 +341,41 @@ class List(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
 
-        return self.request.user.topic.all()
+        return self.request.user.topic_bookmark.all()
 
 
 
 class Create(LoginRequiredMixin, generic.CreateView):
-    fields = ['author', 'name', 'content', 'tags']
+    fields = ['author', 'name', 'content', 'tags', 'id', 'category']
     model = models.Topic
     success_url = reverse_lazy('forum:list_topic_bookmark')
 
 
     def form_valid(self, form):
         topic = form.save(commit=False)
-        topic.author = self.request.user
+        topic.user = self.request.user
         topic.save()
         form.save_m2m()
         return super().form_valid(form)
 
 
+
 class Update(LoginRequiredMixin, generic.UpdateView):
     fields = ['author', 'name', 'content', 'tags']
-    model = models.Bookmark
+    model = models.Topic
 
     success_url = reverse_lazy('forum:list_topic_bookmark')
 
     def get_queryset(self):
-        return self.request.user.topic.all()
+        return self.request.user.topic_bookmark.all()
 
 
 class Delete(LoginRequiredMixin, generic.DeleteView):
-    model = models.Bookmark
+    model = models.Topic
     success_url = reverse_lazy('forum:list_topic_bookmark')
 
     def get_queryset(self):
-        return self.request.user.topic.all()
+        return self.request.user.topic_bookmark.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

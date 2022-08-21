@@ -30,7 +30,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ioann.basic@gmail.com'
-EMAIL_HOST_PASSWORD = 'ubbpyplvesuxbkjk'
+EMAIL_HOST_PASSWORD = 'kbtdkkbivgrnvjtx'
+
 DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'ioann.basic@gmail.com')
 EMAIL_USE_TLS = True
 
@@ -222,8 +223,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'INIT_PARAMS': {'cookie': True},
         'FIELDS': [
             'id',
-            'first_name',
-            'last_name',
+            'username',
             'middle_name',
             'name',
             'name_format',
