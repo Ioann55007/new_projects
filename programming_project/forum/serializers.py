@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from taggit.serializers import TaggitSerializer, TagListSerializerField
 
-from .models import Category, Topic, Replies, User, Created, Feedback
+from .models import Category, Topic, Reply, User, Created, Feedback
 from .services import BlogService
 
 
@@ -39,7 +39,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
 class RepliesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Replies
+        model = Reply
         fields = ('author_name', 'content',  'created', 'updated', 'parent')
 
 

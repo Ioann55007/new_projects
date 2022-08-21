@@ -47,6 +47,7 @@ class Category(models.Model):
     created = models.DateField(auto_now=False)
     objects = UserManager()
     slug = models.SlugField(max_length=130, unique=True)
+    category_image = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('category', kwargs={"slug": self.slug})
@@ -77,7 +78,6 @@ class Topic(models.Model):
     slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topic_bookmark')
-    excerpt = models.TextField(null=True)
     objects = models.Manager()
 
     def __str__(self):
@@ -127,7 +127,7 @@ def fetch_url_title(sender, instance, created, **kwargs):
             instance.save()
 
 
-class Replies(models.Model):
+class Reply(models.Model):
     author = models.EmailField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='comment_set', blank=True)
     content = models.TextField(max_length=200)
@@ -142,9 +142,11 @@ class Replies(models.Model):
         verbose_name_plural = _('Replies')
         ordering = ('-id',)
 
-    def __str__(self):
-        return '{author}: {topic}'.format(author=self.author, topic=self.topic.name)
+    # def __str__(self):
+    #     return '{author}: {topic}'.format(author=self.author, topic=self.topic.name)
 
+    def __str__(self):
+        return self.content
 
 # class Views(models.Model):
 #     # topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)

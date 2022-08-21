@@ -287,8 +287,7 @@
                                             {% if request.user.is_authenticated %}
                                             <a href="{% url 'forum:create'  %}"><i class="icon-Bookmark"></i></a>
 
-                                            <a href="" class="">Removed
-                                            Favourties</a>
+
                                             {% endif %}
                                         </div>
                                         <div data-visible="mobile">
@@ -296,7 +295,13 @@
                                         </div>
 
                                     </div>
-                                            {% include 'forum/comments.html' %}
+                                    <div>
+
+
+
+                                    </div>
+
+                                    {% include 'forum/reply.html' %}
                                 </div>
                             </div>
                         </div>
@@ -688,7 +693,6 @@
 
 <script src="{% static 'js/app.js' %}"></script>
 <script src="{% static 'js/top_bottom.js' %}"></script>
-<script src="{% static 'js/comments.js' %}"></script>
 
 </body>
 </html>

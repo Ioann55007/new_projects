@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import Category, Topic, Replies
+from .models import Category, Topic, Reply
 from django.contrib import admin
 from .models import User
 from . import models
@@ -33,7 +33,7 @@ class TopicAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(Replies)
+@admin.register(Reply)
 class RepliesAdmin(admin.ModelAdmin):
     """Ответы"""
     list_display = ('author', 'created', 'parent', 'topic')

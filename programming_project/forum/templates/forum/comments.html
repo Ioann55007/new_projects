@@ -1,18 +1,12 @@
+{% for reply in replies %}
+Пользователь - {{reply.user}}<br>
+{{reply.content}}<br>
+Добавлен - {{reply.created}}
+<form action=""  method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Отправить</button>
+</form>
 
-
-
-<!-- the comment box -->
-<div class="well">
-  <h4><i class="fa fa-paper-plane-o"></i> Leave a Comment:</h4>
-  <form role="form">
-    <div class="form-group">
-      <textarea class="form-control" rows="1"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary"><i class="fa fa-reply"></i> Submit</button>
-  </form>
-</div>
-<hr>
-
-<!-- the comments -->
-
-
+{% endfor %}
+I LOVE DJANO

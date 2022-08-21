@@ -1,10 +1,13 @@
 import re
 from urllib.parse import urlsplit, urlunsplit
 
+import form as form
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 # from .models import User
 from django.core.mail import send_mail
@@ -27,8 +30,8 @@ from taggit.models import Tag
 
 from . import serializers
 from .filters import TopicFilter
-from .forms import ContactForm
-from .models import Topic, Category, Bookmark
+from .forms import ContactForm, ReplyForm
+from .models import Topic, Category, Bookmark, Reply
 
 from .services import BlogService
 from main_site import settings
@@ -39,8 +42,6 @@ from django.http import HttpResponse
 from django.views import View
 from django.contrib.contenttypes.models import ContentType
 from . import models
-
-
 
 
 class ViewSet(ModelViewSet):
@@ -267,82 +268,11 @@ def like_topic(request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-# def favorite_add(request, id, self):
-#     topiz = get_object_or_404(Topic, id=id)
-#     if topiz.favourites.filter(id=self.request.topic.id).exists():
-#         topiz.favourites.remove(self.request.topic)
-#     else:
-#         topiz.favourites.add(self.request.topic)
-#     return HttpResponseRedirect(self.request.META['HTTP_REFERER'])
-
-
-
-# def favouritie_list(request):
-#     # user = User.objects.get(username=request.user)
-#     # new = Topic.newmanager.filter(user)
-#     new = Topic.newmanager.filter(favourites=request.user)
-#     # context = {'new': new, 'user': user}
-#     # context = {'new': new}
-#     # return render(request,  'favourites/favourite.html', context)
-#     return render(request,
-#                   'favourites/favourite.html',
-#                   {'new': new})
-
-#
-# class List(LoginRequiredMixin, generic.ListView):
-#     model = models.Bookmark
-#
-#     def get_queryset(self):
-#
-#         return self.request.user.bookmarks.all()
-#
-#
-#
-# class Create(LoginRequiredMixin, generic.CreateView):
-#     fields = ['url', 'title', 'description', 'tags']
-#     model = models.Bookmark
-#     success_url = reverse_lazy('forum:list')
-#
-#
-#     def form_valid(self, form):
-#         bookmark = form.save(commit=False)
-#         bookmark.user = self.request.user
-#         bookmark.save()
-#         form.save_m2m()
-#         return super().form_valid(form)
-#
-#
-# class Update(LoginRequiredMixin, generic.UpdateView):
-#     fields = ['url', 'title', 'description', 'tags', 'topic']
-#     model = models.Bookmark
-#
-#     success_url = reverse_lazy('forum:list')
-#
-#     def get_queryset(self):
-#         return self.request.user.bookmarks.all()
-#
-#
-# class Delete(LoginRequiredMixin, generic.DeleteView):
-#     model = models.Bookmark
-#     success_url = reverse_lazy('forum:list')
-#
-#     def get_queryset(self):
-#         return self.request.user.bookmarks.all()
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['delete_view'] = True
-#         return context
-
-
-
 class List(LoginRequiredMixin, generic.ListView):
     model = models.Topic
 
     def get_queryset(self):
-
         return self.request.user.topic_bookmark.all()
-
 
 
 class Create(LoginRequiredMixin, generic.CreateView):
@@ -350,14 +280,12 @@ class Create(LoginRequiredMixin, generic.CreateView):
     model = models.Topic
     success_url = reverse_lazy('forum:list_topic_bookmark')
 
-
     def form_valid(self, form):
         topic = form.save(commit=False)
         topic.user = self.request.user
         topic.save()
         form.save_m2m()
         return super().form_valid(form)
-
 
 
 class Update(LoginRequiredMixin, generic.UpdateView):
@@ -381,4 +309,22 @@ class Delete(LoginRequiredMixin, generic.DeleteView):
         context = super().get_context_data(**kwargs)
         context['delete_view'] = True
         return context
+
+
+def reply_topic(request, pk):
+    topic = get_object_or_404(Topic, id=pk)
+    reply = Reply.objects.filter(topic=pk)
+
+    if request.method == "POST":
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.user = request.user
+            form.topic = topic
+            form.save()
+            return redirect('forum/reply_topic', pk)
+    else:
+        form = ReplyForm()
+
+    return render(request, 'forum/comments.html', {'topic': topic, 'replies': reply, 'form': form})
 
