@@ -1,10 +1,10 @@
-import uuid
 import datetime
-
+import uuid
 import requests
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.utils.timezone import localdate
 
 # Create your models here.
 from django.db import models
@@ -78,10 +78,23 @@ class Topic(models.Model):
     slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topic_bookmark')
+    # e = localdate()
+    # e = datetime.date.today()
+
     objects = models.Manager()
 
     def __str__(self):
         return self.name
+
+
+    def d_date(self):
+        # e = datetime.date.today() - self.created.strptime(str(e), '%Y-%m-%d').date()
+        z = self.created.strptime(str(self.created), '%Y-%m-%d %H:%M:%S.%f+%U:%W')
+
+        r = datetime.datetime.today()
+
+        e = r - z
+        return e
 
     def total_likes(self):
         return self.likes.count()
@@ -92,6 +105,7 @@ class Topic(models.Model):
 
     def tag_list(self) -> str:
         return u", ".join(o.name for o in self.tags.all())
+
 
 
     class Meta:

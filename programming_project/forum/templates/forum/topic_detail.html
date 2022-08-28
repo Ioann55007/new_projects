@@ -302,6 +302,26 @@
                                     </div>
 
                                     {% include 'forum/reply.html' %}
+                                    <div>
+                                        {% for reply in comments %}
+                                            Пользователь - {{ reply.user }}<br>
+                                            Контент - {{ reply.content }} <br>
+                                            Добавлен - {{ reply.created }}<br><br>
+                                        <small><a href="{% url 'forum:delete_reply' reply.id %}">Удалить</a></small><br>
+
+                                         {% endfor %}
+
+                                        {% if user.is_active %}
+                                            <form action="" method="post">
+                                                {% csrf_token %}
+                                                {{ form.as_p }}
+                                                <button type="submit">Отправить</button>
+                                            </form>
+                                        {% else %}
+                                            <h4>Что бы оставить комментарий авторизуйтесь</h4>
+                                        {% endif %}
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -313,7 +333,10 @@
                                             <span class="topic__info-title">Created</span>
                                             <div  class="topic__info-avatar">
                                                 <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
-                                                <span>13d</span>
+                                                <span>
+                                                 {{topic.d_date}}
+
+                                                </span>
                                             </div>
                                         </div>
                                         <div>
@@ -488,7 +511,8 @@
                                 <div class="calendar__range">
                                     <div class="calendar__current">
                                         <p>{{ topic.created |date:"m-Y"  }}</p>
-                                        <span>{{topic.created|date:"M-d"}}</span>
+                                        <span>{{topic.created|date:"M-d"}}</span><br>
+                                        <span>{{topic.created|date:"d-m-Y"}}</span>
 
 
                                     </div>

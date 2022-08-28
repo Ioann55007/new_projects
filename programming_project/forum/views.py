@@ -1,6 +1,6 @@
 import re
 from urllib.parse import urlsplit, urlunsplit
-
+import datetime
 import form as form
 from django.conf import settings
 from django.contrib import auth
@@ -314,17 +314,24 @@ class Delete(LoginRequiredMixin, generic.DeleteView):
 def reply_topic(request, pk):
     topic = get_object_or_404(Topic, id=pk)
     reply = Reply.objects.filter(topic=pk)
-
-    if request.method == "POST":
+    if request.method == 'POST':
         form = ReplyForm(request.POST)
         if form.is_valid():
             form = form.save(commit=False)
             form.user = request.user
             form.topic = topic
             form.save()
-            return redirect('forum/reply_topic', pk)
+            return redirect('forum:reply_topic', pk)
     else:
         form = ReplyForm()
+    # return render(request, 'forum/comments.html', {'form': form, 'comments': reply, 'topic': topic})
+    return render(request, 'forum/topic_detail.html', {'form': form, 'comments': reply, 'topic': topic})
 
-    return render(request, 'forum/comments.html', {'topic': topic, 'replies': reply, 'form': form})
+
+def to_get_reply(request, id):
+    selected_reply = get_object_or_404(Reply, id=id)
+    selected_reply.delete()
+    return redirect('forum:reply_topic', id)
+
+
 

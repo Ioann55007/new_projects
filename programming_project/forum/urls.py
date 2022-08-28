@@ -34,5 +34,6 @@ urlpatterns = format_suffix_patterns([
     path("update/<int:pk>/", views.Update.as_view(), name="update"),
     path("delete/<int:pk>", views.Delete.as_view(), name="delete"),
     path('reply/<int:pk>', views.reply_topic, name='reply_topic'),
+    path('reply_remove/<int:id>', views.to_get_reply, name='delete_reply'),
 
 ])

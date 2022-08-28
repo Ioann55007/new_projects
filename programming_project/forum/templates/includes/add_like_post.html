@@ -1,6 +1,6 @@
 
 {% if request.user.is_authenticated %}
-<form action="{% url 'forum:like_topic' object.id %}" method="post">
+<form action="{% url 'forum:like_topic' topic.id %}" method="post">
         {% csrf_token %}
         {% if liked %}
 
@@ -11,6 +11,6 @@
         <button  type="submit" class="icon-Favorite_Topic" style="background-color: Transparent;  border:none; color:black">Like</button>
 
        {% endif %}
-        {{ object.total_likes }}
+        {{ topic.total_likes }}
     </form>
 {% endif %}

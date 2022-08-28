@@ -36,7 +36,7 @@ class TopicAdmin(admin.ModelAdmin):
 @admin.register(Reply)
 class RepliesAdmin(admin.ModelAdmin):
     """Ответы"""
-    list_display = ('author', 'created', 'parent', 'topic')
+    list_display = ('author', 'created', 'parent', 'topic', 'content')
 
 
 class UserAdmin(BaseUserAdmin):

@@ -1,12 +1,20 @@
-{% for reply in replies %}
-Пользователь - {{reply.user}}<br>
-{{reply.content}}<br>
-Добавлен - {{reply.created}}
-<form action=""  method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Отправить</button>
-</form>
-
+{% for reply in comments %}
+- Пользователь {{ reply.user }}<br>
+- Контент {{ reply.content }}<br>
+- Создан {{ reply.created }}<br><br>
+<small><a href="{% url 'forum:delete_reply' reply.id %}">Удалить</a></small>
 {% endfor %}
-I LOVE DJANO
+
+
+{% if user.is_active %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+<button type="submit">Отправить</button>
+    {% else %}
+
+    <h4>Чтобы оставить комментарий авторизируйтесь.</h4>
+{% endif %}
+
+
+
