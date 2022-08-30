@@ -1,5 +1,6 @@
 import datetime
 import uuid
+
 import requests
 from django.apps import apps
 from django.conf import settings
@@ -25,8 +26,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
     email = models.EmailField(max_length=255, unique=True)
-    # password1 = models.CharField(max_length=255)
-    # password2 = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(u'date joined', default=timezone.now)
@@ -78,9 +77,6 @@ class Topic(models.Model):
     slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topic_bookmark')
-    # e = localdate()
-    # e = datetime.date.today()
-
     objects = models.Manager()
 
     def __str__(self):
@@ -88,11 +84,8 @@ class Topic(models.Model):
 
 
     def d_date(self):
-        # e = datetime.date.today() - self.created.strptime(str(e), '%Y-%m-%d').date()
         z = self.created.strptime(str(self.created), '%Y-%m-%d %H:%M:%S.%f+%U:%W')
-
         r = datetime.datetime.today()
-
         e = r - z
         return e
 
@@ -149,6 +142,7 @@ class Reply(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_set', blank=True, null=True)
+
     objects = models.Manager()
 
     class Meta:
@@ -156,11 +150,17 @@ class Reply(models.Model):
         verbose_name_plural = _('Replies')
         ordering = ('-id',)
 
-    # def __str__(self):
-    #     return '{author}: {topic}'.format(author=self.author, topic=self.topic.name)
 
     def __str__(self):
         return self.content
+
+
+    def last_reply(self):
+        k = self.topic.topic_set
+        ur = k.order_by('-created')[0]
+        f = ur.created
+        return f
+
 
 # class Views(models.Model):
 #     # topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)

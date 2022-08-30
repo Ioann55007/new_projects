@@ -343,7 +343,12 @@
                                             <span class="topic__info-title">Last reply</span>
                                             <div  class="topic__info-avatar">
                                                 <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar"></a>
-                                                <span>4h</span>
+                                                <span>
+                                                        {% for reply in comments %}
+                                                              {{reply.last_reply|time:"H:i"}}
+                                                        {% endfor %}
+
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
