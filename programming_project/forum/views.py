@@ -31,7 +31,7 @@ from taggit.models import Tag
 from . import serializers
 from .filters import TopicFilter
 from .forms import ContactForm, ReplyForm
-from .models import Topic, Category, Bookmark, Reply
+from .models import Topic, Category, Bookmark, Reply, Ip
 
 from .services import BlogService
 from main_site import settings
@@ -334,4 +334,30 @@ def to_get_reply(request, id):
     return redirect('forum:reply_topic', id)
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')  # В REMOTE_ADDR значение айпи пользователя
+    return ip
+
+
+
+
+def post_view(request, slug):
+    topic = Topic.objects.get(slug=slug)
+
+    ip = get_client_ip(request)
+
+    if Ip.objects.filter(ip=ip).exists():
+        topic.views.add(Ip.objects.get(ip=ip))
+    else:
+        Ip.objects.create(ip=ip)
+        topic.views.add(Ip.objects.get(ip=ip))
+
+    context = {
+        'topic': topic,
+    }
+    return render(request, 'forum/topic_detail.html', context)
 

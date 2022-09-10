@@ -8,7 +8,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 from django.contrib.auth.decorators import login_required
 
-from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView, like_topic
+from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView, \
+    like_topic
 
 app_name = 'forum'
 

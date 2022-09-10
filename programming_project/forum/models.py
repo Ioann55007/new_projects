@@ -65,6 +65,14 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
 
+class Ip(models.Model):
+    ip = models.CharField(max_length=100)
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.ip
+
+
 class Topic(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(
@@ -75,9 +83,17 @@ class Topic(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
     slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_set')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topic_bookmark')
+    views = models.ManyToManyField(Ip, related_name="post_views", blank=True)
+    count_user = models.ManyToManyField(User, through="CountUser")
     objects = models.Manager()
+
+    def total_views(self):
+        return self.views.count()
+
+    def user_count(self):
+        return self.count_user.count()
 
     def __str__(self):
         return self.name
@@ -107,6 +123,15 @@ class Topic(models.Model):
 
 
 
+class CountUser(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='count_topic_user')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='count_user_user')
+
+
+    class Meta:
+        unique_together = [('user', 'topic')]
+
+
 class Bookmark(models.Model):
     topic = models.ManyToManyField(Topic, related_name='bookmark_topic_bookmark', default=None, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookmarks')
@@ -123,6 +148,7 @@ class Bookmark(models.Model):
 
     class Meta:
         unique_together = [('url', 'user')]
+
 
 @receiver(post_save, sender=Bookmark)
 def fetch_url_title(sender, instance, created, **kwargs):
@@ -162,20 +188,8 @@ class Reply(models.Model):
         return f
 
 
-# class Views(models.Model):
-#     # topic = models.ForeignKey(Topic, related_name='topic_views_set', on_delete=models.SET_NULL, null=True)
-#     views = models.ManyToManyField("Ip", related_name="post_views", blank=True)
-
-
 class Created(models.Model):
     topic = models.ForeignKey(Topic, related_name='topic_created_set', on_delete=models.SET_NULL, null=True)
-
-
-class Ip(models.Model):
-    ip = models.CharField(max_length=100)
-    updated = models.DateTimeField(auto_now=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='ip_user')
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='User')
 
 
 class Feedback(models.Model):

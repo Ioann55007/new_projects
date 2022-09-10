@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import Category, Topic, Reply
+from .models import Category, Topic, Reply, Ip
 from django.contrib import admin
 from .models import User
 from . import models
@@ -31,6 +31,8 @@ class TopicAdmin(admin.ModelAdmin):
     list_display = ("name", 'category', 'tag_list', 'slug')
     search_fields = ('name', 'category', 'likes', 'created')
 
+
+admin.site.register(Ip)
 
 
 @admin.register(Reply)
