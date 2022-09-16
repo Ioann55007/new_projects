@@ -58,9 +58,7 @@
                     </div>
                 </div>
                 <div class="header__menu">
-                    <div class="header__menu-btn" data-dropdown-btn="menu">
-                        General<i class="icon-Menu_Icon"></i>
-                    </div>
+
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="menu">
                         <div>
                             <ul class="dropdown__catalog row">
@@ -186,7 +184,11 @@
             </div>
 
             <div class="header__offset-btn">
-                <a href="{% url 'create_topicApp:create_top' %}"><img src="static/fonts/icons/main/New_Topic.svg" alt="New Topic"></a>
+                <a href="{% url 'create_topicApp:create_top' %}">
+                    <p style="color:red">Задайте вопрос</p>
+                     <img src="static/fonts/icons/main/New_Topic.svg" alt="New Topic">
+                </a>
+
             </div>
 
         </div>

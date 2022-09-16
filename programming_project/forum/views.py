@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Sum
+from django.db.models import OuterRef, Subquery, Exists
 
 # from .models import User
 from django.core.mail import send_mail
@@ -15,6 +17,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.functional import LazyObject
 from django.utils.http import url_has_allowed_host_and_scheme, quote_etag
 # from django.utils.translation import (
@@ -186,7 +189,8 @@ def modal_topic(request):
 
 
 def modal_latest_topic(request):
-    tops = Topic.objects.order_by('-id')[0:1]
+    # tops = Topic.objects.order_by('-id')[0:1]
+    tops = Topic.objects.last()
     return render(request, 'modal_latest_topic.html', {'tops': tops})
 
 
@@ -265,6 +269,16 @@ def like_topic(request, id):
             topic.likes.remove(request.user.id)
         else:
             topic.likes.add(request.user.id)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def like_reply(request, id):
+    if request.method == 'POST':
+        reply = Reply.objects.get(id=id)
+        if reply.likes.filter(id=request.user.id).exists():
+            reply.likes.remove(request.user.id)
+        else:
+            reply.likes.add(request.user.id)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -360,4 +374,6 @@ def post_view(request, slug):
         'topic': topic,
     }
     return render(request, 'forum/topic_detail.html', context)
+
+
 

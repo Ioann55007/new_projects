@@ -1,10 +1,12 @@
 import datetime
 import uuid
+from time import time
 
 import requests
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.sessions.backends import db
 from django.utils.timezone import localdate
 
 # Create your models here.
@@ -73,6 +75,12 @@ class Ip(models.Model):
         return self.ip
 
 
+def gen_slug(s):
+    new_slug = slugify(s, allow_unicode=True)
+    return new_slug + '_' + str(int(time()))
+
+
+
 class Topic(models.Model):
     name = models.CharField(max_length=200)
     category = models.ForeignKey(
@@ -82,11 +90,12 @@ class Topic(models.Model):
     likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
-    slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_set')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='topic_bookmark')
+    slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1, blank=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='author_set')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='topic_bookmark')
     views = models.ManyToManyField(Ip, related_name="post_views", blank=True)
     count_user = models.ManyToManyField(User, through="CountUser")
+
     objects = models.Manager()
 
     def total_views(self):
@@ -117,9 +126,23 @@ class Topic(models.Model):
 
 
 
+
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.slug = gen_slug(self.name)
+        super().save(*args, **kwargs)
+
+
+
+
+
     class Meta:
         verbose_name = 'Topic'
         verbose_name_plural = 'Topics'
+
+
+
 
 
 
@@ -168,8 +191,12 @@ class Reply(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='parent_set', blank=True, null=True)
+    likes = models.ManyToManyField(User, related_name='reply_likes', default=None, blank=True)
 
     objects = models.Manager()
+
+    def count_likes(self):
+        return self.likes.count()
 
     class Meta:
         verbose_name = _('Reply')
@@ -200,3 +227,4 @@ class Feedback(models.Model):
 
     class Meta:
         verbose_name = _('Feedback')
+

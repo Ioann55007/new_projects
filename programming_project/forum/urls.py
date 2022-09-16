@@ -9,7 +9,7 @@ from . import views
 from django.contrib.auth.decorators import login_required
 
 from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView, \
-    like_topic
+    like_topic, like_reply
 
 app_name = 'forum'
 
@@ -30,6 +30,7 @@ urlpatterns = format_suffix_patterns([
     path('6/team', TeamView.as_view(), name='the_team'),
     path('lang/<lang_code>/', views.lang, name='lang'),
     path('like_topic/<int:id>/', like_topic, name='like_topic'),
+    path('like_reply/<int:id>/', like_reply, name='like_reply'),
     path("11/bookmarks/", views.List.as_view(), name='list_topic_bookmark'),
     path("15/create/", views.Create.as_view(), name='create'),
     path("update/<int:pk>/", views.Update.as_view(), name="update"),

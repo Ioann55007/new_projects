@@ -28,7 +28,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class TopicAdmin(admin.ModelAdmin):
     """Темы"""
     # list_display = ('views',)
-    list_display = ("name", 'category', 'tag_list', 'slug')
+    list_display = ("name", 'tag_list', 'slug')
     search_fields = ('name', 'category', 'likes', 'created')
 
 
@@ -53,9 +53,4 @@ admin.site.register(models.User, UserAdmin)
 @admin.register(models.Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):
     list_display = ['title', 'url', 'user']
-
-
-
-
-
 
