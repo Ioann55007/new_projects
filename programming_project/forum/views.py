@@ -116,6 +116,7 @@ class ByCategory(ListView):
         return reverse('forum:topic_detail', kwargs={"slug": self.object.slug})
 
 
+
 class TopicDetailView(DetailView):
     model = Topic
     queryset = Topic.objects.all()
@@ -137,6 +138,8 @@ class TopicDetailView(DetailView):
         else:
             ip = request.META.get('REMOTE_ADDR')
         return ip
+
+
 
 
 class CategoryDetailView(DetailView):
@@ -228,38 +231,6 @@ class TeamView(View):
 
     def get(self, request):
         return render(request, self.template_name)
-
-
-def lang(request, lang_code):
-    next = request.POST.get('next', request.GET.get('next'))
-    if (next or not request.headers.get('x-requested-with')) and not url_has_allowed_host_and_scheme(url=next,
-                                                                                                     allowed_hosts=request.get_host()):
-        next = request.META.get('HTTP_REFERER')
-        if next:
-            next = quote_etag(next)  # HTTP_REFERER may be encoded.
-        if not url_has_allowed_host_and_scheme(url=next, allowed_hosts=request.get_host()):
-            next = '/'
-    response = HttpResponseRedirect(next) if next else HttpResponse(status=204)
-
-    if lang_code and check_for_language(lang_code):
-        if next:
-            for code_tuple in settings.LANGUAGES:
-                settings_lang_code = "/" + code_tuple[0]
-                parsed = urlsplit(next)
-                if parsed.path.startswith(settings_lang_code):
-                    path = re.sub('^' + settings_lang_code, '', parsed.path)
-                    next = urlunsplit((parsed.scheme, parsed.netloc, path, parsed.query, parsed.fragment))
-            response = HttpResponseRedirect(next)
-        if hasattr(request, 'session'):
-            request.session[LANGUAGE_SESSION_KEY] = lang_code
-        else:
-            response.set_cookie(
-                settings.LANGUAGE_COOKIE_NAME, lang_code,
-                max_age=settings.LANGUAGE_COOKIE_AGE,
-                path=settings.LANGUAGE_COOKIE_PATH,
-                domain=settings.LANGUAGE_COOKIE_DOMAIN,
-            )
-    return response
 
 
 def like_topic(request, id):
@@ -377,3 +348,18 @@ def post_view(request, slug):
 
 
 
+def get_ip(request):
+    address=request.META.get('HTTP_X_FORWARDED_FOR')
+    if address:
+        ip=address.split(',')[0].strip()
+    else:
+        ip=request.META.get('REMOTE_ADDR')
+    return ip
+# Создаст функцию которая будет брать ip запроса
+
+
+def topic(request, slug):
+    ask = get_object_or_404(Topic, slug=slug)
+    ip = get_ip(request)  # Не забудьте импортировать функцию если она находится в другом месте
+    TopicViews.objects.get_or_create(IPAddres=ip, topic=ask)
+    return render(request, 'topic.html', {'topic': ask})

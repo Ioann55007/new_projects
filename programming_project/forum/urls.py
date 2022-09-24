@@ -8,7 +8,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 from django.contrib.auth.decorators import login_required
 
-from .views import Search, topic_view, modal_topic, ForumRulesView, modal_latest_topic, send_email, TeamView, \
+from .views import Search, topic_view, modal_topic, modal_latest_topic, send_email, TeamView, \
     like_topic, like_reply
 
 app_name = 'forum'
@@ -28,7 +28,6 @@ urlpatterns = format_suffix_patterns([
     path('4/about_us/', views.AboutUsView.as_view(), name='about_us'),
     path('5/email_send/', send_email, name='send_email'),
     path('6/team', TeamView.as_view(), name='the_team'),
-    path('lang/<lang_code>/', views.lang, name='lang'),
     path('like_topic/<int:id>/', like_topic, name='like_topic'),
     path('like_reply/<int:id>/', like_reply, name='like_reply'),
     path("11/bookmarks/", views.List.as_view(), name='list_topic_bookmark'),

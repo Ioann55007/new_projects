@@ -50,7 +50,7 @@
                     <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
                         <ul class="dropdown__catalog">
                             <li><a href="{% url 'forum:main' %}">Home Page</a></li>
-                            <li><a href="{% url 'registration_App:simple-signup' %}">Sign up Page</a></li>
+                            <li><a href="{% url 'registration_App:login' %}">Sign up Page</a></li>
                             <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
                         </ul>
                     </nav>
@@ -92,44 +92,11 @@
                     </div>
                 </div>
                 <div class="header__menu">
-                    <div class="header__menu-btn" data-dropdown-btn="menu">
-                        General<i class="icon-Menu_Icon"></i>
-                    </div>
-                    <nav class="dropdown dropdown--design-01" data-dropdown-list="menu">
-                        <div>
-                            <ul class="dropdown__catalog row">
-                                <li class="col-xs-6"><a href="#">New</a></li>
-                                <li class="col-xs-6"><a href="#">Unread</a></li>
-                                <li class="col-xs-6"><a href="#">Users</a></li>
-                                <li class="col-xs-6"><a href="#">Tags</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3>Categories</h3>
-                            {% get_categories as categories %}
-                            <ul class="dropdown__catalog row">
 
-                                {% for category in categories %}
 
-                                <li class="col-xs-6">{{ category.name }}</li>
-                                {% endfor %}
-
-                            </ul>
-                        </div>
-                        <div>
-                            <ul class="dropdown__catalog row">
-                                <li class="col-xs-6"><a href="#">Support</a></li>
-                                <li class="col-xs-6"><a href="#">Forum Rules</a></li>
-                                <li class="col-xs-6"><a href="#">Blog</a></li>
-                                <li class="col-xs-6"><a href="#">About Us</a></li>
-                            </ul>
-                        </div>
-                    </nav>
                 </div>
                 <div class="header__notification">
-                    <div class="header__notification-btn" data-dropdown-btn="notification">
-                        <i class="icon-Notification"></i>
-                    </div>
+
                     <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
 
                     </div>
@@ -137,9 +104,10 @@
 
             </div>
             <div class="header__offset-btn">
-                <a href="{% url 'create_topicApp:create_top' %}"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+                <a href="{% url 'create_topicApp:create_top' %}"><p style="color:red">Задайте вопрос</p>
+                    <img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
             </div>
-        </div>
+        </div>f
     </header>
     <!-- MAIN -->
 {% load static  %}
@@ -197,18 +165,9 @@
                             </ul>
                         </div>
                     </div>
-                    <ul>
-                        <li class="active"><a href="#">Latest topic</a></li>
-                        <li><a href="#">Unread topic</a></li>
-                        <li><a href="#">Most Liked Topics</a></li>
 
-                    </ul>
                 </div>
-                <div class="nav__thread">
-                    <p>Thread Navigation:</p>
-                    <a href="#" class="nav__thread-btn nav__thread-btn--prev"><i class="icon-Arrow_Left"></i>Previous</a>
-                    <a href="#" class="nav__thread-btn nav__thread-btn--next">Next<i class="icon-Arrow_Right"></i></a>
-                </div>
+
             </div>
             <div class="topics">
                 <div class="topics__heading">
@@ -242,7 +201,11 @@
                         <div class="topic">
                             <div class="topic__head">
                                 <div class="topic__avatar">
-                                    <a href="#"><img src="/media/no_image.jpg" width="100" height="140"></a>
+                                    {% for topic in object_list %}
+
+                                    <a href="#"><img src="{{ topic.author.avatar.url }}" width="100" height="140"></a>
+                                    {% endfor %}
+
                                 </div>
                                 <div class="topic__caption">
                                     <div class="topic__name">
@@ -264,7 +227,6 @@
                                 <div class="topic__footer">
                                     <div class="topic__footer-likes">
                                         <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
                                             <span></span>
                                         </div>
                                         <div>
@@ -272,340 +234,37 @@
                                             <span></span>
                                         </div>
                                         <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
+
                                             <span></span>
                                         </div>
                                     </div>
                                     <div class="topic__footer-share">
                                         <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#"><i class="icon-Bookmark"></i></a>
+                                            {% if request.user.is_authenticated %}
+                                            <a href="{% url 'forum:create'  %}"><i class="icon-Bookmark"></i></a>
+                                            {% endif %}
+
                                         </div>
                                         <div data-visible="mobile">
                                             <a href="#"><i class="icon-More_Options"></i></a>
                                         </div>
-                                        <a href="#"><i class="icon-Reply_Fill"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="topic">
-                            <div class="topic__content">
-                                <div class="topic__info">
-                                    <div class="topic__info-section">
-                                        <div>
-                                            <span class="topic__info-title">Created</span>
-
-                                            <div  class="topic__info-avatar">
-                                                <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
-
-
-                                                <span>
-                                                    13d
-
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span class="topic__info-title">Last reply</span>
-                                            <div  class="topic__info-avatar">
-                                                <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar"></a>
-                                                <span>4h</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="topic__info-section">
-                                        <div>
-                                            <span class="topic__info-title">Replies</span>
-                                            <div  class="topic__info-count">18</div>
-                                        </div>
-                                        <div>
-                                            <span class="topic__info-title">Views</span>
-                                            <div  class="topic__info-count">205</div>
-                                        </div>
-                                        <div>
-                                            <span class="topic__info-title">Users</span>
-                                            <div  class="topic__info-count">6</div>
-                                        </div>
-                                        <div>
-                                            <span class="topic__info-title">Likes</span>
-                                            <div  class="topic__info-count">315</div>
-                                        </div>
-                                        <div>
-                                            <span class="topic__info-title">Links</span>
-                                            <div  class="topic__info-count">7</div>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="topic__info-more"><i class="icon-Arrow_Down"></i></a>
-                                </div>
-
-                                <div class="topic__title">
-                                    <p>Popular Links</p>
-                                </div>
-                                <div class="topic__list">
-
-                                </div>
-                                <div class="topic__title">
-                                </div>
-                                <div class="topic__btns">
-                                    <div class="topic__select">
-                                        <p>Sort replies by:</p>
-                                        <div class="btn-select"><i class="icon-Favorite_Topic"></i>Most Liked</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="topic">
-                            <div class="topic__head">
-                                <div class="topic__avatar">
-                                </div>
-
-                            </div>
-                            <div class="topic__content">
-                                <div class="topic__text">
-                                </div>
-                                <div class="topic__footer">
-                                    <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
-
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Downvote"></i></a>
-
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-
-                                        </div>
-                                    </div>
-                                    <div class="topic__footer-share">
-                                        <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#"><i class="icon-Bookmark"></i></a>
-                                        </div>
-                                        <div data-visible="mobile">
-                                            <a href="#"><i class="icon-More_Options"></i></a>
-                                        </div>
-                                        <a href="#"><i class="icon-Reply_Fill"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="topic">
-                            <div class="topic__head">
-                                <div class="topic__avatar">
-                                </div>
 
-                            </div>
-                            <div class="topic__content">
 
-                                <div class="topic__footer">
-                                    <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
 
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Downvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Reply_Empty"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="topic__footer-share">
-                                        <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#" class="active"><i class="icon-Already_Bookmarked"></i></a>
-                                        </div>
-                                        <div data-visible="mobile">
-                                            <a href="#"><i class="icon-More_Options"></i></a>
-                                        </div>
-                                        <a href="#"><i class="icon-Reply_Fill"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="topic topic--comment">
-                            <div class="topic__head">
-                                <div class="topic__avatar">
-                                </div>
 
-                                <a href="#" class="topic__arrow topic__arrow--up"><i class="icon-Arrow_Up"></i></a>
-                            </div>
-                            <div class="topic__content">
 
-                            </div>
-                        </div>
-                        <div class="topic">
-                            <div class="topic__head">
 
-                                <div class="topic__caption">
-                                    <div class="topic__name">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="topic__content">
-                                <div class="topic__text">
-                                    <div class="topic topic--answer">
-                                        <div class="topic__head">
-                                            <div class="topic__caption">
-                                                <div class="topic__user">
-                                                </div>
-                                            </div>
-                                            <a href="#" class="topic__arrow"><i class="icon-Arrow_Up"></i></a>
-                                        </div>
-                                        <div class="topic__content">
-                                            <div class="topic__text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="topic__footer">
-                                    <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Downvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="topic__footer-share">
-                                        <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#"><i class="icon-Bookmark"></i></a>
-                                        </div>
-                                        <div data-visible="mobile">
-                                            <a href="#"><i class="icon-More_Options"></i></a>
-                                        </div>
-                                        <a href="#"><i class="icon-Reply_Fill"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="topic topic--selected">
-                            <div class="topic__head">
-                                <div class="topic__avatar">
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/C.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div class="topic__caption">
-                                    <div class="topic__name">
-                                        <a href="#">Callis</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="topic__content">
-                                <div class="topic__text">
-                                    <p>This post has been hidden by a moderator. Received too much downvotes.</p>
-                                </div>
-                                <div class="topic__footer">
-                                    <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Downvote"></i></a>
-                                            <span>617</span>
-                                        </div>
-                                    </div>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="topic">
-                            <div class="topic__head">
-                                <div class="topic__avatar">
-                                </div>
-                                <div class="topic__caption">
-                                    <div class="topic__name">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="topic__content">
-                                <div class="topic__text">
-                                </div>
-                                <div class="topic__footer">
-                                    <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Downvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="topic__footer-share">
-                                        <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#"><i class="icon-Bookmark"></i></a>
-                                        </div>
-                                        <div data-visible="mobile">
-                                            <a href="#"><i class="icon-More_Options"></i></a>
-                                        </div>
-                                        <a href="#"><i class="icon-Reply_Fill"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="topic">
-                            <div class="topic__head">
-                                <div class="topic__avatar">
-                                </div>
-                                <div class="topic__caption">
-                                    <div class="topic__name">
-                                    </div>
-                                    <div class="topic__date">
-                                        <div class="topic__user topic__user--pos-r">
-                                            <i class="icon-Reply_Fill"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="topic__content">
-                                <div class="topic__text">
-                                </div>
-                                <div class="topic__footer">
-                                    <div class="topic__footer-likes">
-                                        <div>
-                                            <a href="#"><i class="icon-Upvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Downvote"></i></a>
-                                        </div>
-                                        <div>
-                                            <a href="#"><i class="icon-Favorite_Topic"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="topic__footer-share">
-                                        <div data-visible="desktop">
-                                            <a href="#"><i class="icon-Share_Topic"></i></a>
-                                            <a href="#"><i class="icon-Flag_Topic"></i></a>
-                                            <a href="#"><i class="icon-Bookmark"></i></a>
-                                        </div>
-                                        <div data-visible="mobile">
-                                            <a href="#"><i class="icon-More_Options"></i></a>
-                                        </div>
-                                        <a href="#"><i class="icon-Reply_Fill"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="topics__calendar">
                         <div class="calendar">
                             <div class="calendar__top">
-                                <a href="#" class="calendar__btn calendar__btn--c-01"><i class="icon-Calender"></i></a>
                             </div>
                             <div class="calendar__center">
                                {% for topic in object_list %} <div class="calendar__first">{{ topic.created | date }}
@@ -618,176 +277,17 @@
                                     </div>
                                 </div>
                                 {% endfor %}
-                                <div class="calendar__last">6h ago</div>
                             </div>
-                            <div class="calendar__bottom">
-                                <a href="#" class="calendar__btn calendar__btn--c-01"><i class="icon-Track"></i></a>
-                                <a href="#" class="calendar__btn calendar__btn--c-02"><i class="icon-Reply_Fill"></i></a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="topics__title"><i class="icon-Watch_Later"></i>This topic will close 6 months after the last reply.</div>
-                <div class="topics__control">
-                    <a href="#" class="btn"><i class="icon-Bookmark"></i>Bookmark</a>
-                    <a href="#" class="btn"><i class="icon-Share_Topic"></i>Share</a>
-                    <a href="#" class="btn"><i class="icon-Flag_Topic"></i>Flag</a>
-6                    <a href="#" class="btn"><i class="icon-Track"></i>Track</a>
-                    <a href="#" class="btn btn--type-02" data-visible="desktop"><i class="icon-Reply_Fill"></i>Reply</a>
-                </div>
-                <div class="topics__title">Suggested Topics</div>
+
             </div>
             <div class="posts">
-                <div class="posts__head">
-                    <div class="posts__topic">Topic</div>
-                    <div class="posts__category">Category</div>
-                    <div class="posts__users">Users</div>
-                    <div class="posts__replies">Replies</div>
-                    <div class="posts__views">Views</div>
-                    <div class="posts__activity">Activity</div>
-                </div>
-                <div class="posts__body">
-                    <div class="posts__item">
-                        <div class="posts__section-left">
-                            <div class="posts__topic">
-                                <div class="posts__content">
-                                    <a href="#">
-                                        <h3>Current news and discussion</h3>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-368f8b"></i>Politics</a></div>
-                        </div>
-                        <div class="posts__section-right">
-                            <div class="posts__users">
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/G.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/P.svg' %}" alt="avatar"></a>
-                                </div>
-                            </div>
-                            <div class="posts__replies">31</div>
-                            <div class="posts__views">14.5k</div>
-                            <div class="posts__activity">13d</div>
-                        </div>
-                    </div>
-                    <div class="posts__item bg-f2f4f6">
-                        <div class="posts__section-left">
-                            <div class="posts__topic">
-                                <div class="posts__content">
-                                    <a href="#">
-                                        <h3>Get your username drawn by the other users of unity! or a drawing based on what you do</h3>
-                                    </a>
-                                    <div class="posts__tags tags">
-                                        <a href="#" class="bg-4f80b0">gaming</a>
-                                        <a href="#" class="bg-424ee8">nature</a>
-                                        <a href="#" class="bg-36b7d7">entertainment</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-4436f8"></i>Video</a></div>
-                        </div>
-                        <div class="posts__section-right">
-                            <div class="posts__users">
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/L.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/T.svg' %}" alt="avatar"></a>
-                                </div>
-                            </div>
-                            <div class="posts__replies">252</div>
-                            <div class="posts__views">396</div>
-                            <div class="posts__activity">13m</div>
-                        </div>
-                    </div>
-                    <div class="posts__item">
-                        <div class="posts__section-left">
-                            <div class="posts__topic">
-                                <div class="posts__content">
-                                    <a href="#">
-                                        <h3>Which movie have you watched most recently?</h3>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-3ebafa"></i> Exchange</a></div>
-                        </div>
-                        <div class="posts__section-right">
-                            <div class="posts__users">
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/E.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/I.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/R.svg' %}" alt="avatar"></a>
-                                </div>
-                            </div>
-                            <div class="posts__replies">207</div>
-                            <div class="posts__views">7.5k</div>
-                            <div class="posts__activity">41m</div>
-                        </div>
-                    </div>
-                    <div class="posts__item posts__item--bg-gradient">
-                        <div class="posts__section-left">
-                            <div class="posts__topic">
-                                <div class="posts__content">
-                                    <a href="#">
-                                        <h3><span>This post contails spoiler about</span> Star Wars Movie.</h3>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-777da7"></i> Q&amp;As</a></div>
-                        </div>
-                        <div class="posts__section-right">
-                            <div class="posts__users">
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/F.svg' %}" alt="avatar"></a>
-                                </div>
-                            </div>
-                            <div class="posts__replies">2.3k</div>
-                            <div class="posts__views">2.0k</div>
-                            <div class="posts__activity">1h</div>
-                        </div>
-                    </div>
-                    <div class="posts__item">
-                        <div class="posts__section-left">
-                            <div class="posts__topic">
-                                <div class="posts__content">
-                                    <a href="#">
-                                        <h3>Take a picture of what you’re doing at this very moment</h3>
-                                    </a>
-                                    <div class="posts__tags tags">
-                                        <a href="#" class="bg-ec008c">selfie</a>
-                                        <a href="#" class="bg-7cc576">camera</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="posts__category"><a href="#" class="category"><i class="bg-c6b38e"></i> Pets</a></div>
-                        </div>
-                        <div class="posts__section-right">
-                            <div class="posts__users">
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/C.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/U.svg' %}" alt="avatar"></a>
-                                </div>
-                                <div>
-                                    <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/I.svg' %}" alt="avatar"></a>
-                                </div>
-                            </div>
-                            <div class="posts__replies">441</div>
-                            <div class="posts__views">3.1k</div>
-                            <div class="posts__activity">6h</div>
-                        </div>
-                    </div>
-                </div>
+
+                                            <a href="#"><i class="icon-Upvote"></i></a>
+
             </div>
         </div>
     </main>
@@ -804,49 +304,41 @@
                 </div>
                 <div class="footer__nav">
                     <div class="footer__tline">
-                        <i class="icon-Support"></i>
                         <ul class="footer__menu">
-                            <li><a href="#">Support</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">The Team</a></li>
-                        </ul>
-                        <div class="footer__language">
-                            <div class="footer__language-btn" data-dropdown-btn="language">Americas - English<i class="icon-Arrow_Below"></i></div>
-                            <div class="footer__language-dropdown dropdown dropdown--design-01 dropdown--reverse-y" data-dropdown-list="language">
-                                <div class="row">
+                            <li><a id="s">Support</a></li>
+                            <li><a href="{% url 'forum:about_us' %}">About Us</a></li>
+                            <li><a href="{% url 'forum:send_email' %}">Contact Us</a></li>
+                            <li><a href="{% url 'forum:the_team' %}">The Team</a></li>
 
-                                    <div class="col-xs-6">
-                                        <h3>Language</h3>
-                                        <ul class="dropdown__catalog">
-                                            <li class="active"><a href="#"><i></i>English</a></li>
-                                            <li><a href="#"><i></i>Espanol</a></li>
-                                            <li><a href="#"><i></i>Portugues</a></li>
-                                            <li><a href="#"><i></i>Chinese</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </ul>
+
                     </div>
-                    <div class="footer__bline">
-                        <ul class="footer__menu">
-                            <li><a href="#">Privacy</a></li>
-                            <li><a href="#">Send Feedback</a></li>
-                        </ul>
-                        <ul class="footer__social">
-                            <li><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-cloud" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>
-                        </ul>
-                        <div class="footer__language-btn-m" data-dropdown-btn="language">Americas - English<i class="icon-Arrow_Below"></i></div>
+
+
                     </div>
                 </div>
             </div>
+    <dialog id="wo">
+        <div class="form-row">
+            <div class="col">
+                <input type="text" name="name" class="form-control" placeholder="Представьтесь, пожалуйста">
+            </div>
         </div>
+        <div class="form-group">
+            <label for="recipient-mail" class="col-form-label">Ваш email:</label>
+            <input type="email" name="email" id="recipient-mail" class="form-control" placeholder="example@mail.ru">
+        </div>
+        <div class="form-group">
+            <label for="recipient-phone" class="col-form-label">Ваш телефон:</label>
+            <input type="text" id="recipient-phone" class="form-control" name="phone">
+        </div>
+        <div class="form-group">
+            <label for="message-text" class="col-form-label">Сообщение:</label>
+            <textarea name="message" id="message-text" class="form-control"></textarea>
+        </div>
+        <button id="clo">Закрыть</button>
+    </dialog>
+    </div>
     </footer>
     <!-- JAVA SCRIPT -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
@@ -854,4 +346,17 @@
     <script src="{% static 'js/app.js' %}"></script>
 
 </body>
+<script>
+    (function() {
+            var dialog = document.getElementById('wo');
+            document.getElementById('s').onclick = function() {
+              dialog.show();
+            };
+            document.getElementById('clo').onclick = function() {
+              dialog.close();
+            };
+
+        })();
+
+</script>
 </html>

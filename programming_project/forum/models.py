@@ -101,6 +101,7 @@ class Topic(models.Model):
     def total_views(self):
         return self.views.count()
 
+
     def user_count(self):
         return self.count_user.count()
 
@@ -227,4 +228,7 @@ class Feedback(models.Model):
 
     class Meta:
         verbose_name = _('Feedback')
+
+
+
 
