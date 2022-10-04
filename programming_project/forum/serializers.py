@@ -17,9 +17,6 @@ class TopicUnSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    # class Meta:
-    #     model = Category
-    #     fields = ('name', 'author', 'created', 'url', 'topic')
 
     slug = serializers.SlugField(read_only=True, allow_unicode=True)
 
@@ -55,16 +52,7 @@ class CreatedSerializer(serializers.ModelSerializer):
         fields = ('topic',)
 
 
-class TopicListSerializers(serializers.ModelSerializer):
-    category = CategorySerializer()
-    profit = serializers.SerializerMethodField(method_name='get_profit')
 
-    def get_profit(self, obj):
-        return obj.fess_in_world - obj.budget
-
-    class Meta:
-        model = Topic
-        fields = ('id', 'name', 'category', 'profit')
 
 
 class TopicDetailSerializer(serializers.ModelSerializer):
@@ -88,7 +76,7 @@ class CreateTopicSerializer(TaggitSerializer, serializers.ModelSerializer):
         return super().create(validated_data)
 
     def validate_title(self, name: str):
-        if BlogService.is_article_slug_exist(name):
+        if BlogService.is_topic_slug_exist(name):
             raise serializers.ValidationError("This title already exists")
         return name
 

@@ -21,7 +21,6 @@ def send_information_email(
     if file_url:
         file_url = environ.get('APP_HOME', environ.get('HOME')) + file_url
         email_message.attach_file(file_url, kwargs.get('mimetype'))
-    # send_email(email_message)
     send_email(subject, email_message, to_email, fail_silently=True)
 
 

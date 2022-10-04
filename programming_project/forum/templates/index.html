@@ -11,32 +11,24 @@
     <meta name="author" content="author.com">
     <title>Responsive HTML5 Template</title>
 
-    <!-- STYLESHEET -->
-    <!-- fonts -->
+
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
 
-    <!-- icon -->
     <link rel="stylesheet" href="static/fonts/icons/main/mainfont/style.css">
     <link rel="stylesheet" href="static/fonts/icons/font-awesome/css/font-awesome.min.css">
 
-    <!-- Vendor -->
     <link rel="stylesheet" href="static/vendor/bootstrap/v3/bootstrap.min.css">
     <link rel="stylesheet" href="static/vendor/bootstrap/v4/bootstrap-grid.css">
-    <!-- Custom -->
     <link rel="stylesheet" href="static/css/style.css">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 
-    <![endif]-->
 </head>
 <body>
-    <!-- HEADER -->
 {% include 'header.html' %}
-    <!-- MAIN -->
     <main>
         <div class="container">
             {% include 'list_categories.html' %}
@@ -54,10 +46,8 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     {% include 'footer.html' %}
 
-    <!-- JAVA SCRIPT -->
     <script src="static/vendor/jquery/jquery.min.js"></script>
     <script src="static/vendor/velocity/velocity.min.js"></script>
     <script src="static/js/app.js"></script>

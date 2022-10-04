@@ -11,11 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Profile(models.Model):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='User')
-
      user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile_user', verbose_name='User')
-
      avatar = models.ImageField(User, default='media/no_image.jpg', blank=True)
 
 
@@ -23,16 +19,11 @@ class Profile(models.Model):
          verbose_name = _('Profile')
 
 
-
      @receiver(post_save, sender=User)
      def create_profile(sender, instance, created, **kwargs):
           if created:
              Profile.objects.create(user=instance)
 
-    # def post_save_receiver(sender, instance, created, **kwargs):
-    #     pass
-    #
-    #     post_save.connect(post_save_receiver, sender=settings.AUTH_USER_MODEL)
 
 
 

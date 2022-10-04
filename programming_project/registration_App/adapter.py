@@ -12,20 +12,6 @@ from rest_framework.reverse import reverse_lazy
 
 class AccountAdapter(DefaultAccountAdapter):
 
-    def collect_data(self, email_confirmation) -> dict:
-        data = {
-            "user": email_confirmation.email_address.user.get_full_name(),
-            "key": email_confirmation.key,
-        }
-        return data
-
-    def send_confirmation_email(self, email_confirmation, ctx: dict):
-        path = "registration_App:account_verification"
-        activate_url = self.get_confirmation_url(email_confirmation, path)
-        ctx.update({'activate_url': activate_url})
-        email_template = 'account/email/email_confirmation'
-        return self.send_mail(email_template, email_confirmation.email_address.email, ctx)
-
     @staticmethod
     def get_confirmation_url(email_confirmation, path):
         url = reverse_lazy(path, args=[email_confirmation.key])
@@ -62,11 +48,8 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
         # if it does not, let allauth take care of this new social account
         except EmailAddress.DoesNotExist:
-            return
-
-        # if it does, connect this new social login to the existing user
-        user = email_address.user
-        sociallogin.connect(request, user)
+            user = email_address.user
+            return sociallogin.connect(request, user)
 
     def save_user(self, request, sociallogin, form=None):
         """

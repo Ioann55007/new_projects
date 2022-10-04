@@ -1,12 +1,8 @@
-import self as self
 from django.contrib.auth import get_user_model
-from django.views import View
-
 from .forms import UserForm, ProfileForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Profile
 User = get_user_model()
 
 
@@ -40,8 +36,6 @@ def userpage(request):
 
 
 def avatar_img(request):
-    # profile = request.user.profile_user
-    # profile = request.user.profile
     profile = request.user
     form = ProfileForm(instance=profile)
     if request.method == 'POST':

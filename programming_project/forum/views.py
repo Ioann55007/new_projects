@@ -1,49 +1,21 @@
-import re
-from urllib.parse import urlsplit, urlunsplit
-import datetime
-import form as form
-from django.conf import settings
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Sum
-from django.db.models import OuterRef, Subquery, Exists
 
-# from .models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
-from django.utils.functional import LazyObject
-from django.utils.http import url_has_allowed_host_and_scheme, quote_etag
-# from django.utils.translation import (
-#     LANGUAGE_SESSION_KEY, check_for_language
-# )
 from django.views import View, generic
 from django.views.generic import ListView, DetailView
-from rest_framework import viewsets
-from rest_framework.mixins import UpdateModelMixin
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.permissions import AllowAny
+from rest_framework.viewsets import ModelViewSet
 from taggit.models import Tag
-
 from . import serializers
 from .filters import TopicFilter
 from .forms import ContactForm, ReplyForm
-from .models import Topic, Category, Bookmark, Reply, Ip
-
+from .models import Topic, Category,  Reply
 from .services import BlogService
-from main_site import settings
-
-import json
-
-from django.http import HttpResponse
 from django.views import View
-from django.contrib.contenttypes.models import ContentType
 from . import models
 
 
@@ -91,11 +63,7 @@ def topic_view(request, category_id):
     return render(request, 'search_results.html', context)
 
 
-class SingleTopicPageView(View):
-    template_name = 'single-topic.html'
 
-    def get(self, request):
-        return render(request, self.template_name)
 
 
 class TopicListView(ListView):
@@ -181,7 +149,7 @@ class TopicViewSet(ViewSet):
         return response
 
     def retrieve(self, request, **kwargs):
-        response = super().list(request, **kwargs)
+        response = super().retrieve(request, **kwargs)
         response.template_name = self.get_template_name()
         return response
 
@@ -192,7 +160,6 @@ def modal_topic(request):
 
 
 def modal_latest_topic(request):
-    # tops = Topic.objects.order_by('-id')[0:1]
     tops = Topic.objects.last()
     return render(request, 'modal_latest_topic.html', {'tops': tops})
 
@@ -309,7 +276,6 @@ def reply_topic(request, pk):
             return redirect('forum:reply_topic', pk)
     else:
         form = ReplyForm()
-    # return render(request, 'forum/comments.html', {'form': form, 'comments': reply, 'topic': topic})
     return render(request, 'forum/topic_detail.html', {'form': form, 'comments': reply, 'topic': topic})
 
 
@@ -326,40 +292,3 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')  # В REMOTE_ADDR значение айпи пользователя
     return ip
-
-
-
-
-def post_view(request, slug):
-    topic = Topic.objects.get(slug=slug)
-
-    ip = get_client_ip(request)
-
-    if Ip.objects.filter(ip=ip).exists():
-        topic.views.add(Ip.objects.get(ip=ip))
-    else:
-        Ip.objects.create(ip=ip)
-        topic.views.add(Ip.objects.get(ip=ip))
-
-    context = {
-        'topic': topic,
-    }
-    return render(request, 'forum/topic_detail.html', context)
-
-
-
-def get_ip(request):
-    address=request.META.get('HTTP_X_FORWARDED_FOR')
-    if address:
-        ip=address.split(',')[0].strip()
-    else:
-        ip=request.META.get('REMOTE_ADDR')
-    return ip
-# Создаст функцию которая будет брать ip запроса
-
-
-def topic(request, slug):
-    ask = get_object_or_404(Topic, slug=slug)
-    ip = get_ip(request)  # Не забудьте импортировать функцию если она находится в другом месте
-    TopicViews.objects.get_or_create(IPAddres=ip, topic=ask)
-    return render(request, 'topic.html', {'topic': ask})

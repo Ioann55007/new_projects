@@ -15,7 +15,7 @@ class BlogService:
 
     @staticmethod
     def is_topic_slug_exist(name: str) -> bool:
-        return Topic.objects.filter(slug=Topic.get_slug(name)).exists()
+        return Topic.objects.filter(slug=Topic.slug(name)).exists()
 
 
 from django.contrib.auth import get_user_model

@@ -15,7 +15,6 @@ app_name = 'forum'
 
 urlpatterns = format_suffix_patterns([
     path('', views.TopicListView.as_view(), name='main'),
-    path('single-topic/', views.SingleTopicPageView.as_view(), name='single-topic'),
     path('search/', Search.as_view(), name='search_results'),
     path('search/<category_id>/', topic_view, name='topic_view'),
     path('<slug:slug>/', views.TopicDetailView.as_view(), name='topic_detail'),
