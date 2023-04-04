@@ -1,0 +1,6 @@
+{% autoescape off %}
+Привет {{ user.username }},
+Ты зарегистрировался на сайте 'forum programmer'  пожалуйста  перейди по ссылке и заверши регистрацию,
+http://{{ domain }}{% url 'registration_App:activate' uidb64=uid token=token %}
+
+{% endautoescape %}

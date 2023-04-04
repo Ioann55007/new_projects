@@ -1,0 +1,14 @@
+{% extends '_layouts/base.html' %}
+
+{% load static %}
+
+{% block title %} {{ user.username }}'s topics {{ block.super }} {% endblock %}
+{% block content %}
+{% for topic_bookmark in object_list %}
+{% include 'forum/_partials/topic.html' %}
+{{ topic_bookmark.name }}
+
+{% endfor %}
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+{% endblock %}

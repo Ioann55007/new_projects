@@ -1,0 +1,56 @@
+<!doctype html>
+{% load static %}
+
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/fonts/icons/main/mainfont/style.css">
+    <link rel="stylesheet" href="static/fonts/icons/font-awesome/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="static/vendor/bootstrap/v3/bootstrap.min.css">
+    <link rel="stylesheet" href="static/vendor/bootstrap/v4/bootstrap-grid.css">
+    <link rel="stylesheet" href="static/css/style.css">
+
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+</head>
+<body>
+{% include 'header.html' %}
+    <main>
+        <div class="container">
+            {% include 'list_categories.html' %}
+            <div class="posts">
+                <div class="posts__head">
+                    <div class="posts__topic" style="text-indent:50px">Topic</div>
+
+                    <div class="posts__category">Category</div>
+                    <div class="posts__users">Users</div>
+                    <div class="posts__activity">Created</div>
+                </div>
+                {% include 'posts_body.html' %}
+
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+    <script src="static/vendor/velocity/velocity.min.js"></script>
+    <script src="static/js/app.js"></script>
+
+</body>
+</html>

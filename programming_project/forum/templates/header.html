@@ -1,0 +1,239 @@
+{% load tagnag %}
+{% load static %}
+<header>
+        <div class="header js-header js-dropdown">
+            <div class="container">
+                <div class="header__logo">
+                    <h1>
+                        <img src="static/fonts/icons/main/Logo_Forum.svg" alt="logo">
+                    </h1>
+                    <div class="header__logo-btn" data-dropdown-btn="logo">
+                        Search<i class="icon-Arrow_Below"></i>
+                    </div>
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
+                        <ul class="dropdown__catalog">
+                            <li><a href="{% url 'forum:main' %}">Home Page</a></li>
+                            <li><a href="{% url 'registration_App:signup' %}">Sign up Page</a></li>
+                            <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+                <div class="header__search">
+                    <form action="{% url 'forum:search_results' %}" method="get">
+                        <label>
+                            <i class="icon-Search js-header-search-btn-open"></i>
+                            <input type="search" placeholder="Search all forums" class="form-control" name="q">
+                        </label>
+                    </form>
+                   <div class="header__search-close js-header-search-btn-close"><i class="icon-Cancel"></i></div>
+
+
+                    <div class="dropdown dropdown--design-01" data-dropdown-list="search">
+                        <ul>
+                            <li>
+                                <label>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" checked="checked">
+                                        <i></i>
+                                    </label>Search Titles Only
+                                </label>
+
+                            </li>
+                            <li>
+                                <label>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox">
+                                        <i></i>
+                                    </label>Show Results as Posts
+                                </label>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="icon-Advanced_Search"></i>Advanced Search
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="header__menu">
+
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="menu">
+                        <div>
+                            <ul class="dropdown__catalog row">
+                                <li class="col-xs-6"><a href="{% url 'forum:modal_topic' %}"
+                                >New</a></li>
+                              <li class="col-xs-6">
+                                <div><dialog id="window">
+                                    <h3>List new topics!</h3>
+
+
+                                    <button id="exit">Выйти</button>
+                                </dialog>
+                                </div>
+                                <button id="show">Показать диалоговое окно</button>
+
+                                <li class="col-xs-6"><a href="#">Unread</a></li>
+                                <li class="col-xs-6"><a href="#">Users</a></li>
+
+
+                            </ul>
+                                <button class="col-xs-6" id="sh">Tags</button>
+
+                                 <div><dialog id="wind" style="background-color: red">
+                                    <h3>Tags</h3>
+
+
+                                         {% get_tags as tags %}
+                                         {% for tag in tags %}
+                                            {{tag.name}}
+                                           {% if not forloop.last %}: {% endif %}
+
+                                         {% endfor %}
+
+
+                                    <button id="ex">Выйти</button>
+                                </dialog>
+                                </div>
+
+
+
+
+
+
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>Categories</h3>
+                             {% get_categories as categories %}
+                            <ul class="dropdown__catalog row">
+                                {% for category in categories %}
+                                <li class="col-xs-6">{{ category.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div>
+                            <ul class="dropdown__catalog row">
+                                <li class="col-xs-6"><button  id="sw">Support</button> </li>
+
+                                    <dialog id="wqo">
+                                        <div class="form-row">
+                                            <div class="col">
+                                              <input type="text" name="name" class="form-control" placeholder="Представьтесь, пожалуйста">
+                                            </div>
+                                          </div>
+                                            <div class="form-group">
+                                                <label for="recipient-mail" class="col-form-label">Ваш email:</label>
+                                                <input type="email" name="email" id="recipient-mail" class="form-control" placeholder="example@mail.ru">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-phone" class="col-form-label">Ваш телефон:</label>
+                                                <input type="text" id="recipient-phone" class="form-control" name="phone">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="message-text" class="col-form-label">Сообщение:</label>
+                                                <textarea name="message" id="message-text" class="form-control"></textarea>
+                                            </div>
+                                      <button id="clos">Закрыть</button>
+                                    </dialog>
+
+                                <li class="col-xs-6"><a href="{% url 'forum:forum_rules' %}">Forum Rules</a></li>
+                                <li class="col-xs-6"><a href="#">Blog</a></li>
+                                <li class="col-xs-6"><a href="{% url 'forum:about_us' %}">About Us</a></li>
+
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+
+                <div class="header__notification">
+                    <div class="header__notification-btn" data-dropdown-btn="notification">
+
+                    </div>
+                    <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
+                    </div>
+                </div>
+
+                <div class="header__user">
+                    {% if request.user.is_authenticated %}
+                 <a href="{% url 'profile_user:userpage' user.id %}">Ваш профиль</a>
+                    {% endif %}
+                    &nbsp;
+                    {% if user.is_staff %}
+                 <a href="admin/">Админ</a>
+                    {% endif %}
+
+
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
+                        <div>
+                            <div class="dropdown__icons">
+                                <a href="#"><i class="icon-Bookmark"></i></a>
+                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="#"><i class="icon-Preferences"></i></a>
+                                <a href="#"><i class="icon-Logout"></i></a>
+                            </div>
+                        </div>
+
+
+                    </nav>
+
+                </div>
+
+            </div>
+
+            <div class="header__offset-btn">
+                <a href="{% url 'create_topicApp:create_top' %}">
+                    <p style="color:red">Задайте вопрос</p>
+                     <img src="static/fonts/icons/main/New_Topic.svg" alt="New Topic">
+                </a>
+
+            </div>
+
+        </div>
+
+<script>
+
+
+(function() {
+            var dialog = document.getElementById('window');
+
+            document.getElementById('show').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('exit').onclick = function() {
+                dialog.close();
+            };
+
+
+        })();
+
+
+
+
+
+  (function() {
+            var dialog = document.getElementById('wind');
+
+            document.getElementById('sh').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('ex').onclick = function() {
+                dialog.close();
+            };
+
+        })();
+
+
+
+
+
+</script>
+
+
+
+
+ </header>
+
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+
+    <script  src="{% static 'js/modal_new.js' %}"></script>
