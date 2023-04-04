@@ -32,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(u'date joined', default=timezone.now)
     objects = UserManager()
-    avatar = models.ImageField(settings.AUTH_USER_MODEL, default='media/no_image.jpg', blank=True)
+    avatar = models.ImageField(settings.AUTH_USER_MODEL, default='/no_image.jpg', blank=True)
 
     USERNAME_FIELD = 'username'
 

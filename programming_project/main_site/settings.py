@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_social_share',
     'bootstrap3',
+    'bootstrap4',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [

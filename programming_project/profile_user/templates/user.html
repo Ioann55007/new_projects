@@ -5,21 +5,43 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<!--User-->
+	<style>
+
+	   div.nazz {
+		margin: 0; /* Обнуляем значение отступов */
+		padding: 4px; /* Значение полей */
+	   }
+	   div.nazz input {
+		display: inline; /* Отображать как строчный элемент */
+		margin-right: 5px; /* Отступ слева */
+	   }
+	   div.nazz p {
+		display: inline; /* Отображать как строчный элемент */
+		margin-right: 5px; /* Отступ слева */
+	   }
+
+  </style>
 	<br><br>
 
 	<div class="container mx-auto">
 	    <div class="row">
 	    	<div class="col-sm-12 col-md-12 col-lg-3 pb-4">
-
+				{% if user.avatar %}
 				<img src="{{ request.user.avatar.url}}/" height="130" width="200" class="avatar">
-				    <form method="POST" action="{% url 'profile_user:avatar' %}" enctype="multipart/form-data">
+
+				<form method="POST" action="{% url 'profile_user:avatar' %}" enctype="multipart/form-data">
 
                 		{% csrf_token %}
-						{{form.as_p}}
+						{% for forn in form %}
+							{{ forn }}
+						{% endfor %}
+				<div class="nazz">
+					<input class="btn btn-primary" type="submit"> <a href="{% url 'profile_user:userpage' user.id %}" style="border:1px solid; padding: 3px; background:red; color:white">Come Back</a>
 
-
-					    <input class="btn btn-primary" type="submit">
+				</div>
            			 </form>
+
+				{% endif %}
 		    	<div class="card p-4">
 			    	<h4 class="card-title font-weight-bold text-center">Hello, {{ user.username|title }}</h4>
 			      	<hr>

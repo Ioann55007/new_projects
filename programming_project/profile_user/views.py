@@ -11,7 +11,7 @@ def profile(request):
     return render(request, 'user.html')
 
 
-def userpage(request):
+def userpage(request, id):
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user)
@@ -23,7 +23,7 @@ def userpage(request):
             messages.success(request, ('Your wishlist was successfully updated!'))
         else:
             messages.error(request, ('Unable to complete request'))
-        return redirect("profile_user:userpage")
+        return redirect("profile_user:userpage", id)
     user_form = UserForm(instance=request.user)
     profile_form = ProfileForm(instance=request.user)
     return render(request=request, template_name="user.html", context={"user": request.user,
