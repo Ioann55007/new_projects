@@ -352,3 +352,4 @@ def bookmarks_remove(request, bookmark_id):
     bookmark = Bookmarks.objects.get(id=bookmark_id)
     bookmark.delete()
     return redirect('profile_user:userpage', request.user.id)
+

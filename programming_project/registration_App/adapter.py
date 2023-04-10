@@ -13,3 +13,4 @@ class AccountAdapter(DefaultAccountAdapter):
         url = reverse_lazy(path, args=[email_confirmation.key])
         return settings.FRONTEND_SITE + str(url)
 
+
