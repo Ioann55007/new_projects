@@ -65,6 +65,7 @@ class Search(ListView):
         else:
             form = ReplyForm()
         tag = None
+        topic_view
 
         topic = Topic.objects.get(id=id)
         bookmarks = Bookmarks.objects.filter(user=request.user, topic=topic)
@@ -230,7 +231,9 @@ class TopicViewSet(ViewSet):
         return response
 
 
-
+def modal_topic(request):
+    topic = Topic.objects.order_by('-id')[0:5]
+    return render(request, 'modal_new_topics.html', {'topic': topic})
 
 
 def modal_latest_topic(request):
@@ -352,4 +355,3 @@ def bookmarks_remove(request, bookmark_id):
     bookmark = Bookmarks.objects.get(id=bookmark_id)
     bookmark.delete()
     return redirect('profile_user:userpage', request.user.id)
-

@@ -16,10 +16,7 @@ from os import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-
 SECRET_KEY = 'django-insecure-jb#l7g-6d!-(*5o@nxq!mz=y%85q=a#dkvzt&no$@f%1-pny(j'
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -30,8 +27,6 @@ EMAIL_HOST_PASSWORD = 'kbtdkkbivgrnvjtx'
 DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'ioann.basic@gmail.com')
 EMAIL_USE_TLS = True
 
-
-
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 FRONTEND_SITE = 'http://localhost:8000'
 ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
@@ -39,12 +34,10 @@ ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
 SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'admin@gmail.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', '1524ok')
 
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = int(os.environ.get("DEBUG", default=1))
 
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 ALLOWED_HOSTS += ['3ef3-94-41-3-182.eu.ngrok.io']
-
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,8 +74,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'main_site.urls'
 
-
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -101,16 +92,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main_site.wsgi.application'
 
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -127,9 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-
-
 LANGUAGE_CODE = 'ru'
 
 LANGUAGES = (
@@ -142,8 +126,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -152,9 +134,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+THIRD_PARTY_APPS = [
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'rest_framework_simplejwt.token_blacklist',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_framework',
+    'corsheaders',
 
-
-
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -184,7 +174,62 @@ if ENABLE_RENDERING:
         'rest_framework.renderers.TemplateHTMLRenderer',
     )
 
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
+        'SCOPE': ['email', 'public_profile'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'username',
+            'middle_name',
+            'name',
+            'name_format',
+            'picture',
+            'short_name'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': 'path.to.callable',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v7.0',
+        'APP': {
+            'client_id': environ.get('FACEBOOK_CLIENT_ID'),
+            'secret': environ.get('FACEBOOK_SECRET_KEY'),
 
+        }
+    }
+}
+
+INSTALLED_APPS += THIRD_PARTY_APPS
+
+CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND')
+
+CELERY_TIMEZONE = environ.get('TZ', 'UTC')
+
+CELERY_RESULT_PERSISTENT = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_BROKER_HEARTBEAT_CHECKRATE = 10
+CELERY_EVENT_QUEUE_EXPIRES = 10
+CELERY_EVENT_QUEUE_TTL = 10
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'max_retries': 4,
+    'interval_start': 0,
+    'interval_step': 0.5,
+    'interval_max': 3,
+}
+
+CELERY_TASK_ROUTES = {
+    '*': {'queue': 'celery'},
+}
 
 JWT_AUTH_REFRESH_COOKIE = 'refresh'
 JWT_AUTH_COOKIE = 'jwt-auth'
@@ -220,8 +265,6 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=2),
 }
 
-
-
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'basic': {
@@ -252,14 +295,8 @@ SWAGGER_SETTINGS = {
     'LOGOUT_URL': 'rest_framework:logout',
 }
 
-
-
-
-
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_PROFILE_MODULE = 'profile_user.UserProfile'
 
 AUTH_USER_MODEL = 'forum.User'
-

@@ -10,7 +10,9 @@ class ContactForm(forms.Form):
 
 
 class ReplyForm(ModelForm):
-
+    # class Meta:
+    #     model = Reply
+    #     fields = ('content',)
 
 
     content = forms.CharField(label='Контент', widget=forms.Textarea(attrs={'cols': 80, 'rows': 10}))

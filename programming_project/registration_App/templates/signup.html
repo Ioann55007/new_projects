@@ -1,0 +1,124 @@
+{% load static %}
+{% load static i18n %}
+
+
+
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+    <!-- STYLESHEET -->
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="{% static 'fonts/icons/main/mainfont/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/icons/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+</head>
+<body>
+<div class="signup">
+    <!-- HEADER -->
+    <header class="signup__header">
+        <div class="container">
+            <div class="signup__header-content">
+                <p><a href="#">Already have an account?</a></p>
+                {% if request.user.is_authenticated %}
+                Добро пожаловать на сайт! {{ user.username }}  <a href="{% url 'registration_App:logout' %}">Выйти</a>
+                {% else %}
+                <a href="{% url 'registration_App:login' %}" class="btn">Sign In</a>
+
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="signup__main">
+        <img class="signup__bg" src="/media/signup-bg.png" alt="bg">
+
+        <div class="container">
+            <div class="signup__container">
+                <div class="signup__logo">
+                    <a href="#"><img src="{% static 'fonts/icons/main/Logo_Forum.svg' %}" alt="logo">Unity</a>
+                </div>
+
+                <div class="signup__head">
+                    <h3>Create a New Unity Account</h3>
+                    <p>By singin up you can start posting, replaying to topics, earn badges, favorite, vote topics and many more.</p>
+                </div>
+
+
+
+
+
+{% block content %}
+<div class = "container">
+<h2>Sign up</h2>
+<form method="post">
+{% csrf_token %}
+{% for field in form %}
+<p>
+{{ field.label_tag }}<br>
+{{ field }}
+{% if field.help_text %}
+<small style="display: none ">{{ field.help_text }}</small>
+{% endif %}
+{% for error in field.errors %}
+<p style="color: red">{{ error }}</p>
+{% endfor %}
+</p>
+{% endfor %}
+<button type="submit">Sign up</button>
+</form>
+</div>
+{% endblock %}
+
+</div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="signup__footer">
+        <div class="container">
+            <div class="signup__footer-content">
+                <ul class="signup__footer-menu">
+                    <li><a href="#">Teams</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Send Feedback</a></li>
+                </ul>
+                <ul class="signup__footer-social">
+                    <li><a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    <li><a href="#"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
+                    <li><a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a></li>
+                    <li><a href="#"><i class="fa fa-cloud" aria-hidden="true"></i></a></li>
+                    <li><a href="#"><i class="fa fa-rss" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</div>
+
+    <!-- JAVA SCRIPT -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+    <script src="{% static 'js/app.js/' %}"></script>
+
+
+</body>
+</html>

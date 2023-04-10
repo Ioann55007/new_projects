@@ -12,6 +12,13 @@ from forum.models import Topic
 sys.path.append(os.path.abspath('..'))
 
 
+class CreateTopicView(View):
+    template_name = 'create_top.html'
+
+    def get(self, request):
+        return render(request, 'create_top.html')
+
+
 def create_topic(request):
     tops = Topic.objects.last()
 

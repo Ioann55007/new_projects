@@ -1,0 +1,18 @@
+{% extends 'firstsend.html' %}
+{% block title %}
+  Обратная связь :: {{ block.super }}
+{% endblock %}
+{% block content %}
+<h1>Свяжитесь с нами</h1>
+<div style="text-align:right">
+  <div style="font-style:italic">
+    <p>Телефон:<br>+79347484938</p>
+    <p>Почта:<br>ioann.basic@gmail.com</p>
+  </div>
+</div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary btn-block">Send</button>
+</form>
+{% endblock %}

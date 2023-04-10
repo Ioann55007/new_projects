@@ -195,4 +195,3 @@ class Feedback(models.Model):
 
     class Meta:
         verbose_name = _('Feedback')
-
