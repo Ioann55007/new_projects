@@ -16,28 +16,7 @@ from os import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-jb#l7g-6d!-(*5o@nxq!mz=y%85q=a#dkvzt&no$@f%1-pny(j'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ioann.basic@gmail.com'
-EMAIL_HOST_PASSWORD = 'kbtdkkbivgrnvjtx'
-
-DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'ioann.basic@gmail.com')
-EMAIL_USE_TLS = True
-
-ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
-FRONTEND_SITE = 'http://localhost:8000'
-ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
-
-SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'admin@gmail.com')
-SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', '1524ok')
-
-DEBUG = int(os.environ.get("DEBUG", default=0))
-
-ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
-ALLOWED_HOSTS += ['3ef3-94-41-3-182.eu.ngrok.io']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,12 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main_site.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -127,7 +101,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -166,6 +139,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
 
 if ENABLE_RENDERING:
     """ For build CMS using DRF """
@@ -275,3 +249,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AUTH_PROFILE_MODULE = 'profile_user.UserProfile'
 
 AUTH_USER_MODEL = 'forum.User'
+
+
+
+try:
+    from .local_settings import *
+except ImportError:
+    from .prod_settings import *
