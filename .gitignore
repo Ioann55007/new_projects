@@ -1,2 +1,2 @@
-main_site/local_settings.py
-main_site/prod_settings.py
+main_site.local_settings.py
+main_site.prod_settings.py
