@@ -1,0 +1,43 @@
+
+{% load tagnag %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<dialog id="window">
+    <h3>List new topics!</h3>
+    {% for item in topic %}
+        {{ item.name }}
+
+      {% if not forloop.last %}: {% endif %}
+    {% endfor %}
+
+
+    <button id="exit">Выйти</button>
+</dialog>
+                                <button id="show">Показать диалоговое окно</button>
+
+
+
+
+
+</body>
+<script>
+   (function() {
+            var dialog = document.getElementById('window');
+            document.getElementById('show').onclick = function() {
+                dialog.show();
+            };
+            document.getElementById('exit').onclick = function() {
+                dialog.close();
+            };
+        })();
+
+
+
+</script>
+</html>
+

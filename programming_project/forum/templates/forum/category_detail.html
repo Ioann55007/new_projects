@@ -1,0 +1,404 @@
+<!doctype html>
+{% load tagnag %}
+{% load static  %}
+{% load social_share %}
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+    <!-- STYLESHEET -->
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="{% static 'fonts/icons/main/mainfont/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/icons/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<header>
+        <div class="header js-header js-dropdown">
+            <div class="container">
+                <div class="header__logo">
+                    <h1>
+                        <img src="{% static 'fonts/icons/main/Logo_Forum.svg' %}" alt="logo">
+                    </h1>
+                    <div class="header__logo-btn" data-dropdown-btn="logo">
+                        Search<i class="icon-Arrow_Below"></i>
+                    </div>
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="logo">
+                        <ul class="dropdown__catalog">
+                            <li><a href="{% url 'forum:main' %}">Home Page</a></li>
+                            <li><a href="{% url 'registration_App:login' %}">Sign up Page</a></li>
+                            <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header__search">
+                    <form action="#">
+                        <label>
+                            <i class="icon-Search js-header-search-btn-open"></i>
+                            <input type="search" placeholder="Search all forums" class="form-control">
+                        </label>
+                    </form>
+                    <div class="header__search-close js-header-search-btn-close"><i class="icon-Cancel"></i></div>
+
+                    <div class="dropdown dropdown--design-01" data-dropdown-list="search">
+                        <ul>
+                            <li>
+                                <label>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" checked="checked">
+                                        <i></i>
+                                    </label>Search Titles Only
+                                </label>
+
+                            </li>
+                            <li>
+                                <label>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox">
+                                        <i></i>
+                                    </label>Show Results as Posts
+                                </label>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="icon-Advanced_Search"></i>Advanced Search
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="header__menu">
+
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="menu">
+                        <div>
+                            <ul class="dropdown__catalog row">
+                                <li class="col-xs-6"><a href="#">New</a></li>
+                                <li class="col-xs-6"><a href="#">Unread</a></li>
+                                <li class="col-xs-6"><a href="#">Users</a></li>
+                                <li class="col-xs-6"><a href="#">Tags</a></li>
+                            </ul>
+                        </div>
+                        <div>
+
+                            <h3>Categories</h3>
+                            {% get_categories as categories %}
+                            <ul class="dropdown__catalog row">
+                                {% for category in categories %}
+                                <li class="col-xs-6">{{category.name}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div>
+                            <ul class="dropdown__catalog row">
+                                <li class="col-xs-6"><a href="#">Support</a></li>
+                                <li class="col-xs-6"><a href="#">Forum Rules</a></li>
+                                <li class="col-xs-6"><a href="#">Blog</a></li>
+                                <li class="col-xs-6"><a href="#">About Us</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div class="header__notification">
+
+                    <div class="dropdown dropdown--design-01" data-dropdown-list="notification">
+
+                    </div>
+                </div>
+                <div class="header__user">
+                    <div class="header__user-btn" data-dropdown-btn="user">
+                    </div>
+                    <nav class="dropdown dropdown--design-01" data-dropdown-list="user">
+                        <div>
+                            <div class="dropdown__icons">
+                                <a href="#"><i class="icon-Bookmark"></i></a>
+                                <a href="#"><i class="icon-Message"></i></a>
+                                <a href="#"><i class="icon-Preferences"></i></a>
+                                <a href="#"><i class="icon-Logout"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                            <ul class="dropdown__catalog">
+                                <li><a href="#">Dashboard</a></li>
+                                <li><a href="#">Badges</a></li>
+                                <li><a href="#">My Groups</a></li>
+                                <li><a href="#">Notifications</a></li>
+                                <li><a href="#">Topics</a></li>
+                                <li><a href="#">Likes</a></li>
+                                <li><a href="#">Solved</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <div class="header__offset-btn">
+                <a href="{% url 'create_topicApp:create_top' %}">  <p style="color:red">Задайте вопрос</p>
+                    <img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
+            </div>
+        </div>
+    </header>
+{% load static  %}
+
+    <main>
+        <div class="container">
+            <div class="nav">
+                <div class="nav__categories js-dropdown">
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="categories">All Categories</div>
+                        <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
+                            {% get_categories as categories %}
+                            <ul class="dropdown__catalog row">
+                                {% for category in categories %}
+                                <li class="col-xs-6"><a href="#" class="category">{{category.name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="tags">Tags</div>
+                        <div class="dropdown dropdown--design-01" data-dropdown-list="tags">
+                            <div class="tags">
+                                {% get_tags as tags %}
+                                {% for tag in tags %}<a href="#" class="bg-4f80b0">{{tag.name}}</a>{% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav__menu js-dropdown">
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="menu">Latest</div>
+                        <div class="dropdown dropdown--design-01" data-dropdown-list="menu">
+                            <ul class="dropdown__catalog">
+                                <li><a href="#">Latest</a></li>
+                                <li><a href="#">Unread</a></li>
+                                <li><a href="#">Rising</a></li>
+                                <li><a href="#">Most Liked</a></li>
+                                <li><a href="#">Follow Feed</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="nav__thread">
+                    <p>Thread Navigation:</p>
+                    <a href="#" class="nav__thread-btn nav__thread-btn--prev"><i class="icon-Arrow_Left"></i>Previous</a>
+                    <a href="#" class="nav__thread-btn nav__thread-btn--next">Next<i class="icon-Arrow_Right"></i></a>
+                </div>
+            </div>
+            <div class="topics">
+                <div class="topics__heading">
+                    <h2 class="topics__heading-title">
+                            {% for topic in object.topic.all %}
+                                {{topic.name}}
+                            {% endfor %}
+                    </h2>
+                    <div class="topics__heading-info">
+
+                        <a href="{{category.id}}" class="category"><i class="bg-3ebafa"></i>{{category.name}}</a>
+                                    <div class="tags">
+
+
+
+                                                                            {% for topic in object.topic.all %}
+
+                                                                                {% for tag in topic.tags.all %}
+                                        <a href="{{ topic.slug }}" class="bg-4f80b0">{{tag.name}}</a>
+
+                                                                         {% if not forloop.last %}: {% endif %}
+                                                                                {% endfor %}
+
+                                                                            {% endfor %}
+
+
+
+
+
+
+                                    </div>
+                    </div>
+                </div>
+                <div class="topics__body">
+                    <div class="topics__content">
+                        <div class="topic">
+                            <div class="topic__head">
+                                <div class="topic__avatar">
+                                    <a href=""><img src="{{ category.category_image.avatar.url }}" width="100" height="140"></a>
+
+                                </div>
+                                <div class="topic__caption">
+                                    <div class="topic__name">
+                                        <a href="#">{{category.author}}</a>
+                                    </div>
+
+                                    <div class="topic__date">{{category.created}}</div>
+                                </div>
+                            </div>
+                            <div class="topic__content">
+                                <div class="topic__text">
+                                    {% if object.topic.exists %}
+                                        {% for topic in object.topic.all %}
+                                               {{topic.content}}
+                                        {% endfor %}
+                                    {% else %}
+                                        <h4>Темы нет</h4>
+                                            <p>Для данной категории тема не найдена!</p>
+                                    {% endif %}
+                                </div>
+                                <div class="topic__footer">
+                                    <div class="topic__footer-likes">
+
+                                        <div>
+                                            <a href="#"><i class="icon-Downvote"></i></a>
+                                            <span></span>
+                                        </div>
+                                        <div>
+                                            {% include 'includes/category_like_post.html' %}
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                    <div class="topic__footer-share">
+                                        <div data-visible="desktop">
+                                            <div>
+                                          {% post_to_telegram  "Hello"  object_or_url   post_to_telegram %}
+                                            {% post_to_whatsapp "Hi" object_or_url post_to_whatsapp  %}
+                                         </div>
+                                            {% if request.user.is_authenticated %}
+                                            {% for topic in object.topic.all %}
+                                            <a href="{% url 'forum:bookmarks_add' topic.id %}" style="border:solid 2px
+                                             yellow;background-color:black;color:dark-blue;">
+
+                                            Добавить в закладки.
+                                            </a>
+
+                                            {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div data-visible="mobile">
+                                            <a href="#"><i class="icon-More_Options"></i></a>
+                                        </div>
+                                        {% include 'forum/category_reply.html' %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="topic">
+                            <div class="topic__content">
+                                <div class="topic__info">
+                                    <div class="topic__info-section">
+                                        <div>
+                                            <span class="topic__info-title">Created</span>
+                                            <div  class="topic__info-avatar">
+                                                <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/B.svg' %}" alt="avatar"></a>
+                                                <span>
+                                                    {% for topic in object.topic.all %}
+                                                        {{topic.d_date}}
+                                                    {% endfor %}
+
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="topic__info-section">
+
+
+
+                                        <div>
+                                            <span class="topic__info-title"></span>
+                                            <div  class="topic__info-count"></div>
+                                        </div>
+                                        <div>
+                                            <span class="topic__info-title"></span>
+                                            <div  class="topic__info-count"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="topic__title">
+                                </div>
+                                <div class="topic__btns">
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                            <div>
+                                <a href="#"><i class="icon-Upvote"></i></a>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="topics__calendar">
+                        <div class="calendar">
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+{% load static  %}
+
+<footer>
+        <div class="footer js-dropdown">
+            <div class="container">
+                <div class="footer__logo">
+                    <div>
+                        <img src="{% static 'fonts/icons/main/Logo_Forum.svg' %}" alt="logo">Unity
+                    </div>
+                </div>
+                <div class="footer__nav">
+                    <div class="footer__tline">
+                            {% include 'footer.html' %}
+
+                        <div class="footer__language">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,16 @@
+
+{% if request.user.is_authenticated %}
+<form action="{% url 'forum:like_reply' reply.id %}" method="post">
+        {% csrf_token %}
+        {% if liked %}
+
+        <button  type="submit" class="icon-Favorite_Topic" style="background-color: Transparent;  border:none; color:red">Unlike</button>
+
+        {% else %}
+
+        <button  type="submit" class="icon-Favorite_Topic" style="background-color: Transparent;  border:none; color:black">Like</button>
+
+       {% endif %}
+        {{ reply.count_likes }}
+    </form>
+{% endif %}
