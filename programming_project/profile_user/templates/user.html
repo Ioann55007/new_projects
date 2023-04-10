@@ -20,12 +20,20 @@
 		margin-right: 5px; /* Отступ слева */
 	   }
 
-  </style>
-	<br><br>
 
-	<div class="container mx-auto">
+
+
+
+
+  </style>
+	<a href="{% url 'forum:main'  %}" style="border:1px solid; padding: 3px;
+	 background:black; color:white">Go back to main page</a>
+	<br><br>
+ <div style="background-color:blue;">
+	<div class="container mx-auto" style="background-color:red;">
 	    <div class="row">
-	    	<div class="col-sm-12 col-md-12 col-lg-3 pb-4">
+	    	<div class="col-sm-12 col-md-12 col-lg-3 pb-4" style="position:relative;">
+			  <div style="position:absolute;">
 				{% if user.avatar %}
 				<img src="{{ request.user.avatar.url}}/" height="130" width="200" class="avatar">
 
@@ -40,8 +48,16 @@
 
 				</div>
            			 </form>
-
 				{% endif %}
+			  </div>
+
+				<div class="bookmarkz" style="left: 1020px; position:absolute;">
+					<p style="white-space: nowrap;color:white;"><b>Здесь ваши закладки:</b></p>
+					{% include 'bookmarks.html' %}
+				</div>
+			</div>
+
+
 		    	<div class="card p-4">
 			    	<h4 class="card-title font-weight-bold text-center">Hello, {{ user.username|title }}</h4>
 			      	<hr>
@@ -61,11 +77,13 @@
 						</div>
 			        </div>
 		    	</div>
+
 		  	</div>
 		    <div class="col-sm-12 col-md-12 col-lg-9 pb-4">
 		    </div>
-		</div>
 	</div>
+ </div>
+
 	<dialog id="profile_modal">
 	  	<div class="modal-dialog" role="document">
 		    <div class="modal-content">
@@ -89,7 +107,7 @@
 	  	</div>
 
 	</dialog>
-
+	<div style="padding:190px; background:brown;"></div>
 <script>
 	(function() {
             var dialog = document.getElementById('profile_modal');

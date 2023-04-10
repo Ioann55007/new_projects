@@ -12,6 +12,7 @@
 
                     <div class="posts__content">
                         <a href="{{ topic.id  }}">
+
                             <h3>{{ topic.name }}</h3>
                         </a>
                     </div>
@@ -31,8 +32,9 @@
 
 
                         <div class="posts__activity" style="text-align:center">{{topic.created}}</div>
+        <div  class="posts__views">{{ topic.viewers.count }}</div>
 
-
+                        {{ topic.get_client_ip }}
             </div>
 
     </div>

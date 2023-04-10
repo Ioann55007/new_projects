@@ -5,16 +5,22 @@ from forum.models import Topic, Category, User
 
 class TopicForm(forms.ModelForm):
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].empty_label = 'Категория не выбрана'
 
-    name = forms.CharField(label='Название темы вопроса', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    slug = forms.SlugField(label='Слаг', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    tags = forms.CharField(label='Теги', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    author = forms.ModelChoiceField(queryset=User.objects.all(), label='Автор')
-    content = forms.CharField(label='Контент', widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}))
+    name = forms.CharField(label='Name question', widget=forms.TextInput(attrs={'size': '100'}))
+    tags = forms.CharField(label='Tags', widget=forms.TextInput(attrs={'size': '13'}))
+    author = forms.ModelChoiceField(queryset=User.objects.all(), label='Author')
+    content = forms.CharField(label='Content', widget=forms.Textarea(attrs={'cols': 100, 'rows': 10}))
+
+
+
 
     class Meta:
         model = Topic
-        fields = ['name', 'slug', 'tags', 'author', 'category', 'content']
+        fields = ['name', 'tags', 'author', 'category', 'content']
+
+
+

@@ -2,6 +2,8 @@
 <!doctype html>
 {% load tagnag %}
 {% load static  %}
+{% load social_share %}
+
 <html lang="en-US">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -49,7 +51,7 @@
                         <ul class="dropdown__catalog">
                             <li><a href="{% url 'forum:main' %}">Home Page</a></li>
                             <li><a href="{% url 'registration_App:login' %}">Sign up Page</a></li>
-                            <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
+                            <li><a href="{% url 'create_topicApp:topic_create_url' %}">Create Topic Page</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -102,7 +104,7 @@
 
             </div>
             <div class="header__offset-btn">
-                <a href="{% url 'create_topicApp:create_top' %}"><p style="color:red">Задайте вопрос</p>
+                <a href="{% url 'create_topicApp:topic_create_url' %}"><p style="color:red">Задайте вопрос</p>
                     <img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
             </div>
         </div>f
@@ -220,22 +222,44 @@
                                             <span></span>
                                         </div>
                                         <div>
+                                            {% include 'includes/add_like_post_search.html' %}
 
                                             <span></span>
                                         </div>
                                     </div>
                                     <div class="topic__footer-share">
+
+
                                         <div data-visible="desktop">
-                                            {% if request.user.is_authenticated %}
-                                            <a href="{% url 'forum:create'  %}"><i class="icon-Bookmark"></i></a>
+                                            <div>
+                                            {% post_to_telegram  "topic.name"     post_to_telegram %}
+                                            {% post_to_whatsapp "Hi" object_or_url post_to_whatsapp  %}
+                                         </div>
+
+
+                                             {% if request.user.is_authenticated %}
+                                            {% for topic in object_list %}
+
+                                            <a href="{% url 'forum:bookmarks_add' topic.id %}" style="border:solid 2px
+                                             yellow;background-color:black;color:dark-blue;">
+
+                                            Добавить в закладки.
+                                            </a>
+
+                                            {% endfor %}
+
                                             {% endif %}
 
                                         </div>
                                         <div data-visible="mobile">
-                                            <a href="#"><i class="icon-More_Options"></i></a>
+
                                         </div>
+                                        {% include 'forum/search_reply.html' %}
                                     </div>
+
+
                                 </div>
+
                             </div>
                         </div>
 
@@ -266,7 +290,14 @@
 
                                             <a href="#"><i class="icon-Upvote"></i></a>
 
+                <div>
+
+
+                </div>
+
+
             </div>
+
         </div>
     </main>
     <!-- FOOTER -->
@@ -283,7 +314,15 @@
                 <div class="footer__nav">
                     <div class="footer__tline">
                         <ul class="footer__menu">
-                            <li><a id="s">Support</a></li>
+
+                            <select>
+
+                                 <option>Latest topic</option>
+                                 <option>Создан: {{tops.created}}</option>
+                                 <option>Название вопроса: {{tops.name}}</option>
+                                 <option>Категория вопроса: {{tops.category}}</option>
+                                 <option>Контент вопроса: {{tops.content}}</option>
+                             </select>
                             <li><a href="{% url 'forum:about_us' %}">About Us</a></li>
                             <li><a href="{% url 'forum:send_email' %}">Contact Us</a></li>
                             <li><a href="{% url 'forum:the_team' %}">The Team</a></li>

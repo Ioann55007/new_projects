@@ -1,7 +1,7 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, modelform_factory
 
-from .models import Reply
+from .models import Reply, Topic
 
 
 class ContactForm(forms.Form):
@@ -10,6 +10,17 @@ class ContactForm(forms.Form):
 
 
 class ReplyForm(ModelForm):
+
+
+
+    content = forms.CharField(label='Контент', widget=forms.Textarea(attrs={'cols': 80, 'rows': 10}))
+
     class Meta:
         model = Reply
-        fields = ('content',)
+        fields = ['content']
+
+
+class TopicForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+        fields = ('name', 'category', 'content')

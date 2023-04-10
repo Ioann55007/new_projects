@@ -23,7 +23,6 @@ from django.contrib.auth.models import PermissionsMixin, UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
     username = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
@@ -39,12 +38,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email', 'password', 'avatar']
 
 
-
-
 class Category(models.Model):
     """Категории"""
     name = models.CharField(max_length=170)
-    author = models.CharField(max_length=9)
+    author = models.CharField(max_length=100)
     created = models.DateField(auto_now=False)
     objects = UserManager()
     slug = models.SlugField(max_length=130, unique=True)
@@ -60,7 +57,6 @@ class Category(models.Model):
         value = self.name
         self.slug = slugify(value, allow_unicode=True)
         super().save(*args, **kwargs)
-
 
     class Meta:
         verbose_name = 'Category'
@@ -80,6 +76,11 @@ def gen_slug(s):
     return new_slug + '_' + str(int(time()))
 
 
+class Viewer(models.Model):
+    objects = models.Manager()
+    ipaddress = models.GenericIPAddressField("IP address", blank=True, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True)
+
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
@@ -90,24 +91,20 @@ class Topic(models.Model):
     likes = models.ManyToManyField(User, related_name='topic_likes', default=None, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
-    slug = models.SlugField(max_length=130, unique=True, default=uuid.uuid1, blank=True)
+    slug = models.SlugField(max_length=130, unique=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='author_set')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='topic_bookmark')
-    views = models.ManyToManyField(Ip, related_name="post_views", blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE,
+                             related_name='topic_bookmark')
     count_user = models.ManyToManyField(User, through="CountUser")
+    viewers = models.ManyToManyField(Viewer, blank=True)
 
     objects = models.Manager()
-
-    def total_views(self):
-        return self.views.count()
-
 
     def user_count(self):
         return self.count_user.count()
 
     def __str__(self):
         return self.name
-
 
     def d_date(self):
         z = self.created.strptime(str(self.created), '%Y-%m-%d %H:%M:%S.%f+%U:%W')
@@ -125,16 +122,10 @@ class Topic(models.Model):
     def tag_list(self) -> str:
         return u", ".join(o.name for o in self.tags.all())
 
-
-
-
-
     def save(self, *args, **kwargs):
         if not self.id:
             self.slug = gen_slug(self.name)
         super().save(*args, **kwargs)
-
-
 
 
 
@@ -143,50 +134,29 @@ class Topic(models.Model):
         verbose_name_plural = 'Topics'
 
 
+class Bookmarks(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    quantity = models.PositiveSmallIntegerField(default=0)
+    create_time = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
-
+    def __str__(self):
+        return f"Ваши закладки {self.user} | Тема: {self.topic.name}"
 
 
 class CountUser(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='count_topic_user')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='count_user_user')
 
-
     class Meta:
         unique_together = [('user', 'topic')]
 
 
-class Bookmark(models.Model):
-    topic = models.ManyToManyField(Topic, related_name='bookmark_topic_bookmark', default=None, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookmarks')
-    url = models.URLField('URL')
-    description = models.TextField(default='', blank=True)
-    title = models.CharField(default='', blank=True, max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    deleted_at = models.DateTimeField(blank=True, null=True)
-    tags = TaggableManager()
-
-    def __str__(self):
-        return self.title if self.title else self.url
-
-    class Meta:
-        unique_together = [('url', 'user')]
-
-
-@receiver(post_save, sender=Bookmark)
-def fetch_url_title(sender, instance, created, **kwargs):
-    if created:
-        r = requests.get(instance.url)
-        if r.ok:
-            text = r.text
-            instance.title = text[text.find('<title>')+7:text.find('<title>')][:255]
-            instance.save()
-
-
 class Reply(models.Model):
     author = models.EmailField()
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='comment_set', blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='comment_set',
+                             blank=True)
     content = models.TextField(max_length=200)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='topic_set')
     created = models.DateTimeField(auto_now_add=True)
@@ -204,10 +174,8 @@ class Reply(models.Model):
         verbose_name_plural = _('Replies')
         ordering = ('-id',)
 
-
     def __str__(self):
         return self.content
-
 
     def last_reply(self):
         k = self.topic.topic_set
@@ -227,7 +195,3 @@ class Feedback(models.Model):
 
     class Meta:
         verbose_name = _('Feedback')
-
-
-
-

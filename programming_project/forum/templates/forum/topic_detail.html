@@ -53,7 +53,7 @@
                         <ul class="dropdown__catalog">
                             <li><a href="{% url 'forum:main' %}">Home Page</a></li>
                             <li><a href="{% url 'registration_App:login' %}">Sign up Page</a></li>
-                            <li><a href="{% url 'create_topicApp:create_top' %}">Create Topic Page</a></li>
+                            <li><a href="{% url 'create_topicApp:topic_create_url' %}">Create Topic Page</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -116,7 +116,6 @@
                         </div>
                         <div>
                             <ul class="dropdown__catalog row">
-                                <li class="col-xs-6"><a href="#">Support</a></li>
                                 <li class="col-xs-6"><a href="#">Forum Rules</a></li>
                                 <li class="col-xs-6"><a href="#">Blog</a></li>
                                 <li class="col-xs-6"><a href="#">About Us</a></li>
@@ -159,7 +158,7 @@
                 </div>
             </div>
             <div class="header__offset-btn">
-                <a href="{% url 'create_topicApp:create_top' %}">  <p style="color:red">Задайте вопрос</p>
+                <a href="{% url 'create_topicApp:topic_create_url' %}"><p style="color:red">Задайте вопрос</p>
                     <img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New Topic"></a>
             </div>
         </div>
@@ -277,12 +276,21 @@
                                     </div>
                                     <div class="topic__footer-share">
                                         <div data-visible="desktop">
-                                            <a id="sow"><i class="icon-Share_Topic"></i></a>
+                                          <div>
+                                          {% post_to_telegram  "Hello"  object_or_url   post_to_telegram %}
+                                            {% post_to_whatsapp "Hi" object_or_url post_to_whatsapp  %}
+                                         </div>
+
                                             {% if request.user.is_authenticated %}
-                                            <a href="{% url 'forum:create'  %}"><i class="icon-Bookmark"></i></a>
+                                            <a href="{% url 'forum:bookmarks_add' topic.id %}" style="border:solid 2px
+                                             yellow;background-color:black;color:dark-blue;">
+
+                                            Добавить в закладки.
+                                            </a>
 
 
                                             {% endif %}
+
                                         </div>
                                         <div data-visible="mobile">
                                             <a href="#"><i class="icon-More_Options"></i></a>
@@ -303,15 +311,20 @@
                                             Добавлен - {{ reply.created }}<br><br>
                                         {% include 'includes/add_like_reply.html' %}
 
-                                        <small><a href="{% url 'forum:delete_reply' reply.id %}">Удалить</a></small><br>
-
+                                        <small><a href="{% url 'forum:delete_reply' reply.id %}" style="color:red">Удалить</a></small><br>
                                          {% endfor %}
 
                                         {% if user.is_active %}
                                             <form action="" method="post">
                                                 {% csrf_token %}
                                                 {{ form.as_p }}
-                                                <button type="submit">Отправить</button>
+                                                {% if form %}
+                                                <button type="submit" style="border:solid 2px
+                                             blue;background-color:black;color:red;">Отправить</button>
+
+                                                {% endif %}
+
+
                                             </form>
                                         {% else %}
                                             <h4>Что бы оставить комментарий авторизуйтесь</h4>
@@ -337,44 +350,41 @@
                                             </div>
                                         </div>
                                         <div>
+                                            {% if form %}
                                             <span class="topic__info-title">Last reply</span>
                                             <div  class="topic__info-avatar">
                                                 <a href="#" class="avatar"><img src="{% static 'fonts/icons/avatars/A.svg' %}" alt="avatar"></a>
                                                 <span>
+
+
                                                         {% for reply in comments %}
                                                               {{reply.last_reply|time:"H:i"}}
                                                         {% endfor %}
 
                                                 </span>
+
                                             </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="topic__info-section">
+                                        {% if form %}
                                         <div>
 
                                             <span class="topic__info-title">Replies</span>
                                             <div  class="topic__info-count">{{comments.count}}</div>
 
                                         </div>
-                                        <div>
-                                            <span class="topic__info-title">Views</span>
-                                            <div  class="topic__info-count">{{topic.total_views}}</div>
+                                        {% endif %}
 
-                                        </div>
-                                        <div>
-                                            <span class="topic__info-title">Users</span>
-                                            <div  class="topic__info-count">{{topic.user_count}}</div>
-                                        </div>
+
+
 
 
                                     </div>
                                 </div>
-
-
-
-                                <div class="topic__title">
+                              <div class="topic__title">
                                 </div>
-
                             </div>
                         </div>
 
@@ -473,17 +483,8 @@
         <button id="ex">Выйти</button>
     </dialog>
 
-   <dialog id="ourlog">
-           {% send_email object.title "New Song: {{object.title}}. Check it out!" object_or_url "Share via email" %}
-           <i class="fa fa-envelope"></i>
-
-           {% post_to_whatsapp object_or_url "Share via WhatsApp" %}<i class="fa fa-whatsapp"></i>
-
-           {% post_to_telegram  object_or_url 'Telegram' %}<i class="fa fa-telegram"></i><br>
 
 
-       <button id="clis">Закрыть</button>
-   </dialog>
 
 <script>
     (function() {

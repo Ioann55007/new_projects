@@ -3,6 +3,11 @@ from .forms import UserForm, ProfileForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from forum.models import Bookmarks
+
+from forum.models import Topic
+
 User = get_user_model()
 
 
@@ -28,8 +33,10 @@ def userpage(request, id):
     profile_form = ProfileForm(instance=request.user)
     return render(request=request, template_name="user.html", context={"user": request.user,
                                                                        "user_form": user_form,
-
-                                                                       "profile_form": profile_form})
+                                                                        "bookmarks": Bookmarks.objects.filter(
+                                                                            user=request.user),
+                                                                        "profile_form": profile_form,
+                                                                       })
 
 
 

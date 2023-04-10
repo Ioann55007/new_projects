@@ -39,7 +39,7 @@ ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
 SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'admin@gmail.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', '1524ok')
 
-DEBUG = int(os.environ.get("DEBUG", default=1))
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 ALLOWED_HOSTS += ['3ef3-94-41-3-182.eu.ngrok.io']
@@ -153,18 +153,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-THIRD_PARTY_APPS = [
-    'dj_rest_auth',
-    'dj_rest_auth.registration',
-    'rest_framework_simplejwt.token_blacklist',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'rest_framework',
-    'corsheaders',
-    'django_summernote',
 
-]
 
 
 REST_FRAMEWORK = {
@@ -194,66 +183,6 @@ if ENABLE_RENDERING:
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.TemplateHTMLRenderer',
     )
-
-
-SOCIALACCOUNT_PROVIDERS = {
-    'facebook': {
-        'METHOD': 'oauth2',
-        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
-        'SCOPE': ['email', 'public_profile'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'INIT_PARAMS': {'cookie': True},
-        'FIELDS': [
-            'id',
-            'username',
-            'middle_name',
-            'name',
-            'name_format',
-            'picture',
-            'short_name'
-        ],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': 'path.to.callable',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v7.0',
-        'APP': {
-            'client_id': environ.get('FACEBOOK_CLIENT_ID'),
-            'secret': environ.get('FACEBOOK_SECRET_KEY'),
-
-        }
-    }
-}
-
-
-INSTALLED_APPS += THIRD_PARTY_APPS
-
-
-CELERY_BROKER_URL = environ.get('CELERY_BROKER_URL')
-CELERY_RESULT_BACKEND = environ.get('CELERY_RESULT_BACKEND')
-
-CELERY_TIMEZONE = environ.get('TZ', 'UTC')
-
-CELERY_RESULT_PERSISTENT = True
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-
-CELERY_BROKER_HEARTBEAT_CHECKRATE = 10
-CELERY_EVENT_QUEUE_EXPIRES = 10
-CELERY_EVENT_QUEUE_TTL = 10
-CELERY_TASK_SOFT_TIME_LIMIT = 60
-
-CELERY_BROKER_TRANSPORT_OPTIONS = {
-    'max_retries': 4,
-    'interval_start': 0,
-    'interval_step': 0.5,
-    'interval_max': 3,
-}
-
-CELERY_TASK_ROUTES = {
-    '*': {'queue': 'celery'},
-}
 
 
 
@@ -325,35 +254,7 @@ SWAGGER_SETTINGS = {
 
 
 
-SUMMERNOTE_THEME = 'bs4'
 
-
-SUMMERNOTE_CONFIG = {
-    'iframe': True,
-    'empty': ('<p><br/></p>', '<p><br></p>'),
-    'summernote': {
-        'airMode': False,
-        'width': '100%',
-        'height': '480',
-        'lang': None,
-        'toolbar': [
-            ['style', ['style']],
-            ['font', ['bold', 'underline', 'clear']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
-            ['view', ['fullscreen', 'codeview']],
-        ],
-        'codemirror': {
-            'mode': 'htmlmixed',
-            'lineNumbers': 'true',
-
-        },
-        'attachment_absolute_uri': True,
-        'attachment_require_authentication': True,
-
-    }
-}
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

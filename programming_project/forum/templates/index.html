@@ -39,14 +39,14 @@
                     <div class="posts__category">Category</div>
                     <div class="posts__users">Users</div>
                     <div class="posts__activity">Created</div>
+                    <div class="posts__views">Views</div>
+
                 </div>
                 {% include 'posts_body.html' %}
-
             </div>
         </div>
+        {% include 'pagination.html' %}
     </main>
-
-    {% include 'footer.html' %}
 
     <script src="static/vendor/jquery/jquery.min.js"></script>
     <script src="static/vendor/velocity/velocity.min.js"></script>
