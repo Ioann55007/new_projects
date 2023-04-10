@@ -1,0 +1,30 @@
+
+{% extends 'firstsend.html' %}
+{% load static %}
+
+{% block title %} Create Topic - {{block.super}}
+
+{% endblock %}
+
+
+{% block content %}
+<div style="background-color:blue;color:yellow;">
+<form  action="{% url  'create_topicApp:topic_create_url' %}" method="post">
+    <div style="margin-left:400px;">
+{% csrf_token %}
+<div class="form-error">{{form.non_field_errors}}</div>
+{% for f in form %}
+ <p><label class="form-label" for="{f.id_for_label}">{{f.label}}: </label>{{f}}</p>
+ <div class="form-error">{{f.errors}}</div>
+{% endfor %}
+
+    <button type="submit" name="button" style="border: solid 1px;background-color:red;color:black; ">Create topic</button>
+    </div>
+</form>
+</div>
+<div class="container" style="padding:190px; background:brown;">
+
+
+</div>
+
+{% endblock %}
