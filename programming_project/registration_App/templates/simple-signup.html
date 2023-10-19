@@ -50,7 +50,7 @@
                     <p>By singin up you can start posting, replaying to topics, earn badges, favorite, vote topics and many more.</p>
                 </div>
 
-                <form action="{% url 'registration_App:send_email' %}" method="post">
+                <form action="{% url 'forum:send_email' %}" method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
 

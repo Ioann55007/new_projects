@@ -13,7 +13,7 @@
                             <ul class="dropdown__catalog row">
                                 {% for category in categories %}
 
-                                <li class="col-xs-6"><a href="{% url 'forum:category_detail' category.slug category.id %}" class="category">{{ category.name }}</a></li>
+                                <li class="col-xs-6">{{ category.name }}</li>
                                 {% endfor %}
 
 

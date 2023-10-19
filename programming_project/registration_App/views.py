@@ -1,6 +1,7 @@
 from email.message import EmailMessage
 
 from coreapi.compat import force_text
+from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -10,42 +11,52 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 import logging
 from django.contrib.auth import get_user_model, logout
+from django.views.generic import TemplateView
+
 from .forms import SignupForm, UserLoginForm
+from .models import EmailVerification
 from .token import account_activation_token
 from django.contrib.auth import login
+
+from forum.models import User
 
 logger = logging.getLogger(__name__)
 
 
+class EmailVirificationView(TemplateView):
+    template_name = "email_verification.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = "email confirmation"
+        return context
+
+    def get(self, request, *args, **kwargs):
+        code = kwargs['code']
+        user = User.objects.get(email=kwargs['email'])
+        email_verification = EmailVerification.objects.filter(user=user, code=code)
+        if email_verification.exists() and not email_verification.first().is_expired():
+            user.is_verify_email = True
+            user.save()
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect('index')
+
 
 def signup(request):
     if request.method == 'POST':
-        form = SignupForm(request.POST)
+        form = SignupForm(data=request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-
-
-
-            current_site = get_current_site(request)
-            mail_subject = 'Activation link has been sent to your email id'
-            message = render_to_string('acc_active_email.html', {
-
-                'form': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            to_email = form.cleaned_data.get('email')
-            email = EmailMessage(
-                        mail_subject, message, to=[to_email]
-            )
-            email.send()
-            return HttpResponse('Пожалуйста перейди по ссылке и заверши регистрацию')
+            form.save()
+            messages.success(request, 'Подтвердите регистрацию по почте')
+            return redirect('registration_App:login')
     else:
         form = SignupForm()
-    return render(request, 'signup.html', {'form': form})
+    context = {
+        'title': 'Регистрация',
+        'form': form
+    }
+    return render(request, 'signup.html', context)
 
 
 def activate(request, uidb64, token):
@@ -75,8 +86,6 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 
-
 def user_logout(request):
     logout(request)
     return redirect('registration_App:login')
-

@@ -256,3 +256,8 @@ try:
     from .local_settings import *
 except ImportError:
     from .prod_settings import *
+
+
+DOMAIN_NAME = 'http://127.0.0.1:8000'
+
+

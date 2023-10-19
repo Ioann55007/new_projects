@@ -13,7 +13,7 @@ from taggit.models import Tag
 from . import serializers
 from .filters import TopicFilter
 from .forms import ContactForm, ReplyForm
-from .models import Topic, Category, Reply, Bookmarks, Ip, Viewer
+from .models import Topic, Category, Reply, Viewer
 from .services import BlogService
 from django.views import View
 from . import models
@@ -177,18 +177,6 @@ class CategoryDetailView(DetailView):
                 topic.likes.add(request.user.id)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    def bookmarks_add(request, topic_id):
-        topic = Topic.objects.get(id=topic_id)
-        bookmarks = Bookmarks.objects.filter(user=request.user, topic=topic)
-
-        if not bookmarks.exists():
-            Bookmarks.objects.create(user=request.user, topic=topic, quantity=1)
-        else:
-            bookmark = bookmarks.first()
-            bookmark.quantity += 1
-            bookmark.save()
-
-        return redirect('profile_user:userpage', request.user.id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -270,11 +258,7 @@ def send_email(request):
     return render(request, 'email/contact_us.html', {'form': form})
 
 
-class TeamView(View):
-    template_name = 'team/the_team.html'
 
-    def get(self, request):
-        return render(request, self.template_name)
 
 
 def like_topic(request, id):
@@ -331,7 +315,7 @@ def get_client_ip(request, id):
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
     else:
-        ip = request.META.get('REMOTE_ADDR')  # В REMOTE_ADDR значение айпи пользователя
+        ip = request.META.get('REMOTE_ADDR')
     return ip
 
 

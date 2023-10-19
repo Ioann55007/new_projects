@@ -32,7 +32,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(u'date joined', default=timezone.now)
     objects = UserManager()
     avatar = models.ImageField(settings.AUTH_USER_MODEL, default='/no_image.jpg', blank=True)
-
     USERNAME_FIELD = 'username'
 
     REQUIRED_FIELDS = ['email', 'password', 'avatar']
@@ -95,7 +94,6 @@ class Topic(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE, related_name='author_set')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE,
                              related_name='topic_bookmark')
-    count_user = models.ManyToManyField(User, through="CountUser")
     viewers = models.ManyToManyField(Viewer, blank=True)
 
     objects = models.Manager()
@@ -134,23 +132,9 @@ class Topic(models.Model):
         verbose_name_plural = 'Topics'
 
 
-class Bookmarks(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
-    quantity = models.PositiveSmallIntegerField(default=0)
-    create_time = models.DateTimeField(auto_now_add=True)
-    objects = models.Manager()
-
-    def __str__(self):
-        return f"Ваши закладки {self.user} | Тема: {self.topic.name}"
 
 
-class CountUser(models.Model):
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='count_topic_user')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='count_user_user')
 
-    class Meta:
-        unique_together = [('user', 'topic')]
 
 
 class Reply(models.Model):

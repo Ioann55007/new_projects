@@ -25,6 +25,8 @@ def create_topic(request):
     if request.method == 'POST':
         form = TopicForm(request.POST, request.user)
         if form.is_valid():
+            form = form.save(commit=False)
+            form.author = request.user
             form.save()
             return redirect('forum:main')
     else:

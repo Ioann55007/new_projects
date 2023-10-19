@@ -23,6 +23,8 @@ urlpatterns = [
 urlpatterns += [
 
     path('signup_email', signup, name='signup'),
+    path('verify/<str:email>/<uuid:code>', views.EmailVirificationView.as_view(), name='email_verification'),
+
     path('activate//<uidb64>/<token>/',
             activate, name='activate'),
     path('login/1', user_login, name='login'),

@@ -22,7 +22,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ioann.basic@gmail.com'
-EMAIL_HOST_PASSWORD = 'kbtdkkbivgrnvjtx'
+EMAIL_HOST_PASSWORD = 'sjbm wjjl zydp sgfm'
 
 DEFAULT_FROM_EMAIL = environ.get('DEFAULT_FROM_EMAIL', 'ioann.basic@gmail.com')
 EMAIL_USE_TLS = True
@@ -34,7 +34,7 @@ ENABLE_RENDERING = int(os.environ.get('ENABLE_RENDERING', 1))
 SUPERUSER_EMAIL = os.environ.get('SUPERUSER_EMAIL', 'admin@gmail.com')
 SUPERUSER_PASSWORD = os.environ.get('SUPERUSER_PASSWORD', '1524ok')
 
-DEBUG = int(os.environ.get("DEBUG", default=1))
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost,127.0.0.1').split(",")
 ALLOWED_HOSTS += ['3ef3-94-41-3-182.eu.ngrok.io']

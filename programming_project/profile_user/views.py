@@ -1,12 +1,15 @@
 from django.contrib.auth import get_user_model
-from .forms import UserForm, ProfileForm
+from django.urls import reverse_lazy, reverse
+from django.views.generic import DeleteView, UpdateView
+
+from .forms import UserForm, ProfileForm, UserProfileForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from forum.models import Bookmarks
-
 from forum.models import Topic
+
+from .models import Profile
 
 User = get_user_model()
 
@@ -33,13 +36,26 @@ def userpage(request, id):
     profile_form = ProfileForm(instance=request.user)
     return render(request=request, template_name="user.html", context={"user": request.user,
                                                                        "user_form": user_form,
-                                                                        "bookmarks": Bookmarks.objects.filter(
-                                                                            user=request.user),
-                                                                        "profile_form": profile_form,
+
+                                                                       "profile_form": profile_form,
                                                                        })
 
 
+class DeleteProfile(DeleteView):
+    model = User
 
+    # success_url = reverse_lazy("forum:main")
+    def get_success_url(self):
+        return reverse('forum:main')
+
+
+class ProfileUpdate(UpdateView):
+    model = User
+    form_class = UserProfileForm
+    template_name = 'profile_form.html'
+
+    def get_success_url(self):
+        return reverse('profile_user:userpage', kwargs={"id": self.object.id})
 
 
 def avatar_img(request):
