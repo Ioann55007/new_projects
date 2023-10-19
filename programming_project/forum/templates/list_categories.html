@@ -1,0 +1,79 @@
+{% load tagnag %}
+
+<div class="nav">
+                <div class="nav__categories js-dropdown">
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="categories">All Categories</div>
+
+                        {% for topic in object_list %}
+
+                        <nav class="dropdown dropdown--design-01" data-dropdown-list="categories">
+
+                            {% get_categories as categories %}
+                            <ul class="dropdown__catalog row">
+                                {% for category in categories %}
+
+                                <li class="col-xs-6">{{ category.name }}</li>
+                                {% endfor %}
+
+
+                            </ul>
+
+                        </nav>
+                        {% endfor %}
+
+
+
+                 </div>
+
+                </div>
+                <div class="nav__menu js-dropdown">
+                    <div class="nav__select">
+                        <div class="btn-select" data-dropdown-btn="menu">Latest</div>
+                        <div class="dropdown dropdown--design-01" data-dropdown-list="menu">
+                            <ul class="dropdown__catalog">
+
+                                <li><a href="#">Unread topic</a></li>
+                                <li><a href="#">Most Liked Topics</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+
+
+<dialog id="wo">
+        <h2>Последний вопрос:</h2>
+        <div>
+            <form method="post">
+                {% csrf_token %}
+
+                {{ form.as_p  }}
+
+            </form>
+        </div>
+        <button id="clo">Закрыть</button>
+
+    </dialog>
+
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+<script>
+(function() {
+            var dialog = document.getElementById('wo');
+            document.getElementById('f').onclick = function() {
+              dialog.show();
+            };
+
+            document.getElementById('clo').onclick = function() {
+              dialog.close();
+            };
+
+        })();
+
+</script>

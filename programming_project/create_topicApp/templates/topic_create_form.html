@@ -1,0 +1,166 @@
+
+{% comment %}
+{% load static %}
+{% block content %}
+<html lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+    <!-- STYLESHEET -->
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="{% static 'fonts/icons/main/mainfont/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/icons/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- HEADER -->
+
+    <!-- MAIN -->
+    <main>
+        <div class="container">
+            <div class="create">
+                <div class="create__head">
+                    <div class="create__title"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New topic">Create New Thread</div>
+                </div>
+                <form action="{% url  'create_topicApp:topic_create_url' %}" method="post">
+                    {% csrf_token %}
+                <div class="create__section">
+                    <label class="create__label" for="{{ form.title.id_for_label }}">Thread Title</label>
+                    {{ form.name }}
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="create__section">
+                            <label class="create__label" for="category">Select Category</label>
+                            <label class="custom-select" for="{{ form.category.id_for_label }}">
+                               {{ form.category }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="create__section">
+                            <label class="create__label">Select tags</label>
+                            <label class="custom-select" for="{{ form.tags.id_for_label }}">
+                                {{ form.tags }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="create__section create__textarea">
+                    <label class="custom-select" for="{{ form.content.id_for_label }}"></label>
+
+                    {{ form.content }}
+
+                </div>
+                        <button type="submit" name="button"
+                                style="border: solid 1px;background-color:red;color:black; ">Create topic
+                        </button>
+                </form>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+
+    <!-- JAVA SCRIPT -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+</body>
+</html>
+
+{% endblock %}
+{% endcomment %}
+
+{% load static %}
+
+
+
+
+{% block content %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Responsive HTML5 Template">
+    <meta name="author" content="author.com">
+    <title>Responsive HTML5 Template</title>
+
+    <!-- STYLESHEET -->
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="{% static 'fonts/icons/main/mainfont/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/icons/font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Vendor -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v3/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/v4/bootstrap-grid.css' %}">
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- HEADER -->
+
+    <!-- MAIN -->
+    <main>
+        <div class="container">
+            <div class="create">
+                <div class="create__head">
+                    <div class="create__title"><img src="{% static 'fonts/icons/main/New_Topic.svg' %}" alt="New topic">Create New Thread</div>
+                </div>
+                {% if request.user.is_authenticated %}
+
+                <form  action="{% url  'create_topicApp:topic_create_url' %}" method="post">
+                {% csrf_token %}
+                    {{ form.as_p }}
+                        <button type="submit" name="button" style="border: solid 1px;background-color:red;color:black; ">Create topic</button>
+                </form>
+                {% else %}
+                <p>Пожалуйста войдите в свой аккаунт</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+
+    <!-- JAVA SCRIPT -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/velocity/velocity.min.js' %}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+</body>
+
+
+{% endblock %}

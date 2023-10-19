@@ -1,0 +1,23 @@
+{% load static %}
+{% block content %}
+{% if request.user.is_authenticated %}
+<form action="{% url 'forum:like_topic' topic.id %}" method="post">
+        {% csrf_token %}
+        {% if liked %}
+
+
+        <button type="submit"><img src="{% static 'images/free-icon-heart-1077035.png' %}"
+                                   width="50" height="70" alt="">
+        </button>
+        {% else %}
+
+    <button type="submit">
+        <img src="{% static 'images/free-icon-heart-1077086.png' %}" width="50" height="70" alt="">
+    </button>
+       {% endif %}
+        {{ topic.total_likes }}
+
+    </form>
+{% endif %}
+
+{% endblock %}
